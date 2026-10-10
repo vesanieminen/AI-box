@@ -82,5 +82,9 @@
   ".local/share/vllm/wait-ready.py": {
     "source": "dot_local/share/vllm/wait-ready.py",
     "sha256": "58375f43dffd965ffe73f97238f35ae14f6a0c9d6e0ba15d208cd65382e1af01"
+  },
+  "Documents/Local-AI/Models.html": {
+    "source": "Documents/Local-AI/Models.html",
+    "sha256": "73ae77598babc89740fa0fb4e8e5c650aaa7e195dfa8c4785932a4e83f2c36f7"
   }
 }

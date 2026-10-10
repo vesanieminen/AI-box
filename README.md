@@ -40,8 +40,8 @@ committing.
 
 ## Chezmoi setup and restore
 
-Install the recorded additions with the normal Arch package manager, then enable
-deployment:
+Capturing changes works without chezmoi. For deployment, install chezmoi using
+`sudo pacman -S --needed chezmoi`, then enable deployment:
 
 ```bash
 cd ~/Projects/dotfiles

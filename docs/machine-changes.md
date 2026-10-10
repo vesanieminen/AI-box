@@ -51,13 +51,30 @@ inspected for clues; sanitized findings are in `ssd-history.md`.
   `vllm-boot.service`. Ollama is installed using Arch's `ollama-cuda`, with the
   SSD model directory/environment retained. See `system/local-ai/README.md` for
   normal restoration and manual backend switching.
-- Package additions are listed in `packages/official.txt`, including the extra
-  SSD applications and dotfile/model CLI tools. Transitive dependencies are not
+- Package additions are listed in `packages/official.txt`, limited to the AI runtime,
+  GPU/lighting/font tools already selected, stress-ng and ethtool. Unrelated SSD
+  desktop/development apps were declined. Transitive dependencies are not
   duplicated. The SSD's alternate kernel is not an application addition.
 
 Validation so far: Hyprland reload/configerrors clean; idle IPC reports enabled;
 fontconfig resolves CaskaydiaMono; lighting command exits successfully; idle guard
 and LACT daemon active/enabled; all 12 GPU Observatory tests pass with local
-socket access; captured JSON/TOML and Python syntax valid; all 21 captured files
-match live settings. Runtime download, startup and final package validation are
+socket access; captured JSON/TOML and Python syntax valid; all 22 captured files
+match live settings. The vLLM image download and startup validation are
 still in progress. Live backups are temporarily in /tmp/omarchy-ssd-import-backup.
+
+- Network wake: recovered Ethernet magic-packet wake (64) and Wi-Fi magic-packet
+  wake (8) from the SSD’s NetworkManager profiles. Applied both as persistent
+  defaults and to existing profiles without copying credentials. Verified Wi-Fi
+  magic-packet wake enabled and both wired interfaces reporting `Wake-on: g`.
+  Restoration is in `system/network/README.md`. Actual suspend/remote-wake has
+  not been exercised during model setup.
+- Copied the requested original HTML catalog to `~/Documents/Local-AI/Models.html`
+  and captured it. It is an SSD snapshot, not live status for this box.
+- Narrowed the package manifest to seven selected additions. Removed only the
+  19 unrelated packages just added by the broad batch; pacman’s log confirms
+  every removed package was newly installed in that batch. No default or other
+  pre-existing Omarchy package was removed.
+- Verified Arch Ollama 0.33.3 discovers all four copied tags and the custom
+  `qwen3.8:3090` model returns `OK` with MTP enabled. Unloaded its weights and
+  stopped the temporary validation server before vLLM startup.

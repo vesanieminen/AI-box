@@ -26,7 +26,7 @@ Weights are stored outside Git. All 13 model directories and four Ollama tags we
 | `ornith-1.5-9b.tabbyapi.128k` | [ultimatechris/Ornith-1.5-9B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-9B-EXL3-4bpw/tree/8d1e89ef430f9ba3a12789b198abf1385670ceb0) | `8d1e89ef430f9ba3a12789b198abf1385670ceb0` | 6.7 |
 | `qwen3.8-27b.sglang.208k` | [turboderp/Qwen3.8-27B-exl3](https://huggingface.co/turboderp/Qwen3.8-27B-exl3/tree/6fe61ad620abfe97c5b49f9722c2bceeea4ccc28) | `6fe61ad620abfe97c5b49f9722c2bceeea4ccc28` | 12.9 |
 
-Install the Arch `python-huggingface-hub` package for `hf`. Download only missing assets; already copied assets do not need redownloading. For example:
+Install the Arch `python-huggingface-hub` package for `hf` only when downloads are needed. It is not required to serve the already copied models. Download only missing assets; already copied assets do not need redownloading. For example:
 
 ```bash
 hf download lued/Qwen3.8-27B-INT8-W8A16-MTP --revision 7c12373712d1363e2b76655cb3332c9c124627d7 --local-dir "$HOME/.local/share/vllm/models/qwen3.8-27b-int8"
@@ -52,3 +52,13 @@ ollama create qwen3.8:3090 -f "$HOME/.local/share/ollama/Qwen38-3090.Modelfile"
 ```
 
 The configured server sets `OLLAMA_MODELS` to the copied user directory. Do not run an unconfigured server that uses a different model directory. Model weights are not backed up by this repository; retain a separate disk backup if preserving these exact downloads is required.
+
+## Original HTML catalog
+
+The SSD’s `Documents/Local-AI/Models.html` is copied and managed under `home/`.
+It lists eight selected two-GPU model components; the other five archived
+variants are on disk and recorded in `vllm.json`. The HTML is the original SSD
+snapshot: its old addresses, server-status text, verification labels and 175 W
+manual benchmark plans do not describe changes applied to this box. GPU power
+limits remain 350 W, and alternative model recipes are not automatically tested
+or started.

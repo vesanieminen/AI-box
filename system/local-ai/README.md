@@ -53,7 +53,8 @@ sudo docker logs --tail 100 qwen38-vllm
 
 The Arch package replaces the SSD's standalone Ollama installation. The SSD
 binary was version 0.35.0; the configured Arch repository offered 0.33.3 at import.
-Version and model compatibility are validated separately from copying assets.
+Arch Ollama 0.33.3 discovers all copied tags and returned a short response from
+the custom Qwen3.8 profile with MTP. Full-context operation remains untested.
 The package manager provides future updates. Model manifests and blobs stay in
 `~/.local/share/ollama/models`, outside Git.
 
