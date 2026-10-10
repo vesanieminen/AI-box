@@ -51,6 +51,10 @@
     "source": "dot_local/bin/ai-desktop-idle.py",
     "sha256": "62a51bad5a73904ebcda60a31f7c74d9e6b6720d41dc5b54bb909a0b715186e8"
   },
+  ".local/bin/gh": {
+    "source": "dot_local/bin/executable_gh",
+    "sha256": "9c56b0b9705dd0305ca302f92dc9b4cfbc7db0221c05e1b191e11e610841a3cb"
+  },
   ".local/bin/local-ai-lan-proxy.py": {
     "source": "dot_local/bin/local-ai-lan-proxy.py",
     "sha256": "0b23bc23e641b565d2d218b4402be1c1b4173846dd7c47cdddca0f309d4c6591"

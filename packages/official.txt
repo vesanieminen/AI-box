@@ -1,5 +1,6 @@
 chezmoi
 ethtool
+github-cli
 lact
 nvidia-container-toolkit
 ollama-cuda

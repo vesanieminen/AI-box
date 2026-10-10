@@ -32,3 +32,12 @@ Restore with `yay -S --needed geekbench`. Its package recipe downloads the
 vendor archive and verifies SHA-256 before packaging; build scripts stay in the
 AUR build cache, outside this repository. [AUR package](https://aur.archlinux.org/packages/geekbench),
 [vendor downloads](https://www.geekbench.com/download/). Benchmark runs are manual.
+
+Llama-swap uses AUR `llama-swap-bin`. Install with
+`yay -S --needed llama-swap-bin`; its recipe verifies the upstream release
+archive checksum. Configuration and service restoration are in
+`system/local-ai/README.md`. [AUR package](https://aur.archlinux.org/packages/llama-swap-bin),
+[upstream project](https://github.com/mostlygeek/llama-swap).
+
+GitHub CLI uses Arch `github-cli`: `sudo pacman -S --needed github-cli`.
+PAT provisioning and HTTPS Git authentication are documented in `docs/github.md`.

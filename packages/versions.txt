@@ -8,3 +8,5 @@ openrgb 1.0rc3-3
 stress-ng 0.22.00-1
 ttf-cascadia-mono-nerd 3.5.1-2
 geekbench 7.1.0-1
+github-cli 2.100.0-1
+llama-swap-bin 263-1
