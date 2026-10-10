@@ -121,8 +121,10 @@ weights are reused from local folders and never downloaded on a model switch.
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
 into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 11 IDs
 and their configured context limits under the custom provider `llama-swap`.
-The example chooses output budgets of 8192 tokens, or 2048 for Gemma INT8's
-8192-token context; these are client budgets, not tested maximum output lengths.
+Each model's advertised output ceiling equals its configured context limit.
+Input and generated output still share that context; the available generation
+budget is smaller when the prompt occupies tokens. These ceilings are not
+verified full-length generation results.
 No API key is required for the direct LAN endpoint.
 
 Run `/models` in OpenCode and select a `llama-swap/...` entry. The root `model`
