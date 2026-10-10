@@ -29,7 +29,7 @@
   },
   ".config/omarchy/plugins/vesanieminen.idle/Service.qml": {
     "source": "dot_config/omarchy/plugins/vesanieminen.idle/Service.qml",
-    "sha256": "f6233fc392782a7a87b8fe5f58dc2777dfea16613de4bde7d8074b15819e9c21"
+    "sha256": "b995b8fb5e27dc7cd033d94f8644c89214ea1a168e6b23aff626c3fc62a6cc4e"
   },
   ".config/omarchy/plugins/vesanieminen.idle/manifest.json": {
     "source": "dot_config/omarchy/plugins/vesanieminen.idle/manifest.json",
@@ -37,7 +37,7 @@
   },
   ".config/omarchy/shell.json": {
     "source": "dot_config/omarchy/shell.json",
-    "sha256": "dfa7e8dd715178b3a79e1bdf3e8c9734426541646567a35809cc94999a62e79c"
+    "sha256": "177e96f6c5fc54e51a6e8fdc1b95be9cc1947d576336debf7dee963df0cda0f2"
   },
   ".config/systemd/user/local-ai-lan.service": {
     "source": "dot_config/systemd/user/local-ai-lan.service",
@@ -82,6 +82,10 @@
   ".local/share/vllm/wait-ready.py": {
     "source": "dot_local/share/vllm/wait-ready.py",
     "sha256": "58375f43dffd965ffe73f97238f35ae14f6a0c9d6e0ba15d208cd65382e1af01"
+  },
+  ".local/state/omarchy/toggles/screensaver-off": {
+    "source": "dot_local/state/omarchy/toggles/screensaver-off",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "Documents/Local-AI/Models.html": {
     "source": "Documents/Local-AI/Models.html",

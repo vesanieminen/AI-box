@@ -116,3 +116,16 @@ was verified. A short chat completion returned `OK`. Live backups are temporaril
   All 22 expected files were present, contents and permissions matched, and
   there were no additional files. Both temporary and live `chezmoi verify`
   passed; live `chezmoi diff` is empty. No settings were applied to the live home.
+
+## 2026-10-10: Permanently disable the screensaver
+
+- Set `idle.screensaver` to zero and taught the user-owned idle plugin to treat
+  zero as disabled, using the existing 300-second lock deadline directly.
+  AI-aware suspend and the existing Stay Awake override are unchanged.
+- Enabled Omarchy's persistent `screensaver-off` preference. Although Omarchy
+  stores this under `.local/state/omarchy/toggles`, this specific empty flag is
+  a deliberate saved preference and is captured for restoration. Other runtime
+  state remains excluded. Normal screensaver launching is blocked; Omarchy's
+  explicit `force` launch remains available.
+- Restarted the desktop shell to load the plugin and checked idle IPC status.
+  The screensaver is disabled and the lock timeout remains 300 seconds.

@@ -19,8 +19,9 @@ Item {
   readonly property var idleConfig: shell && shell.shellConfig && shell.shellConfig.idle
     ? shell.shellConfig.idle : (shell && shell.idleConfig ? shell.idleConfig : ({}))
   readonly property int screensaverTimeoutSeconds: secondsFromConfig(idleConfig.screensaver, defaultScreensaverSeconds)
+  readonly property bool screensaverEnabled: screensaverTimeoutSeconds > 0
   readonly property int lockTimeoutSeconds: secondsFromConfig(idleConfig.lock, defaultLockSeconds)
-  readonly property int firstIdleTimeoutSeconds: Math.min(screensaverTimeoutSeconds, lockTimeoutSeconds)
+  readonly property int firstIdleTimeoutSeconds: screensaverEnabled ? Math.min(screensaverTimeoutSeconds, lockTimeoutSeconds) : lockTimeoutSeconds
   readonly property int screensaverDelaySeconds: Math.max(0, screensaverTimeoutSeconds - firstIdleTimeoutSeconds)
   readonly property int lockDelaySeconds: Math.max(0, lockTimeoutSeconds - firstIdleTimeoutSeconds)
   readonly property bool idleEnabled: stayAwakeStateLoaded && !stayAwake
@@ -64,6 +65,7 @@ Item {
   }
 
   function launchScreensaver() {
+    if (!root.screensaverEnabled) return
     root.screensaverStartedThisCycle = true
     screensaverLaunchGraceTimer.restart()
     runProcess(screensaverProcess, "screensaver", "[[ $(omarchy-shell lock isLocked 2>/dev/null) == \"true\" ]] || omarchy-launch-screensaver")
@@ -91,8 +93,10 @@ Item {
     root.screensaverStartedThisCycle = false
     resetScreensaverWindows()
 
-    if (root.screensaverDelaySeconds === 0) launchScreensaver()
-    else screensaverTimer.restart()
+    if (root.screensaverEnabled) {
+      if (root.screensaverDelaySeconds === 0) launchScreensaver()
+      else screensaverTimer.restart()
+    }
 
     if (root.lockDelaySeconds === 0) lockSystem("lock-timeout-immediate")
     else lockTimer.restart()
@@ -187,6 +191,7 @@ Item {
       idle: idleMonitor.isIdle,
       inIdleCycle: root.idledThisCycle,
       screensaverStarted: root.screensaverStartedThisCycle,
+      screensaverEnabled: root.screensaverEnabled,
       screensaver: root.screensaverTimeoutSeconds,
       lock: root.lockTimeoutSeconds,
       screensaverDelay: root.screensaverDelaySeconds,
