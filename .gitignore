@@ -1,0 +1,14 @@
+*.bak
+*.bak.*
+*.swp
+*.swo
+*~
+__pycache__/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.age
+*.log
+.DS_Store
