@@ -35,9 +35,11 @@ def target_path(name):
     return path
 
 
-def source_name(relative, mode):
+def source_name(relative, mode, empty=False):
     parts = ["dot_" + p[1:] if p.startswith(".") else p for p in Path(relative).parts]
     prefix = ""
+    if empty:
+        prefix += "empty_"
     if not mode & (stat.S_IRGRP | stat.S_IROTH):
         prefix += "private_"
     if mode & stat.S_IXUSR:
@@ -71,7 +73,7 @@ def main():
         if mode not in (0o600, 0o644, 0o700, 0o755):
             raise ValueError(f"Unsupported permissions {mode:o}: {name}; use chezmoi directly")
         data = target.read_bytes()
-        encoded = source_name(name, mode)
+        encoded = source_name(name, mode, empty=not data)
         old_encoded = entry.get("source", encoded)
         old_relative = Path(old_encoded)
         if old_relative.is_absolute() or ".." in old_relative.parts:

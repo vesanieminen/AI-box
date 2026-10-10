@@ -129,3 +129,7 @@ was verified. A short chat completion returned `OK`. Live backups are temporaril
   explicit `force` launch remains available.
 - Restarted the desktop shell to load the plugin and checked idle IPC status.
   The screensaver is disabled and the lock timeout remains 300 seconds.
+- Updated capture to encode empty files with Chezmoi's `empty_` attribute;
+  otherwise an empty source file represents an absent target. Verified all 23
+  files, including the preference flag, restore with matching contents and
+  permissions into a fresh temporary home. Live Chezmoi verification passed.

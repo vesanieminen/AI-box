@@ -84,7 +84,7 @@
     "sha256": "58375f43dffd965ffe73f97238f35ae14f6a0c9d6e0ba15d208cd65382e1af01"
   },
   ".local/state/omarchy/toggles/screensaver-off": {
-    "source": "dot_local/state/omarchy/toggles/screensaver-off",
+    "source": "dot_local/state/omarchy/toggles/empty_screensaver-off",
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   },
   "Documents/Local-AI/Models.html": {
