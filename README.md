@@ -40,8 +40,13 @@ committing.
 
 ## Chezmoi setup and restore
 
-Capturing changes works without chezmoi. For deployment, install chezmoi using
-`sudo pacman -S --needed chezmoi`, then enable deployment:
+Chezmoi is installed and configured on this machine to use this checkout.
+All 22 managed files match live settings; restoration into an empty temporary
+directory was verified for contents and permissions. Generated Python bytecode
+is excluded by `home/.chezmoiignore`, including files already ignored by Git.
+
+Capturing changes also works without chezmoi. On a fresh machine, install it using
+`sudo pacman -S --needed chezmoi`, then configure deployment:
 
 ```bash
 cd ~/Projects/dotfiles

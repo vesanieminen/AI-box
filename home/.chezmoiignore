@@ -1,1 +1,6 @@
 # Only deliberately changed configuration files belong in this source tree.
+
+# Generated Python bytecode is runtime state, including Git-ignored files.
+**/__pycache__
+**/__pycache__/**
+**/*.pyc

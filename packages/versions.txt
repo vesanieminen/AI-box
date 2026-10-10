@@ -1,4 +1,5 @@
 # Selected additions at validation; informational, not a version lock.
+chezmoi 2.72.1-1
 ethtool 1:7.1-1
 lact 0.10.1-1
 nvidia-container-toolkit 1.20.0-1

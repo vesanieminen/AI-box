@@ -103,3 +103,16 @@ was verified. A short chat completion returned `OK`. Live backups are temporaril
 - Automatic suspend remains configured. At final validation, the existing
   runtime Stay Awake indicator was on; this override prevents suspend until
   toggled off. The indicator is runtime state and is not tracked in Git.
+
+## 2026-10-10: Chezmoi setup and restoration validation
+
+- Installed the normal Arch `chezmoi` package, version 2.72.1-1, and recorded it
+  as an intentional addition. Ran the existing generic setup helper to create
+  `~/.config/chezmoi/chezmoi.toml`, pointing at `~/Projects/dotfiles`. On a fresh
+  checkout, the same helper generates the appropriate local path.
+- Excluded generated Python bytecode explicitly in `home/.chezmoiignore`:
+  Git ignore rules alone do not prevent Chezmoi from deploying source files.
+- Restored into an empty temporary home with isolated persistent state/cache.
+  All 22 expected files were present, contents and permissions matched, and
+  there were no additional files. Both temporary and live `chezmoi verify`
+  passed; live `chezmoi diff` is empty. No settings were applied to the live home.
