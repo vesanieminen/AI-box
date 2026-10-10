@@ -121,10 +121,22 @@ weights are reused from local folders and never downloaded on a model switch.
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
 into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 11 IDs
 and their configured context limits under the custom provider `llama-swap`.
-Each model's advertised output ceiling equals its configured context limit.
-Input and generated output still share that context; the available generation
-budget is smaller when the prompt occupies tokens. These ceilings are not
-verified full-length generation results.
+Output limits use the model catalog's separate output field, bounded by the
+configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6
+uses 65536; Gemma 4 uses 32768, except the locally constrained Gemma INT8
+profile is bounded to 8192. Context limits remain the configured backend sizes.
+Input and generated output share the total context, so a prompt reduces the
+remaining generation budget. Full-length generation is not verified.
+
+Sources: [Qwen3.8](https://github.com/anomalyco/models.dev/blob/dev/models/alibaba/qwen3.8-27b.toml),
+[Qwen3.6](https://github.com/anomalyco/models.dev/blob/dev/models/alibaba/qwen3.6-35b-a3b.toml),
+[Gemma 31B](https://github.com/anomalyco/models.dev/blob/dev/models/google/gemma-4-31b-it.toml),
+[Gemma 26B](https://github.com/anomalyco/models.dev/blob/dev/models/google/gemma-4-26b-a4b-it.toml).
+The OpenCode card rounds Qwen3.8's 32768-token output to 33K; its 262144-token
+context is a different limit. Ornith 1.5 35B's catalog has no output limit,
+and no Ornith 1.5 9B catalog entry was found. The example leaves their output
+field unspecified, using OpenCode's custom-model fallback rather than claiming
+a verified maximum. [OpenCode model fallbacks](https://opencode.ai/v2/docs/models).
 No API key is required for the direct LAN endpoint.
 
 Run `/models` in OpenCode and select a `llama-swap/...` entry. The root `model`
