@@ -12,3 +12,5 @@ __pycache__/
 *.age
 *.log
 .DS_Store
+home/dot_config/gh/
+home/private_dot_config/gh/

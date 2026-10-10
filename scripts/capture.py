@@ -24,6 +24,8 @@ def target_path(name):
         raise ValueError(f"Invalid target path: {name}")
     if relative.parts[0] in BLOCKED:
         raise ValueError(f"Authentication/runtime directory excluded: {name}")
+    if relative.parts[:2] == (".config", "gh"):
+        raise ValueError(f"GitHub authentication directory excluded: {name}")
     path = HOME / relative
     if not path.resolve().is_relative_to(HOME):
         raise ValueError(f"Path escapes HOME: {name}")

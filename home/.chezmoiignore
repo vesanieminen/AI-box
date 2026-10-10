@@ -4,3 +4,7 @@
 **/__pycache__
 **/__pycache__/**
 **/*.pyc
+
+# GitHub authentication is provisioned separately, never restored from Git.
+.config/gh
+.config/gh/**

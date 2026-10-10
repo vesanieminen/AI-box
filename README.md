@@ -82,6 +82,8 @@ into `~/AGENTS.md` and adjust the repository path if needed.
 Each completed task should include a local commit describing the change and
 its validation. Tracking is an explicit workflow, not a background watcher.
 No remote is configured; pushing or publishing requires a user request.
+GitHub CLI installation and separate PAT provisioning are documented in
+[GitHub access](docs/github.md). Credentials stay outside this repository.
 
 ## AI box restoration
 
