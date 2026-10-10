@@ -118,15 +118,31 @@ weights are reused from local folders and never downloaded on a model switch.
 
 ### OpenCode clients
 
-Keep the existing provider and API base URL `http://192.168.0.181:8000/v1`.
-The default model ID remains `qwen3.8-27b-int8`. With automatic model discovery,
-run `/models` and select one of the model IDs above.
-For manually listed models, duplicate the working INT8 entry, change the model
-ID to `qwen3.8-27b-int4` (including `modelID` if set), and retain its other
-provider, tool-support and request settings. Set the context limit for each
-new entry to match the model table; INT8 Qwen settings cannot be copied unchanged
-to a model with a smaller context. OpenCode's provider prefix remains
-the same; llama-swap routes using the model ID sent in the request body.
+On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 11 IDs
+and their configured context limits under the custom provider `llama-swap`.
+The example chooses output budgets of 8192 tokens, or 2048 for Gemma INT8's
+8192-token context; these are client budgets, not tested maximum output lengths.
+No API key is required for the direct LAN endpoint.
+
+Run `/models` in OpenCode and select a `llama-swap/...` entry. The root `model`
+setting sets the default for new work; a session selection takes precedence.
+For an existing working provider, keep its provider ID, package and request
+settings, update `baseURL` to `http://192.168.0.181:8000/v1`, and merge the example's
+`models` entries. Use that provider ID instead of `llama-swap` in model references.
+The example's 900000 ms header/chunk timeouts accommodate cold startup.
+
+List these models explicitly: OpenCode's built-in vLLM discovery filters for
+`owned_by: vllm`, while llama-swap reports `owned_by: llama-swap`. A custom
+provider's explicit model list avoids relying on that filter. The example does
+not change a client's existing tool or reasoning overrides; carry over the
+settings that already work with the relevant backend. Short generation and
+streaming checks do not establish end-to-end agent/tool reliability for each model.
+
+If using the Raspberry Pi's LiteLLM gateway, set the client URL to that gateway's
+actual OpenAI-compatible endpoint and use its configured model aliases. LiteLLM's
+upstream for this box is `http://192.168.0.181:8000/v1`; provisioning the gateway
+and testing its wake-on-WLAN hook are separate from this machine's setup.
 
 The first request after a switch waits for model loading. Set any existing
 client/proxy request timeout long enough for cold startup. Only one configured

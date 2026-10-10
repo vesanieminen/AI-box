@@ -1,0 +1,94 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "llama-swap/qwen3.8-27b-int8",
+  "providers": {
+    "llama-swap": {
+      "name": "AI box / llama-swap",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "http://192.168.0.181:8000/v1",
+        "headerTimeout": 900000,
+        "chunkTimeout": 900000
+      },
+      "models": {
+        "qwen3.8-27b-int8": {
+          "name": "Qwen3.8 27B INT8 MTP",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          }
+        },
+        "qwen3.8-27b-int4": {
+          "name": "Qwen3.8 27B INT4 MTP",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          }
+        },
+        "qwen3.8-27b-int8-dflash2": {
+          "name": "Qwen3.8 27B INT8 DFlash2",
+          "limit": {
+            "context": 212992,
+            "output": 8192
+          }
+        },
+        "qwen3.6-35b-a3b-int4": {
+          "name": "Qwen3.6 35B-A3B INT4",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "ornith-1.5-35b-int4": {
+          "name": "Ornith 1.5 35B-A3B INT4",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          }
+        },
+        "gemma-4-31b-int4": {
+          "name": "Gemma 4 31B INT4",
+          "limit": {
+            "context": 73728,
+            "output": 8192
+          }
+        },
+        "gemma-4-31b-int8": {
+          "name": "Gemma 4 31B INT8",
+          "limit": {
+            "context": 8192,
+            "output": 2048
+          }
+        },
+        "gemma-4-26b-a4b-exl3": {
+          "name": "Gemma 4 26B-A4B EXL3",
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          }
+        },
+        "ornith-1.5-35b-exl3": {
+          "name": "Ornith 1.5 35B-A3B EXL3",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "ornith-1.5-9b-exl3": {
+          "name": "Ornith 1.5 9B EXL3",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "qwen3.8-27b-exl3": {
+          "name": "Qwen3.8 27B EXL3 3bpw",
+          "limit": {
+            "context": 212992,
+            "output": 8192
+          }
+        }
+      }
+    }
+  }
+}
