@@ -12,6 +12,7 @@ Install the additions in [official packages](../packages/official.txt) with
 | Package | Purpose |
 | --- | --- |
 | chezmoi | Restore managed user configuration from this repository |
+| github-cli | GitHub CLI and HTTPS Git authentication |
 | ethtool | Inspect and configure Ethernet wake support |
 | lact | GPU control application and `lactd.service` telemetry daemon |
 | nvidia-container-toolkit | Expose NVIDIA GPUs to the vLLM container through CDI |
@@ -20,13 +21,14 @@ Install the additions in [official packages](../packages/official.txt) with
 | stress-ng | Manual system stress testing |
 | ttf-cascadia-mono-nerd | Configured terminal font |
 
-Install Geekbench 7 using `yay -S --needed geekbench`. Package sources and
+Install AUR additions with `yay -S --needed geekbench llama-swap-bin`.
+Geekbench 7 provides manual benchmarking; llama-swap provides LAN model switching. Package sources and
 restoration commands are in [packages](../packages/README.md); installed versions
 are recorded in [versions.txt](../packages/versions.txt).
 
 ## User configuration
 
-Chezmoi manages 23 files. Configure it with `scripts/setup-chezmoi.sh` from this
+Chezmoi manages 24 files. Configure it with `scripts/setup-chezmoi.sh` from this
 checkout, review `chezmoi diff`, then run `chezmoi apply` to restore settings.
 The capture allowlist is `tracked-files.json`. Python bytecode is excluded;
 empty preference files use Chezmoi's `empty_` attribute.
@@ -47,18 +49,27 @@ empty preference files use Chezmoi's `empty_` attribute.
 ## AI services and models
 
 Follow [AI service restoration](../system/local-ai/README.md) to create the
-container and install the system units. Docker, `vllm-boot.service`,
-`ollama-idle-suspend.service` and `lactd.service` are enabled.
+containers and install the system units. Docker, `llama-swap.service`,
+`ollama-idle-suspend.service` and `lactd.service` are enabled. The direct
+`vllm-boot.service` is disabled. Llama-swap preloads INT8 on boot and manages
+one model at a time; GPU placement follows the selected backend profile.
 
 - Default backend: `vllm/vllm-openai:v0.29.0`, pinned by digest in
   `system/local-ai/compose.yaml`, serving `lued/Qwen3.8-27B-INT8-W8A16-MTP`.
   It uses both RTX 3090 GPUs, tensor parallelism 2, MTP3 and FP8 E4M3 KV cache.
   The advertised maximum context is 262144 tokens.
-- vLLM listens on `0.0.0.0:8000`; API base URL is
-  `http://192.168.0.181:8000/v1`. The persistent UFW rule permits TCP 8000
+- Llama-swap listens on `0.0.0.0:8000`; API base URL is
+  `http://192.168.0.181:8000/v1` and browser UI is
+  `http://192.168.0.181:8000/ui/`. INT8 and INT4 vLLM backends listen only on
+  localhost ports 5800 and 5801. Other vLLM backends use 5802–5806;
+  EXL3 backends use 5810–5813. Selecting `qwen3.8-27b-int4` unloads INT8 and
+  loads the INT4 MTP2 profile; selecting `qwen3.8-27b-int8` switches back.
+  Active inference finishes before a queued switch. Existing OpenCode clients
+  keep the same endpoint and select models through `/models`. The persistent UFW rule permits TCP 8000
   from `192.168.0.0/24`. Restore it using [firewall instructions](../system/firewall/README.md).
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
-  alternative to vLLM; its services remain disabled while vLLM is the boot backend.
+  alternative to llama-swap; its services remain disabled while llama-swap
+  manages the GPUs.
   The system unit preloads `qwen3.8:3090` when started.
 - Thirteen vLLM model directories and four Ollama tags are available locally.
   Weights remain outside Git. [Model records](../models/README.md) contain sources,
@@ -69,6 +80,24 @@ container and install the system units. Docker, `vllm-boot.service`,
   It reads LACT telemetry and serves `http://127.0.0.1:8765` when started using
   the command in the AI service instructions. It is not enabled at boot.
 
+### Model switching and timing metadata
+
+Llama-swap configuration declares 11 complete chat-model routes through vLLM,
+TabbyAPI and SGLang. Runtime images are pinned in `system/local-ai/compose.yaml`;
+weights remain outside Git. The shared DFlash2 draft is used with its Qwen
+INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
+no weights. The model table and restoration steps are in
+[AI services](../system/local-ai/README.md).
+
+All vLLM profiles include per-request timing metrics and forced final streaming
+usage. Llama-swap Activity displays prompt/decode throughput for new responses.
+Streaming vLLM and TabbyAPI responses report rates in Activity. SGLang reports
+streaming token usage, with throughput available through its separate native
+Prometheus endpoint. Its response format does not expose Activity-compatible
+per-request rates. A remote OpenCode response also reported both vLLM rates.
+Chezmoi restoration was verified for all 24 files and their permissions.
+The idle guard's 12 regression checks pass.
+
 ## Network wake
 
 [Network restoration](../system/network/README.md) installs NetworkManager's
@@ -76,17 +105,27 @@ persistent magic-packet defaults: Ethernet wake-on-LAN 64 and Wi-Fi wake-on-WLAN
 Existing connection profiles also select magic-packet wake. Network credentials
 are provisioned separately.
 
+## GitHub access
+
+`github-cli` provides `/usr/bin/gh`; the managed user launcher uses that binary.
+The PAT is provisioned separately at `~/.config/gh/pat` (directory 700, file 600).
+The authentication directory is excluded from capture, Chezmoi and Git.
+[GitHub access](github.md) documents authentication and push commands.
+
 ## Verified behavior
 
-- All 23 managed files match live settings and restore into an empty home with
+- All 24 managed files match live settings and restore into an empty home with
   matching contents and permissions; Chezmoi verification passes.
-- vLLM starts, lists the expected model and returns a short chat completion.
-  Both GPUs participate. The host's LAN-address API request succeeds.
+- All 11 selectable models generate a short response through llama-swap.
+  Both Qwen MTP profiles return `OK`; INT8 → INT4 → INT8
+  switching is verified. Each uses both GPUs and one model runs at a time.
+  The browser UI returns HTTP 200. API and UI requests from other LAN devices
+  succeed; OpenCode streaming inference is also verified.
 - Ollama discovers all four tags and the custom Qwen3.8 profile returns a short
   response with MTP enabled.
 - The idle plugin reports the screensaver disabled and a 300-second lock timeout.
   The AI-aware suspend guard and LACT daemon are active.
 - Wi-Fi magic-packet wake is enabled; both Ethernet interfaces report `Wake-on: g`.
 
-An actual reboot, suspend with remote wake, requests from another LAN device,
-and full-context model operation still require end-to-end verification.
+An actual reboot, suspend with remote wake and full-context model operation
+still require end-to-end verification.

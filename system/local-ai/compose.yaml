@@ -1,8 +1,9 @@
 {
+  "name": "local-ai",
   "services": {
-    "vllm": {
+    "vllm-int8": {
       "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
-      "container_name": "qwen38-vllm",
+      "container_name": "qwen38-vllm-int8",
       "user": "1000:1000",
       "init": true,
       "network_mode": "host",
@@ -37,9 +38,9 @@
         "--served-model-name",
         "qwen3.8-27b-int8",
         "--host",
-        "0.0.0.0",
+        "127.0.0.1",
         "--port",
-        "8000",
+        "5800",
         "--tensor-parallel-size",
         "2",
         "--dtype",
@@ -69,7 +70,9 @@
         "--mm-processor-kwargs",
         "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
         "--speculative-config",
-        "{\"method\":\"mtp\",\"num_speculative_tokens\":3}"
+        "{\"method\":\"mtp\",\"num_speculative_tokens\":3}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage"
       ],
       "volumes": [
         "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b-int8:/models/qwen3.8-27b-int8:ro",
@@ -77,6 +80,666 @@
         "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
         "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
       ]
+    },
+    "vllm-int4": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "qwen38-vllm-int4",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/qwen38-int4-mtp-1791313917",
+        "TRITON_CACHE_DIR": "/cache/triton/qwen38-int4-mtp-1791313917",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/qwen38-int4-mtp-1791313917/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/qwen3.8-27b-int4-mtp",
+        "--served-model-name",
+        "qwen3.8-27b-int4",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5801",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "262144",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--disable-custom-all-reduce",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--enable-auto-tool-choice",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--mm-processor-kwargs",
+        "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 2}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b-int4-mtp:/models/qwen3.8-27b-int4-mtp:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    },
+    "qwen3.8-27b-int8-dflash2": {
+      "image": "local-ai/vllm-qwen-embedding:0.29.0",
+      "container_name": "qwen3.8-27b-int8-dflash2-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/qwen3.8-27b-int8-dflash2",
+        "TRITON_CACHE_DIR": "/cache/triton/qwen3.8-27b-int8-dflash2",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/qwen3.8-27b-int8-dflash2/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/qwen3.8-27b-int8-dflash2",
+        "--served-model-name",
+        "qwen3.8-27b-int8-dflash2",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5802",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "212992",
+        "--gpu-memory-utilization",
+        "0.96",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--disable-custom-all-reduce",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--enable-auto-tool-choice",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--mm-processor-kwargs",
+        "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage",
+        "--speculative-config",
+        "{\"method\": \"dflash\", \"model\": \"/models/qwen3.8-dflash2-draft\", \"num_speculative_tokens\": 7, \"draft_tensor_parallel_size\": 2}"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b-int8-dflash2:/models/qwen3.8-27b-int8-dflash2:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-dflash2-draft:/models/qwen3.8-dflash2-draft:ro"
+      ],
+      "build": {
+        "context": "./images/vllm-qwen-embedding"
+      }
+    },
+    "qwen3.6-35b-a3b-int4": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "qwen3.6-35b-a3b-int4-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/qwen3.6-35b-a3b-int4",
+        "TRITON_CACHE_DIR": "/cache/triton/qwen3.6-35b-a3b-int4",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/qwen3.6-35b-a3b-int4/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/qwen3.6-35b-a3b.vllm.128k.2x",
+        "--served-model-name",
+        "qwen3.6-35b-a3b-int4",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5803",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "131072",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--disable-custom-all-reduce",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--enable-auto-tool-choice",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--mm-processor-kwargs",
+        "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.6-35b-a3b.vllm.128k.2x:/models/qwen3.6-35b-a3b.vllm.128k.2x:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    },
+    "ornith-1.5-35b-int4": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "ornith-1.5-35b-int4-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/ornith-1.5-35b-int4",
+        "TRITON_CACHE_DIR": "/cache/triton/ornith-1.5-35b-int4",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/ornith-1.5-35b-int4/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/ornith-1.5-35b-int4-tp2",
+        "--served-model-name",
+        "ornith-1.5-35b-int4",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5804",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "262144",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--disable-custom-all-reduce",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--enable-auto-tool-choice",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--mm-processor-kwargs",
+        "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/ornith-1.5-35b-int4-tp2:/models/ornith-1.5-35b-int4-tp2:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    },
+    "gemma-4-31b-int4": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "gemma-4-31b-int4-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/gemma-4-31b-int4",
+        "TRITON_CACHE_DIR": "/cache/triton/gemma-4-31b-int4",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/gemma-4-31b-int4/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/gemma-4-31b-int4-tp2",
+        "--served-model-name",
+        "gemma-4-31b-int4",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5805",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "73728",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "auto",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--disable-custom-all-reduce",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage",
+        "--tool-call-parser",
+        "gemma4",
+        "--reasoning-parser",
+        "gemma4",
+        "--enable-auto-tool-choice"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/gemma-4-31b-int4-tp2:/models/gemma-4-31b-int4-tp2:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    },
+    "gemma-4-31b-int8": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "gemma-4-31b-int8-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/gemma-4-31b-int8",
+        "TRITON_CACHE_DIR": "/cache/triton/gemma-4-31b-int8",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/gemma-4-31b-int8/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/gemma-4-31b-int8-tp2",
+        "--served-model-name",
+        "gemma-4-31b-int8",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5806",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "8192",
+        "--gpu-memory-utilization",
+        "0.96",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "auto",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--disable-custom-all-reduce",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--enable-per-request-metrics",
+        "--enable-force-include-usage",
+        "--tool-call-parser",
+        "gemma4",
+        "--reasoning-parser",
+        "gemma4",
+        "--enable-auto-tool-choice"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/gemma-4-31b-int8-tp2:/models/gemma-4-31b-int8-tp2:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    },
+    "gemma-4-26b-a4b-exl3": {
+      "image": "ghcr.io/0xsero/tabbyapi-exl3@sha256:0f83e6198dc3be2561652d8df2525a7d1a69733e12fc8e25cbc5bc319a8a3ad1",
+      "container_name": "gemma-4-26b-a4b-exl3-swap",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "HOME": "/tmp",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "CUDA_DEVICE_ORDER": "PCI_BUS_ID"
+      },
+      "command": [
+        "main.py",
+        "--config",
+        "/app/config.yml"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/gemma-4-26b-a4b.tabbyapi.64k:/workspace/models/gemma-4-26b-a4b-exl3:ro",
+        "./etc/tabbyapi/gemma-4-26b-a4b-exl3.yaml:/app/config.yml:ro"
+      ],
+      "entrypoint": "/opt/venv/bin/python3"
+    },
+    "ornith-1.5-35b-exl3": {
+      "image": "ghcr.io/0xsero/tabbyapi-exl3@sha256:0f83e6198dc3be2561652d8df2525a7d1a69733e12fc8e25cbc5bc319a8a3ad1",
+      "container_name": "ornith-1.5-35b-exl3-swap",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "HOME": "/tmp",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "CUDA_DEVICE_ORDER": "PCI_BUS_ID"
+      },
+      "command": [
+        "main.py",
+        "--config",
+        "/app/config.yml"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/ornith-1.5-35b-a3b.tabbyapi.128k:/workspace/models/ornith-1.5-35b-exl3:ro",
+        "./etc/tabbyapi/ornith-1.5-35b-exl3.yaml:/app/config.yml:ro"
+      ],
+      "entrypoint": "/opt/venv/bin/python3"
+    },
+    "ornith-1.5-9b-exl3": {
+      "image": "ghcr.io/0xsero/tabbyapi-exl3@sha256:0f83e6198dc3be2561652d8df2525a7d1a69733e12fc8e25cbc5bc319a8a3ad1",
+      "container_name": "ornith-1.5-9b-exl3-swap",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "HOME": "/tmp",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "CUDA_DEVICE_ORDER": "PCI_BUS_ID"
+      },
+      "command": [
+        "main.py",
+        "--config",
+        "/app/config.yml"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/ornith-1.5-9b.tabbyapi.128k:/workspace/models/ornith-1.5-9b-exl3:ro",
+        "./etc/tabbyapi/ornith-1.5-9b-exl3.yaml:/app/config.yml:ro"
+      ],
+      "entrypoint": "/opt/venv/bin/python3"
+    },
+    "qwen3.8-27b-exl3": {
+      "image": "ghcr.io/0xsero/sglang-exl3@sha256:c8922bd7256caf1b273af7ac49221e652be9e6072c1cdec4b959f506fd415d79",
+      "container_name": "qwen3.8-27b-exl3-swap",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "16g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+        "HF_HUB_OFFLINE": "1",
+        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+        "SGLANG_EXL3_EMBED_HOST": "1",
+        "SGLANG_EXL3_PREFILL_FP16_ACC": "1",
+        "SGLANG_EXL3_VIT_MLP_CHUNK": "8192",
+        "SGLANG_EXL3_VIT_SDPA": "1",
+        "SGLANG_OPT_MAMBA_SKIP_DECODE_LOCK": "1",
+        "SGLANG_VLM_CACHE_SIZE_MB": "256"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "sglang.launch_server",
+        "--model-path",
+        "/models/turboderp-Qwen3.8-27B-exl3-3.00bpw",
+        "--quantization",
+        "exl3",
+        "--trust-remote-code",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5813",
+        "--served-model-name",
+        "turboderp-Qwen3.8-27B-exl3-3.00bpw",
+        "--context-length",
+        "212992",
+        "--mem-fraction-static",
+        "0.82",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--mamba-ssm-dtype",
+        "bfloat16",
+        "--max-running-requests",
+        "1",
+        "--max-mamba-cache-size",
+        "3",
+        "--cuda-graph-max-bs-decode",
+        "1",
+        "--cuda-graph-max-bs-prefill",
+        "240",
+        "--chunked-prefill-size",
+        "4096",
+        "--max-prefill-tokens",
+        "4096",
+        "--prefill-decode-interval",
+        "16",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--mamba-radix-cache-strategy",
+        "no_buffer",
+        "--disable-overlap-schedule",
+        "--image-processor-backend",
+        "pil",
+        "--speculative-algorithm",
+        "NEXTN",
+        "--speculative-num-steps",
+        "3",
+        "--speculative-eagle-topk",
+        "1",
+        "--speculative-num-draft-tokens",
+        "4",
+        "--speculative-token-map",
+        "/opt/sglang-exl3/tokenmaps/qwen38_hot32k_v2.pt",
+        "--enable-metrics",
+        "--enable-request-time-stats-logging",
+        "--stream-response-default-include-usage",
+        "--enable-cache-report"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b.sglang.208k:/models/turboderp-Qwen3.8-27B-exl3-3.00bpw:ro"
+      ],
+      "entrypoint": "/opt/entrypoint.sh"
     }
   }
 }

@@ -1,0 +1,210 @@
+{
+  "healthCheckTimeout": 900,
+  "globalTTL": 0,
+  "unloadTimeout": 90,
+  "logLevel": "info",
+  "logToStdout": "proxy,http",
+  "captureBuffer": 0,
+  "models": {
+    "qwen3.8-27b-int8": {
+      "name": "Qwen3.8 27B INT8 MTP",
+      "description": "Two RTX 3090 GPUs, 262144-token context, MTP3",
+      "cmd": "/usr/bin/docker start --attach qwen38-vllm-int8",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen38-vllm-int8",
+      "proxy": "http://127.0.0.1:5800",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.8-27b-int8",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 262144
+      }
+    },
+    "qwen3.8-27b-int4": {
+      "name": "Qwen3.8 27B INT4 MTP",
+      "description": "Two RTX 3090 GPUs, 262144-token context, MTP2",
+      "cmd": "/usr/bin/docker start --attach qwen38-vllm-int4",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen38-vllm-int4",
+      "proxy": "http://127.0.0.1:5801",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.8-27b-int4",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 262144
+      }
+    },
+    "qwen3.8-27b-int8-dflash2": {
+      "name": "Qwen3.8 27B INT8 DFlash2",
+      "description": "vLLM, TP2, 212992-token context, BF16 DFlash2 draft, packed embedding loader",
+      "cmd": "/usr/bin/docker start --attach qwen3.8-27b-int8-dflash2-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen3.8-27b-int8-dflash2-swap",
+      "proxy": "http://127.0.0.1:5802",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.8-27b-int8-dflash2",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 212992
+      }
+    },
+    "qwen3.6-35b-a3b-int4": {
+      "name": "Qwen3.6 35B-A3B INT4",
+      "description": "vLLM, tensor parallelism 2, 131072-token context",
+      "cmd": "/usr/bin/docker start --attach qwen3.6-35b-a3b-int4-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen3.6-35b-a3b-int4-swap",
+      "proxy": "http://127.0.0.1:5803",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.6-35b-a3b-int4",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 131072
+      }
+    },
+    "ornith-1.5-35b-int4": {
+      "name": "Ornith 1.5 35B-A3B INT4",
+      "description": "vLLM, tensor parallelism 2, 262144-token context",
+      "cmd": "/usr/bin/docker start --attach ornith-1.5-35b-int4-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 ornith-1.5-35b-int4-swap",
+      "proxy": "http://127.0.0.1:5804",
+      "checkEndpoint": "/health",
+      "useModelName": "ornith-1.5-35b-int4",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 262144
+      }
+    },
+    "gemma-4-31b-int4": {
+      "name": "Gemma 4 31B INT4",
+      "description": "vLLM, tensor parallelism 2, 73728-token context, automatic KV dtype",
+      "cmd": "/usr/bin/docker start --attach gemma-4-31b-int4-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 gemma-4-31b-int4-swap",
+      "proxy": "http://127.0.0.1:5805",
+      "checkEndpoint": "/health",
+      "useModelName": "gemma-4-31b-int4",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 73728
+      }
+    },
+    "gemma-4-31b-int8": {
+      "name": "Gemma 4 31B INT8",
+      "description": "vLLM, tensor parallelism 2, 8192-token context, automatic KV dtype",
+      "cmd": "/usr/bin/docker start --attach gemma-4-31b-int8-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 gemma-4-31b-int8-swap",
+      "proxy": "http://127.0.0.1:5806",
+      "checkEndpoint": "/health",
+      "useModelName": "gemma-4-31b-int8",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 8192
+      }
+    },
+    "gemma-4-26b-a4b-exl3": {
+      "name": "Gemma 4 26B-A4B EXL3",
+      "description": "TabbyAPI / ExLlamaV3, 65536-token context; automatic GPU split (not tensor parallelism)",
+      "cmd": "/usr/bin/docker start --attach gemma-4-26b-a4b-exl3-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 gemma-4-26b-a4b-exl3-swap",
+      "proxy": "http://127.0.0.1:5810",
+      "checkEndpoint": "/v1/models",
+      "useModelName": "gemma-4-26b-a4b-exl3",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 65536
+      },
+      "filters": {
+        "setParams": {
+          "stream_options.include_usage": true
+        }
+      }
+    },
+    "ornith-1.5-35b-exl3": {
+      "name": "Ornith 1.5 35B-A3B EXL3",
+      "description": "TabbyAPI / ExLlamaV3, 131072-token context; automatic GPU split (not tensor parallelism)",
+      "cmd": "/usr/bin/docker start --attach ornith-1.5-35b-exl3-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 ornith-1.5-35b-exl3-swap",
+      "proxy": "http://127.0.0.1:5811",
+      "checkEndpoint": "/v1/models",
+      "useModelName": "ornith-1.5-35b-exl3",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 131072
+      },
+      "filters": {
+        "setParams": {
+          "stream_options.include_usage": true
+        }
+      }
+    },
+    "ornith-1.5-9b-exl3": {
+      "name": "Ornith 1.5 9B EXL3",
+      "description": "TabbyAPI / ExLlamaV3, 131072-token context; automatic GPU split (not tensor parallelism)",
+      "cmd": "/usr/bin/docker start --attach ornith-1.5-9b-exl3-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 ornith-1.5-9b-exl3-swap",
+      "proxy": "http://127.0.0.1:5812",
+      "checkEndpoint": "/v1/models",
+      "useModelName": "ornith-1.5-9b-exl3",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 131072
+      },
+      "filters": {
+        "setParams": {
+          "stream_options.include_usage": true
+        }
+      }
+    },
+    "qwen3.8-27b-exl3": {
+      "name": "Qwen3.8 27B EXL3 3bpw",
+      "description": "SGLang EXL3, 212992-token context, SSD single-GPU recipe",
+      "cmd": "/usr/bin/docker start --attach qwen3.8-27b-exl3-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen3.8-27b-exl3-swap",
+      "proxy": "http://127.0.0.1:5813",
+      "checkEndpoint": "/health",
+      "useModelName": "turboderp-Qwen3.8-27B-exl3-3.00bpw",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 212992
+      },
+      "filters": {
+        "setParams": {
+          "stream_options.include_usage": true
+        }
+      }
+    }
+  },
+  "routing": {
+    "router": {
+      "use": "group",
+      "settings": {
+        "groups": {
+          "gpu-models": {
+            "swap": true,
+            "exclusive": true,
+            "members": [
+              "qwen3.8-27b-int8",
+              "qwen3.8-27b-int4",
+              "qwen3.8-27b-int8-dflash2",
+              "qwen3.6-35b-a3b-int4",
+              "ornith-1.5-35b-int4",
+              "gemma-4-31b-int4",
+              "gemma-4-31b-int8",
+              "gemma-4-26b-a4b-exl3",
+              "ornith-1.5-35b-exl3",
+              "ornith-1.5-9b-exl3",
+              "qwen3.8-27b-exl3"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

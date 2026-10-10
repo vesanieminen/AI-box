@@ -4,11 +4,14 @@ Weights are stored outside Git. All 13 model directories and four Ollama tags we
 
 ## Default boot model
 
-`qwen3.8-27b-int8`: Qwen3.8 27B INT8 W8A16 with MTP, served on port 8000 across two RTX 3090 GPUs. See [service restoration](../system/local-ai/README.md).
+`qwen3.8-27b-int8`: Qwen3.8 27B INT8 W8A16 with MTP, served through llama-swap on port 8000 across two RTX 3090 GPUs.
+The complete chat models are configured for on-demand switching through vLLM,
+TabbyAPI or SGLang. The Gemma 26B 8bpw folder contains configuration but no
+weights; the DFlash2 draft is a companion, not a standalone chat model. See [service restoration](../system/local-ai/README.md).
 
 ## Hugging Face models
 
-`vllm.json` records each repository, exact revision, file sizes and a download command. Folder names preserve the SSD naming; EXL3 folders need an EXL3-compatible backend and are archived assets, not enabled vLLM services. Some SSD folders were pruned to model files; downloading the pinned repository can restore additional documentation.
+`vllm.json` records each repository, exact revision, file sizes and a download command. Folder names preserve the SSD naming; EXL3 folders use TabbyAPI or SGLang through llama-swap; they are not vLLM model formats. Some SSD folders were pruned to model files; downloading the pinned repository can restore additional documentation.
 
 | Local directory | Download source | Revision | Copied GiB |
 | --- | --- | --- | --- |
@@ -60,5 +63,5 @@ It lists eight selected two-GPU model components; the other five archived
 variants are on disk and recorded in `vllm.json`. The HTML is the original SSD
 snapshot: its old addresses, server-status text, verification labels and 175 W
 manual benchmark plans do not describe changes applied to this box. GPU power
-limits remain 350 W, and alternative model recipes are not automatically tested
-or started.
+limits remain 350 W, and model service configuration and current validation are documented separately
+in `system/local-ai/README.md`.

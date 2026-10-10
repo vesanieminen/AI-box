@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Suspend only when both the desktop and AI server have been idle 15 minutes."""
 import json
-from datetime import datetime
 from pathlib import Path
 import subprocess
 import sys
 import time
+from urllib.request import urlopen
 
 IDLE_SECONDS = 900
 DESKTOP_STATE = Path('/home/vesanieminen/.local/state/ollama/desktop-idle.json')
@@ -48,7 +48,50 @@ def ollama_connected():
     # Conservatively count any established client connection, even if it is
     # idle keep-alive. This protects long streaming and queued requests.
     return bool(command('ss', '-Htn', 'state', 'established',
-                        '( sport = :11434 or sport = :8000 )').strip())
+                        '( sport = :11434 or sport = :5800 or sport = :5801 or sport = :5802 or sport = :5803 or sport = :5804 or sport = :5805 or sport = :5806 or sport = :5810 or sport = :5811 or sport = :5812 or sport = :5813 )').strip())
+
+
+def swap_busy():
+    state = command('systemctl', 'show', 'llama-swap.service',
+                    '--property=ActiveState', '--value').strip()
+    if state == 'inactive':
+        # Ollama can be selected manually while llama-swap is stopped.
+        return False
+    if state not in ('active', 'activating', 'deactivating'):
+        raise RuntimeError('Unable to verify llama-swap service state')
+    # Model discovery and UI/log streams are not inference activity. Read
+    # model loading state and the initial snapshot of in-flight API requests.
+    with urlopen('http://127.0.0.1:8000/running', timeout=5) as response:
+        models = json.load(response)['running']
+    if any(model['state'] in ('starting', 'stopping') for model in models):
+        return True
+    with urlopen('http://127.0.0.1:8000/api/events', timeout=5) as response:
+        for _ in range(64):
+            line = response.readline(1024 * 1024)
+            if not line:
+                break
+            if not line.startswith(b'data:'):
+                continue
+            event = json.loads(line[5:])
+            if event['type'] == 'inflight':
+                snapshot = json.loads(event['data'])
+                if snapshot['operation'] == 'snapshot':
+                    return bool(snapshot.get('requests'))
+    raise RuntimeError('Unable to verify llama-swap in-flight requests')
+
+
+def recent_swap_request():
+    result = subprocess.run(
+        ['journalctl', '-u', 'llama-swap.service', '--since', '-16 minutes',
+         '--no-pager', '-o', 'json', '--grep',
+         r'Request .*"((POST|PUT|DELETE|PATCH) /(v1/|api/models/|api/profiles/)|GET /upstream/[^ ]+/ HTTP)'],
+        text=True, capture_output=True, timeout=10)
+    if result.returncode == 1 and not result.stdout.strip() and not result.stderr.strip():
+        return 0.0
+    if result.returncode:
+        raise RuntimeError('Unable to check llama-swap request activity')
+    return max((int(json.loads(line)['__REALTIME_TIMESTAMP']) / 1_000_000
+                for line in result.stdout.splitlines()), default=0.0)
 
 
 def recent_ollama_request():
@@ -73,27 +116,17 @@ def recent_ollama_request():
     return latest
 
 
-def recent_vllm_request():
-    result = subprocess.run(
-        ['docker', 'logs', '--since', '16m', '--tail', '10000', '--timestamps', 'qwen38-vllm'],
-        text=True, capture_output=True, timeout=10)
-    if result.returncode:
-        if 'No such container' in result.stderr:
-            return 0.0
-        raise RuntimeError('Unable to check vLLM request activity')
-    latest = 0.0
-    for line in (result.stdout + result.stderr).splitlines():
-        if any('"' + method + ' /' in line for method in ('POST', 'PUT', 'DELETE', 'PATCH')):
-            stamp = line.split(' ', 1)[0]
-            latest = max(latest, datetime.fromisoformat(stamp.replace('Z', '+00:00')).timestamp())
-    return latest
-
-
 def downloads_active():
     for proc in Path('/proc').glob('[0-9]*/cmdline'):
         try:
             args = proc.read_bytes().split(b'\0')
-            if any(arg.endswith((b'/download-recipes.py', b'/download-extra-after-queue.py')) for arg in args):
+            names = [arg.rsplit(b'/', 1)[-1] for arg in args]
+            if names and names[0] == b'docker':
+                if b'pull' in args[1:3] or (b'compose' in args and b'create' in args):
+                    return True
+            if b'hf' in names and b'download' in args:
+                return True
+            if names and names[0] == b'ollama' and b'pull' in args[1:3]:
                 return True
         except (OSError, PermissionError):
             continue
@@ -102,8 +135,8 @@ def downloads_active():
 
 def inspect(last_activity):
     now = time.time()
-    connected = ollama_connected() or downloads_active()
-    last_activity = max(last_activity, recent_ollama_request(), recent_vllm_request())
+    connected = ollama_connected() or swap_busy() or downloads_active()
+    last_activity = max(last_activity, recent_ollama_request(), recent_swap_request())
     if connected:
         last_activity = now
     desktop = desktop_idle()
@@ -131,7 +164,7 @@ def main():
             last_activity, status = inspect(last_activity)
             if status['would_suspend']:
                 # Repeat the connection check immediately before requesting sleep.
-                if not ollama_connected() and not downloads_active() and desktop_idle():
+                if not ollama_connected() and not swap_busy() and not downloads_active() and desktop_idle():
                     print('Desktop and AI server idle for 15 minutes; requesting suspend', flush=True)
                     subprocess.run(['systemctl', 'suspend'], check=True, timeout=30)
                 last_activity = time.time()

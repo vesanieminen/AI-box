@@ -1,6 +1,6 @@
 # LAN access to vLLM
 
-vLLM uses host networking and listens on `0.0.0.0:8000`. The current LAN address
+Llama-swap listens on `0.0.0.0:8000` and proxies to private vLLM backends. The current LAN address
 is `192.168.0.181/24`; the OpenAI API base URL is
 `http://192.168.0.181:8000/v1`. Model discovery is `/v1/models`.
 
@@ -23,6 +23,4 @@ From another device on the LAN:
 curl http://192.168.0.181:8000/v1/models
 ```
 
-The current API retains the SSD's configuration without an API key. Full remote
-reachability requires checking from another device; a host-local request to its
-LAN address alone does not exercise the incoming firewall path.
+The current LAN API has no API key. Requests from other LAN devices have successfully reached the API and web UI.

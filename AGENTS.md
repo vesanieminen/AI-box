@@ -33,7 +33,7 @@ Use normal Arch repository/AUR package installation for applications and record
 only deliberate additions. Do not retain one-off SSD copying or installation
 scripts. Keep model weights outside Git; record model sources, pinned revisions,
 and download commands. This machine primarily serves AI models; preserve the
-selected vLLM boot service and AI-aware automatic suspend behavior.
+selected llama-swap boot service and default vLLM profile and AI-aware automatic suspend behavior.
 
 Documentation describes the final working installation: installed programs and
 their purpose, retained settings, restore commands and verified behavior. Update

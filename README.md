@@ -41,7 +41,7 @@ committing.
 ## Chezmoi setup and restore
 
 Chezmoi is installed and configured on this machine to use this checkout.
-All 23 managed files match live settings; restoration into an empty temporary
+All 24 managed files match live settings; restoration into an empty temporary
 directory was verified for contents and permissions. Generated Python bytecode
 is excluded by `home/.chezmoiignore`, including files already ignored by Git.
 
@@ -91,12 +91,12 @@ Start with a fresh Omarchy installation, install `packages/official.txt`, apply
 the user configs, then follow [AI service restoration](system/local-ai/README.md).
 [Model provenance and download commands](models/README.md) record the copied
 weights; weights themselves require a separate backup or download. The selected
-boot backend is vLLM Qwen3.8 INT8 on both RTX 3090 GPUs.
+boot service is llama-swap, preloading vLLM Qwen3.8 INT8 on both RTX 3090 GPUs.
 
 One-off SSD copying and installation helpers are not retained. App additions
 are package names, overrides are configuration files, and model downloads are
 recorded sources and revisions. No restore command depends on the external SSD.
 
 LAN access and persistent wake are recorded in [firewall settings](system/firewall/README.md)
-and [network wake settings](system/network/README.md). Geekbench 7 is the explicit
-AUR addition; other unrelated SSD apps are excluded.
+and [network wake settings](system/network/README.md). Geekbench 7 and llama-swap are the explicit
+AUR additions; other unrelated SSD apps are excluded.
