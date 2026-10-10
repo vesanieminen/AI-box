@@ -1,135 +1,92 @@
-# Machine changes
+# Installed configuration
 
-## 2026-10-10 — Establish tracking for future changes
+This is the reproducible configuration on top of a default Omarchy installation,
+verified on 2026-10-10. Record final installations, retained settings, restoration
+instructions and validation here.
 
-- Created `~/Projects/dotfiles` with an empty chezmoi source tree, an explicit
-  capture allowlist, and instructions for recording future changes.
-- Added `~/AGENTS.md` so future machine configuration tasks include recording,
-  validation, and a local commit.
-- The starting point is the default Omarchy installation. No default configs or
-  installed-package inventories are retained in this repository.
-- Chezmoi is not installed. The session could not resolve its download server;
-  capturing changes works now, while chezmoi setup/deployment remains pending.
-- No remote, push, application reload, or privileged system change was performed.
-- Validation: the capture helper passed checks for capture/update, drift,
-  source-edit conflicts, deleted files, excluded credential paths, executable
-  permissions, and symlink rejection. The final allowlist contains zero files;
-  the chezmoi setup script passed Bash syntax validation.
+## Programs
 
-For future manual changes, record the date, reason, exact actions, affected
-files/services, validation, and restoration instructions here when Git diffs
-and repeatable scripts do not fully describe the change.
+Install the additions in [official packages](../packages/official.txt) with
+`sudo pacman -S --needed $(cat packages/official.txt)`. Pacman resolves dependencies.
 
-## 2026-10-10 — Import selected SSD customizations
+| Package | Purpose |
+| --- | --- |
+| chezmoi | Restore managed user configuration from this repository |
+| ethtool | Inspect and configure Ethernet wake support |
+| lact | GPU control application and `lactd.service` telemetry daemon |
+| nvidia-container-toolkit | Expose NVIDIA GPUs to the vLLM container through CDI |
+| ollama-cuda | Package-managed Ollama with NVIDIA acceleration |
+| openrgb | Turn off ASUS RTX 3090 lighting at desktop login |
+| stress-ng | Manual system stress testing |
+| ttf-cascadia-mono-nerd | Configured terminal font |
 
-Source: the read-only Samsung T7 Omarchy 4.0.4 installation. This box primarily
-serves AI models. The selected restoration policy is normal Arch package
-installation, configuration templates and recorded model provenance. No one-off
-SSD copying/installation scripts are retained. Raw shell/package history was
-inspected for clues; sanitized findings are in `ssd-history.md`.
+Install Geekbench 7 using `yay -S --needed geekbench`. Package sources and
+restoration commands are in [packages](../packages/README.md); installed versions
+are recorded in [versions.txt](../packages/versions.txt).
 
-- Screenshot: Super+Shift+S saves a fullscreen screenshot, replacing Google Maps.
-- Terminals: Alacritty and Ghostty use CaskaydiaMono Nerd Font at size 11; Foot
-  uses JetBrainsMono at size 11; Kitty uses size 11. Current keyboard fixes remain.
-- Idle: the cloned vesanieminen.idle plugin publishes desktop activity, and the
-  enabled guard suspends after 15 minutes without desktop or AI activity. The
-  user explicitly chose to keep this behavior for the AI box. Screen saver and
-  lock remain at 150 and 300 seconds.
-- Lighting: OpenRGB's imported login entry turns off ASUS RTX 3090 lighting.
-- LACT: installed the app and enabled `lactd.service`. Both GPUs retain their
-  existing 350 W limits. The SSD power-limit scripts were explicitly declined.
-- GPU Observatory: copied the application to `~/code/gpu-monitor`, outside this
-  repository for its future separate repository. Its transient user service
-  serves http://127.0.0.1:8765 and reads LACT telemetry. Boot startup is not added.
-- Assets: all 13 model directories and four Ollama model tags were copied; the
-  vLLM cache was copied to save startup work. Weights and caches
-  stay outside Git. `models/` records sources, revisions, file sizes, Ollama
-  manifests and download commands. Default Qwen file sizes and every Ollama
-  manifest's referenced blob sizes were verified.
-- Runtime: the boot backend uses the exact SSD vLLM image and
-  Qwen3.8 INT8 model, described by `system/local-ai/compose.yaml` and
-  `vllm-boot.service`. Ollama is installed using Arch's `ollama-cuda`, with the
-  SSD model directory/environment retained. See `system/local-ai/README.md` for
-  normal restoration and manual backend switching.
-- Package additions are listed in `packages/official.txt`, limited to the AI runtime,
-  GPU/lighting/font tools already selected, stress-ng and ethtool. Unrelated SSD
-  desktop/development apps were declined. Transitive dependencies are not
-  duplicated. The SSD's alternate kernel is not an application addition.
+## User configuration
 
-Validation: Hyprland reload/configerrors clean; custom idle IPC responds correctly;
-fontconfig resolves CaskaydiaMono; lighting command exits successfully; idle guard
-and LACT daemon active/enabled; all 12 GPU Observatory tests pass with local
-socket access; captured JSON/TOML and Python syntax valid; all 22 captured files
-match live settings. The vLLM image was downloaded, the boot service started and API readiness
-was verified. A short chat completion returned `OK`. Live backups are temporarily in /tmp/omarchy-ssd-import-backup.
+Chezmoi manages 23 files. Configure it with `scripts/setup-chezmoi.sh` from this
+checkout, review `chezmoi diff`, then run `chezmoi apply` to restore settings.
+The capture allowlist is `tracked-files.json`. Python bytecode is excluded;
+empty preference files use Chezmoi's `empty_` attribute.
 
-- Network wake: recovered Ethernet magic-packet wake (64) and Wi-Fi magic-packet
-  wake (8) from the SSD’s NetworkManager profiles. Applied both as persistent
-  defaults and to existing profiles without copying credentials. Verified Wi-Fi
-  magic-packet wake enabled and both wired interfaces reporting `Wake-on: g`.
-  Restoration is in `system/network/README.md`. Actual suspend/remote-wake has
-  not been exercised during model setup.
-- Copied the requested original HTML catalog to `~/Documents/Local-AI/Models.html`
-  and captured it. It is an SSD snapshot, not live status for this box.
-- Narrowed the package manifest to seven selected additions. Removed only the
-  19 unrelated packages just added by the broad batch; pacman’s log confirms
-  every removed package was newly installed in that batch. No default or other
-  pre-existing Omarchy package was removed.
-- Verified Arch Ollama 0.33.3 discovers all four copied tags and the custom
-  `qwen3.8:3090` model returns `OK` with MTP enabled. Unloaded its weights and
-  stopped the temporary validation server before vLLM startup.
+- Super+Shift+S saves a fullscreen screenshot.
+- Ghostty and Alacritty use CaskaydiaMono Nerd Font at size 11; Foot uses
+  JetBrainsMono at size 11; Kitty uses size 11.
+- The screensaver is disabled: `idle.screensaver` is zero, the custom idle
+  plugin supports zero as disabled, and the persistent `screensaver-off`
+  preference blocks normal screensaver launching. The lock timeout is 300 seconds.
+- The custom idle plugin publishes desktop activity to the AI-aware suspend guard.
+  Automatic suspend occurs after 15 minutes without desktop or AI activity.
+  The runtime Stay Awake switch overrides idle behavior and is not managed by Git.
+- OpenRGB's desktop autostart entry turns off ASUS RTX 3090 lighting.
+- `~/Documents/Local-AI/Models.html` retains the supplied model catalog. It is a
+  reference snapshot, not live service status; model provenance is in `models/`.
 
-- vLLM: `vllm-boot.service` is active/enabled and serves `qwen3.8-27b-int8`
-  on port 8000 using the pinned vLLM 0.29.0 image, TP=2, MTP3 and FP8 E4M3 KV.
-  `/v1/models` advertises a 262144-token maximum; a short non-thinking chat
-  completion returned `OK`. Full-window context, other model recipes and an
-  actual reboot have not been tested. Both GPU limits remain 350 W.
-- The copied standalone Ollama binary and temporary PATH shim were removed after
-  the Arch package passed model discovery and Qwen response validation. The
-  package-managed executable is `/usr/bin/ollama`; system Ollama stays disabled
-  alongside the vLLM boot backend.
+## AI services and models
 
-- Geekbench 7: installed AUR `geekbench` 7.1.0-1 after reviewing the standard
-  PKGBUILD, verifying its vendor archive SHA-256 and building with makepkg.
-  `geekbench --version` reports 7.1.0; no benchmark was run. Recorded in
-  `packages/foreign.txt`, with source/restoration links in `packages/README.md`.
+Follow [AI service restoration](../system/local-ai/README.md) to create the
+container and install the system units. Docker, `vllm-boot.service`,
+`ollama-idle-suspend.service` and `lactd.service` are enabled.
 
-- LAN API access: confirmed vLLM listens on `0.0.0.0:8000` and that UFW had
-  no incoming rule for that port. Added the `Local vLLM` application profile
-  and persistent TCP 8000 allow rule from `192.168.0.0/24`, preserving all
-  existing firewall rules. The host’s LAN-address `/v1/models` request works;
-  a request from another LAN device is still needed for end-to-end verification.
-  Restoration is in `system/firewall/README.md`.
-- Automatic suspend remains configured. At final validation, the existing
-  runtime Stay Awake indicator was on; this override prevents suspend until
-  toggled off. The indicator is runtime state and is not tracked in Git.
+- Default backend: `vllm/vllm-openai:v0.29.0`, pinned by digest in
+  `system/local-ai/compose.yaml`, serving `lued/Qwen3.8-27B-INT8-W8A16-MTP`.
+  It uses both RTX 3090 GPUs, tensor parallelism 2, MTP3 and FP8 E4M3 KV cache.
+  The advertised maximum context is 262144 tokens.
+- vLLM listens on `0.0.0.0:8000`; API base URL is
+  `http://192.168.0.181:8000/v1`. The persistent UFW rule permits TCP 8000
+  from `192.168.0.0/24`. Restore it using [firewall instructions](../system/firewall/README.md).
+- Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
+  alternative to vLLM; its services remain disabled while vLLM is the boot backend.
+  The system unit preloads `qwen3.8:3090` when started.
+- Thirteen vLLM model directories and four Ollama tags are available locally.
+  Weights remain outside Git. [Model records](../models/README.md) contain sources,
+  pinned revisions and download commands; restoration requires a separate model
+  backup or downloading those assets.
+- LACT's daemon supplies GPU control and telemetry. Both GPU power limits are 350 W.
+- GPU Observatory is located at `~/code/gpu-monitor`, outside this repository.
+  It reads LACT telemetry and serves `http://127.0.0.1:8765` when started using
+  the command in the AI service instructions. It is not enabled at boot.
 
-## 2026-10-10: Chezmoi setup and restoration validation
+## Network wake
 
-- Installed the normal Arch `chezmoi` package, version 2.72.1-1, and recorded it
-  as an intentional addition. Ran the existing generic setup helper to create
-  `~/.config/chezmoi/chezmoi.toml`, pointing at `~/Projects/dotfiles`. On a fresh
-  checkout, the same helper generates the appropriate local path.
-- Excluded generated Python bytecode explicitly in `home/.chezmoiignore`:
-  Git ignore rules alone do not prevent Chezmoi from deploying source files.
-- Restored into an empty temporary home with isolated persistent state/cache.
-  All 22 expected files were present, contents and permissions matched, and
-  there were no additional files. Both temporary and live `chezmoi verify`
-  passed; live `chezmoi diff` is empty. No settings were applied to the live home.
+[Network restoration](../system/network/README.md) installs NetworkManager's
+persistent magic-packet defaults: Ethernet wake-on-LAN 64 and Wi-Fi wake-on-WLAN 8.
+Existing connection profiles also select magic-packet wake. Network credentials
+are provisioned separately.
 
-## 2026-10-10: Permanently disable the screensaver
+## Verified behavior
 
-- Set `idle.screensaver` to zero and taught the user-owned idle plugin to treat
-  zero as disabled, using the existing 300-second lock deadline directly.
-  AI-aware suspend and the existing Stay Awake override are unchanged.
-- Enabled Omarchy's persistent `screensaver-off` preference. Although Omarchy
-  stores this under `.local/state/omarchy/toggles`, this specific empty flag is
-  a deliberate saved preference and is captured for restoration. Other runtime
-  state remains excluded. Normal screensaver launching is blocked; Omarchy's
-  explicit `force` launch remains available.
-- Restarted the desktop shell to load the plugin and checked idle IPC status.
-  The screensaver is disabled and the lock timeout remains 300 seconds.
-- Updated capture to encode empty files with Chezmoi's `empty_` attribute;
-  otherwise an empty source file represents an absent target. Verified all 23
-  files, including the preference flag, restore with matching contents and
-  permissions into a fresh temporary home. Live Chezmoi verification passed.
+- All 23 managed files match live settings and restore into an empty home with
+  matching contents and permissions; Chezmoi verification passes.
+- vLLM starts, lists the expected model and returns a short chat completion.
+  Both GPUs participate. The host's LAN-address API request succeeds.
+- Ollama discovers all four tags and the custom Qwen3.8 profile returns a short
+  response with MTP enabled.
+- The idle plugin reports the screensaver disabled and a 300-second lock timeout.
+  The AI-aware suspend guard and LACT daemon are active.
+- Wi-Fi magic-packet wake is enabled; both Ethernet interfaces report `Wake-on: g`.
+
+An actual reboot, suspend with remote wake, requests from another LAN device,
+and full-context model operation still require end-to-end verification.

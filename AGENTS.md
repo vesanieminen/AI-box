@@ -34,3 +34,9 @@ only deliberate additions. Do not retain one-off SSD copying or installation
 scripts. Keep model weights outside Git; record model sources, pinned revisions,
 and download commands. This machine primarily serves AI models; preserve the
 selected vLLM boot service and AI-aware automatic suspend behavior.
+
+Documentation describes the final working installation: installed programs and
+their purpose, retained settings, restore commands and verified behavior. Update
+existing entries when the configuration changes. Do not append troubleshooting
+chronology, failed attempts, temporary workarounds or superseded settings. Keep
+model provenance and clearly identify verification that is still outstanding.

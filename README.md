@@ -5,7 +5,7 @@ only deliberate changes made from now on. Untouched default configuration and
 the initial installed-package inventory are excluded.
 
 `home/` is a chezmoi source tree; `.chezmoiroot` prevents repository documentation
-and scripts from being deployed into HOME. It was initialized without managed configs.
+and scripts from being deployed into HOME.
 When we change a configuration file, we retain the whole edited file so it can
 be restored onto a fresh Omarchy installation. Git history explains the change;
 this is not a complete operating-system backup.
@@ -70,8 +70,11 @@ source files. Generated theme output remains outside Git.
 
 Record deliberate package additions/removals according to `packages/README.md`.
 Store system configuration templates and direct restoration instructions in `system/`. Document
-manual changes and validation in `docs/machine-changes.md`. Disk, firmware, and
-GUI actions need an explicit record when they do not correspond to config files.
+final installations, retained settings and validation in `docs/machine-changes.md`.
+Keep documentation focused on the working configuration and restore steps,
+without troubleshooting chronology, temporary workarounds or superseded settings.
+Disk, firmware, and GUI settings need an explicit record when they do not
+correspond to config files.
 
 `~/AGENTS.md` directs future machine configuration work into this repository.
 Its text is saved in `docs/home-AGENTS.md`; on a new machine, merge that policy

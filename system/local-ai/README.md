@@ -1,8 +1,8 @@
 # AI box services
 
-The main boot backend is Qwen3.8 27B INT8 with MTP under vLLM, matching the SSD.
+The main boot backend is Qwen3.8 27B INT8 with MTP under vLLM.
 It uses both RTX 3090 GPUs and serves an OpenAI-compatible API on port 8000.
-Ollama is installed through Arch's `ollama-cuda` package and retains the SSD's
+Ollama is installed through Arch's `ollama-cuda` package and uses the recorded
 model directory, preload profile and environment. Ollama is available manually;
 it does not preload another model alongside the two-GPU vLLM boot service.
 
@@ -23,9 +23,9 @@ sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 sudo docker compose -f system/local-ai/compose.yaml create
 ```
 
-Compose pins the exact SSD image digest for `vllm/vllm-openai:v0.29.0`, all
+Compose pins the image digest for `vllm/vllm-openai:v0.29.0`, all
 server flags, environment variables and mounts. `AI_HOME` can override its home
-path. `server-config.json` and optional profiles preserve the SSD configuration;
+path. `server-config.json` and optional profiles define the serving configuration;
 the boot service starts the already-created container rather than rebuilding it.
 Do not run `launch.py` when that container already exists. Docker is managed
 through privileged commands; no Docker group access is needed.
@@ -51,9 +51,8 @@ sudo docker logs --tail 100 qwen38-vllm
 
 ## Ollama when needed
 
-The Arch package replaces the SSD's standalone Ollama installation. The SSD
-binary was version 0.35.0; the configured Arch repository offered 0.33.3 at import.
-Arch Ollama 0.33.3 discovers all copied tags and returned a short response from
+The Arch package provides `/usr/bin/ollama` (0.33.3 at validation).
+It discovers all four local tags and returned a short response from
 the custom Qwen3.8 profile with MTP. Full-context operation remains untested.
 The package manager provides future updates. Model manifests and blobs stay in
 `~/.local/share/ollama/models`, outside Git.
@@ -69,26 +68,26 @@ sudo systemctl stop ollama.service
 sudo systemctl start vllm-boot.service
 ```
 
-The system Ollama unit preloads `qwen3.8:3090`. The imported user Ollama unit is
+The system Ollama unit preloads `qwen3.8:3090`. The user Ollama unit is
 an alternative and remains disabled; do not run both on port 11434. Enable
 `ollama-resume.service` only if selecting system Ollama as an active backend.
-The imported LAN proxy remains disabled: its SSD address and separate gateway
-key need provisioning before use. Credentials were not copied.
+The optional LAN proxy remains disabled. Its address and separate gateway key
+require provisioning before use.
 
 ## Idle, lighting and monitoring
 
-As requested, retain the SSD's automatic suspend behavior: the cloned Omarchy
-idle plugin publishes desktop activity, and the guard suspends after 15 minutes
-without desktop or AI activity. It checks Ollama and vLLM. Omarchy's existing
-150-second screensaver and 300-second lock remain. For machines running without
-a desktop session, revisit the desktop heartbeat dependency before relying on
-this policy.
+The cloned Omarchy idle plugin publishes desktop activity, and the guard
+suspends after 15 minutes without desktop or AI activity. It checks Ollama and
+vLLM. The screensaver is disabled; the lock timeout is 300 seconds. The persistent
+`screensaver-off` preference and zero screensaver timeout are managed by Chezmoi.
+For machines running without a desktop session, revisit the desktop heartbeat
+dependency before relying on this policy.
 
 LACT is installed normally and `lactd.service` is enabled. GPU limits are left
-at the existing defaults; the SSD power-limit scripts were declined. OpenRGB's
-user autostart entry turns off the ASUS RTX 3090 lighting.
+at 350 W on both GPUs. OpenRGB's user autostart entry turns off the ASUS RTX 3090
+lighting.
 
-GPU Observatory is copied to `~/code/gpu-monitor`, outside this repository,
+GPU Observatory is located at `~/code/gpu-monitor`, outside this repository,
 for its future separate repository. It reads LACT telemetry and runs locally at
 http://127.0.0.1:8765. Its current user service is transient, not a boot service.
 To start it in a later session:
