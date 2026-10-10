@@ -5,7 +5,7 @@ only deliberate changes made from now on. Untouched default configuration and
 the initial installed-package inventory are excluded.
 
 `home/` is a chezmoi source tree; `.chezmoiroot` prevents repository documentation
-and scripts from being deployed into HOME. It starts without managed configs.
+and scripts from being deployed into HOME. It was initialized without managed configs.
 When we change a configuration file, we retain the whole edited file so it can
 be restored onto a fresh Omarchy installation. Git history explains the change;
 this is not a complete operating-system backup.
@@ -40,10 +40,8 @@ committing.
 
 ## Chezmoi setup and restore
 
-Chezmoi is not installed yet, and this session could not reach its download
-server. Capturing and committing changes works without it. To enable deployment,
-install it from a terminal with `omarchy pkg add chezmoi`, record that package
-addition, and run:
+Install the recorded additions with the normal Arch package manager, then enable
+deployment:
 
 ```bash
 cd ~/Projects/dotfiles
@@ -66,7 +64,7 @@ source files. Generated theme output remains outside Git.
 ## Other machine changes
 
 Record deliberate package additions/removals according to `packages/README.md`.
-Store repeatable privileged setup and `/etc` templates in `system/`. Document
+Store system configuration templates and direct restoration instructions in `system/`. Document
 manual changes and validation in `docs/machine-changes.md`. Disk, firmware, and
 GUI actions need an explicit record when they do not correspond to config files.
 
@@ -76,3 +74,15 @@ into `~/AGENTS.md` and adjust the repository path if needed.
 Each completed task should include a local commit describing the change and
 its validation. Tracking is an explicit workflow, not a background watcher.
 No remote is configured; pushing or publishing requires a user request.
+
+## AI box restoration
+
+Start with a fresh Omarchy installation, install `packages/official.txt`, apply
+the user configs, then follow [AI service restoration](system/local-ai/README.md).
+[Model provenance and download commands](models/README.md) record the copied
+weights; weights themselves require a separate backup or download. The selected
+boot backend is vLLM Qwen3.8 INT8 on both RTX 3090 GPUs.
+
+One-off SSD copying and installation helpers are not retained. App additions
+are package names, overrides are configuration files, and model downloads are
+recorded sources and revisions. No restore command depends on the external SSD.

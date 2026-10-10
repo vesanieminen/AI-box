@@ -1,0 +1,11 @@
+[Unit]
+Description=Reload Ollama and its saved model after system resume
+After=nvidia-resume.service systemd-suspend.service systemd-hibernate.service systemd-suspend-then-hibernate.service systemd-hybrid-sleep.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl try-restart ollama.service
+TimeoutStartSec=11min
+
+[Install]
+WantedBy=systemd-suspend.service systemd-hibernate.service systemd-suspend-then-hibernate.service systemd-hybrid-sleep.service

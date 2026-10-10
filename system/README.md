@@ -1,10 +1,9 @@
 # System configuration
 
-Keep templates for deliberate `/etc` edits and repeatable setup scripts here.
-Each script should describe prerequisites, check existing state, and avoid
-reapplying completed work. Privileged changes require the normal machine access;
-capturing a template does not authorize applying it on another machine.
+Keep templates for deliberate system settings here, with direct restoration
+commands in the corresponding README. Use normal Arch package installation for
+applications. Do not retain one-off SSD copying or installation scripts.
 
-Do not copy all of `/etc` or include password databases, network credentials,
-private keys, or installation-generated identifiers. No privileged system
-changes were made while establishing this repository.
+Do not copy all of `/etc`, credential databases, network secrets, private keys,
+or generated machine identifiers. AI service restoration is documented in
+`local-ai/README.md`; model assets and provenance are documented in `../models/`.

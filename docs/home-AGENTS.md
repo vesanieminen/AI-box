@@ -11,10 +11,16 @@ For changes to this user's machine configuration, use the dotfiles repository at
   diff, validate the affected application, and commit that task's changes locally.
   Do not include unrelated changes.
 - Record deliberate package additions/removals according to `packages/README.md`.
-- Record system-wide changes as repeatable scripts or templates in `system/`,
+- Record system-wide changes as configuration templates in `system/`,
   with instructions and validation. Record manual actions in `docs/machine-changes.md`.
 - Keep secrets, authentication state, caches, logs, and generated files out of Git.
 - Do not publish or push the repository unless the user requests it.
 
 These instructions apply to machine configuration work. Application repositories
 should continue to follow their own development instructions.
+
+Use normal Arch repository/AUR package installation for applications and record
+only deliberate additions. Do not retain one-off SSD copying or installation
+scripts. Keep model weights outside Git; record model sources, pinned revisions,
+and download commands. This machine primarily serves AI models; preserve the
+selected vLLM boot service and AI-aware automatic suspend behavior.

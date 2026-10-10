@@ -1,1 +1,86 @@
-{}
+{
+  ".config/alacritty/alacritty.toml": {
+    "source": "dot_config/alacritty/alacritty.toml",
+    "sha256": "b46e35ddf93fa8330768ccfe5315e728f3f4d77fc4f3b3059be5e97c1392a0dd"
+  },
+  ".config/autostart/gpu-lights-off.desktop": {
+    "source": "dot_config/autostart/gpu-lights-off.desktop",
+    "sha256": "81b666e34c6503eabc2b2265fa65c09837ad528343fdeda8ed6229ddcfd2741a"
+  },
+  ".config/foot/foot.ini": {
+    "source": "dot_config/foot/foot.ini",
+    "sha256": "63ef212243e6de0f7fe73fa9bc17732bfca7f2f77e7651cf77549e8118dc6cea"
+  },
+  ".config/ghostty/config": {
+    "source": "dot_config/ghostty/config",
+    "sha256": "eb69a4e13b6c6d95159a6aa658b9d6fbd0d9434244c80255924ff4da547d297d"
+  },
+  ".config/hypr/bindings.lua": {
+    "source": "dot_config/hypr/bindings.lua",
+    "sha256": "c896d2ba3812695666044e51cc223f9f8e3030eaff4b5564a5c6929a63545603"
+  },
+  ".config/kitty/kitty.conf": {
+    "source": "dot_config/kitty/kitty.conf",
+    "sha256": "e36b3fd6b9f67280aa3718fcf64306e2c52942cf5180b54f9bdc56772dc70548"
+  },
+  ".config/omarchy/plugins/vesanieminen.idle/IdleModel.js": {
+    "source": "dot_config/omarchy/plugins/vesanieminen.idle/IdleModel.js",
+    "sha256": "58226a67d5fc2f33b1a23b55cb32764a8b2091cc94c4d02af1b67f369440b9b8"
+  },
+  ".config/omarchy/plugins/vesanieminen.idle/Service.qml": {
+    "source": "dot_config/omarchy/plugins/vesanieminen.idle/Service.qml",
+    "sha256": "f6233fc392782a7a87b8fe5f58dc2777dfea16613de4bde7d8074b15819e9c21"
+  },
+  ".config/omarchy/plugins/vesanieminen.idle/manifest.json": {
+    "source": "dot_config/omarchy/plugins/vesanieminen.idle/manifest.json",
+    "sha256": "cdbac4d0e40806667cb23252635b2d58a967638a355dc3f57d8e41f0ef453d35"
+  },
+  ".config/omarchy/shell.json": {
+    "source": "dot_config/omarchy/shell.json",
+    "sha256": "dfa7e8dd715178b3a79e1bdf3e8c9734426541646567a35809cc94999a62e79c"
+  },
+  ".config/systemd/user/local-ai-lan.service": {
+    "source": "dot_config/systemd/user/local-ai-lan.service",
+    "sha256": "ae6f963fa0777870612089ea322c1ba865c72fa8fe0371a5afa36148d84da9b8"
+  },
+  ".config/systemd/user/ollama.service": {
+    "source": "dot_config/systemd/user/ollama.service",
+    "sha256": "ac45201422109328c96ae7caca667e49755c39f457f7d4d51f0134ad4404c781"
+  },
+  ".local/bin/ai-desktop-idle.py": {
+    "source": "dot_local/bin/ai-desktop-idle.py",
+    "sha256": "62a51bad5a73904ebcda60a31f7c74d9e6b6720d41dc5b54bb909a0b715186e8"
+  },
+  ".local/bin/local-ai-lan-proxy.py": {
+    "source": "dot_local/bin/local-ai-lan-proxy.py",
+    "sha256": "0b23bc23e641b565d2d218b4402be1c1b4173846dd7c47cdddca0f309d4c6591"
+  },
+  ".local/share/ollama/Qwen38-3090.Modelfile": {
+    "source": "dot_local/share/ollama/Qwen38-3090.Modelfile",
+    "sha256": "d8c7cf6846cae2eb5e0d5b85b141a08c18f85591fa6b7044d8d072b641bb693f"
+  },
+  ".local/share/ollama/warm-start.py": {
+    "source": "dot_local/share/ollama/warm-start.py",
+    "sha256": "9a4ad8c1ef581def4b6c2e5a0b3802d20e70e7762115b72ff1501b3a37754189"
+  },
+  ".local/share/vllm/launch.py": {
+    "source": "dot_local/share/vllm/launch.py",
+    "sha256": "c2b0da8a5f420058263e56fdf765b1175180413e219db583c31530308dcfb5b0"
+  },
+  ".local/share/vllm/profiles/qwen3.8-int4-mtp.json": {
+    "source": "dot_local/share/vllm/profiles/qwen3.8-int4-mtp.json",
+    "sha256": "b7aacf7ca31e293983efc05001206e35bd688f83dafd3dd2d9390cb68eeb8ffa"
+  },
+  ".local/share/vllm/profiles/qwen3.8-int8-mtp.json": {
+    "source": "dot_local/share/vllm/profiles/qwen3.8-int8-mtp.json",
+    "sha256": "8a1b8e7a47795ddcb89deb6f154b596f2b55b20bf874cbadb8e854f01e1c5a2f"
+  },
+  ".local/share/vllm/server-config.json": {
+    "source": "dot_local/share/vllm/server-config.json",
+    "sha256": "d8e05ac0f84c760b55eb886c5fe25790c63e5a5f814464ae68d4a7a36295772f"
+  },
+  ".local/share/vllm/wait-ready.py": {
+    "source": "dot_local/share/vllm/wait-ready.py",
+    "sha256": "58375f43dffd965ffe73f97238f35ae14f6a0c9d6e0ba15d208cd65382e1af01"
+  }
+}

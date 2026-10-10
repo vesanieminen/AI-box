@@ -20,7 +20,7 @@ Live configuration lives under HOME; chezmoi source files live under `home/`
    refuses to overwrite pending source edits. Manage symlinks, templates, and
    encrypted files through chezmoi once installed, outside the capture manifest.
 5. Record deliberate package additions/removals according to `packages/README.md`.
-   Record system changes as repeatable scripts/templates in `system/`; document
+   Record system changes as configuration templates in `system/`; document
    manual actions in `docs/machine-changes.md`.
 6. Stage specific files for this task and commit locally after validation.
    Do not stage unrelated changes or push without a user request.
@@ -28,3 +28,9 @@ Live configuration lives under HOME; chezmoi source files live under `home/`
 Keep credentials, private keys, tokens, browser profiles, history, caches, logs,
 generated theme output, and authentication directories out of Git. Document
 secret provisioning without recording the secrets themselves.
+
+Use normal Arch repository/AUR package installation for applications and record
+only deliberate additions. Do not retain one-off SSD copying or installation
+scripts. Keep model weights outside Git; record model sources, pinned revisions,
+and download commands. This machine primarily serves AI models; preserve the
+selected vLLM boot service and AI-aware automatic suspend behavior.

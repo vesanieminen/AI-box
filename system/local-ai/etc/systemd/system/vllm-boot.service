@@ -1,0 +1,19 @@
+[Unit]
+Description=Qwen3.8 INT8 vLLM server with two GPUs
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+RequiresMountsFor=/home/vesanieminen/.local/share/vllm/models /home/vesanieminen/.local/share/vllm/cache
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
+ExecStart=/usr/bin/docker start qwen38-vllm
+ExecStartPost=/usr/bin/python3 /home/vesanieminen/.local/share/vllm/wait-ready.py
+ExecStop=/usr/bin/docker stop --time 60 qwen38-vllm
+TimeoutStartSec=10min
+TimeoutStopSec=90
+
+[Install]
+WantedBy=multi-user.target

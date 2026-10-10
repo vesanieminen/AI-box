@@ -1,0 +1,1487 @@
+{
+  "default": "qwen3.8-27b-int8",
+  "models": [
+    {
+      "directory": "qwen3.8-27b-int8",
+      "repo": "lued/Qwen3.8-27B-INT8-W8A16-MTP",
+      "revision": "7c12373712d1363e2b76655cb3332c9c124627d7",
+      "url": "https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-MTP/tree/7c12373712d1363e2b76655cb3332c9c124627d7",
+      "download_command": "hf download lued/Qwen3.8-27B-INT8-W8A16-MTP --revision 7c12373712d1363e2b76655cb3332c9c124627d7 --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-27b-int8\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 25103
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9993
+        },
+        {
+          "name": "config.json",
+          "bytes": 20741
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 5294339208
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 5331532672
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 5346441736
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 5367740464
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 5341106968
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 4085701448
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 198053
+        },
+        {
+          "name": "model_mtp.safetensors",
+          "bytes": 849400392
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 269
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 11424
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 25103
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9993
+        },
+        {
+          "name": "config.json",
+          "bytes": 20741
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 5294339208
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 5331532672
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 5346441736
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 5367740464
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 5341106968
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 4085701448
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 198053
+        },
+        {
+          "name": "model_mtp.safetensors",
+          "bytes": 849400392
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 269
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 11424
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        }
+      ],
+      "copied_bytes": 31636520343
+    },
+    {
+      "directory": "qwen3.6-35b-a3b.vllm.128k.2x",
+      "repo": "Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency",
+      "revision": "d14fd7339b09364ea2aabc542ea20f7dccd97ca1",
+      "url": "https://huggingface.co/Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency/tree/d14fd7339b09364ea2aabc542ea20f7dccd97ca1",
+      "download_command": "hf download Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency --revision d14fd7339b09364ea2aabc542ea20f7dccd97ca1 --local-dir \"$HOME/.local/share/vllm/models/qwen3.6-35b-a3b.vllm.128k.2x\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 10732
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7764
+        },
+        {
+          "name": "config.json",
+          "bytes": 20973
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 2984113728
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 4002922104
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 4002934816
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 4002905296
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 3993081112
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 323979184
+        },
+        {
+          "name": "model-lmhead-int8.safetensors",
+          "bytes": 516505920
+        },
+        {
+          "name": "model-mtp.safetensors",
+          "bytes": 1689283688
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 10468339
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 438
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12807982
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 16718
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 10732
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7764
+        },
+        {
+          "name": "config.json",
+          "bytes": 20973
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 2984113728
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 4002922104
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 4002934816
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 4002905296
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 3993081112
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 323979184
+        },
+        {
+          "name": "model-lmhead-int8.safetensors",
+          "bytes": 516505920
+        },
+        {
+          "name": "model-mtp.safetensors",
+          "bytes": 1689283688
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 10468339
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 438
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12807982
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 16718
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 21549137359
+    },
+    {
+      "directory": "qwen3.8-27b-int4-mtp",
+      "repo": "Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency",
+      "revision": "75e632dd5cc71fa0ee3a000f99f6840afc0375e2",
+      "url": "https://huggingface.co/Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency/tree/75e632dd5cc71fa0ee3a000f99f6840afc0375e2",
+      "download_command": "hf download Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency --revision 75e632dd5cc71fa0ee3a000f99f6840afc0375e2 --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-27b-int4-mtp\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 29045
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 8952
+        },
+        {
+          "name": "config.json",
+          "bytes": 21111
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 3211003472
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 3217442568
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 699275200
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 2542807272
+        },
+        {
+          "name": "model-lmhead-int8.safetensors",
+          "bytes": 1291264328
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 198416
+        },
+        {
+          "name": "model_extra_tensors.safetensors",
+          "bytes": 849400392
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 16136
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12809320
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 17928
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 29045
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 8952
+        },
+        {
+          "name": "config.json",
+          "bytes": 21111
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 3211003472
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 3217442568
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 699275200
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 2542807272
+        },
+        {
+          "name": "model-lmhead-int8.safetensors",
+          "bytes": 1291264328
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 198416
+        },
+        {
+          "name": "model_extra_tensors.safetensors",
+          "bytes": 849400392
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 16136
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12809320
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 17928
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 18224427719
+    },
+    {
+      "directory": "qwen3.8-dflash2-draft",
+      "repo": "z-lab/Qwen3.8-27B-DFlash2",
+      "revision": "50307d4c4cde6860d4eee73e2547cd786fe8e8a4",
+      "url": "https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2/tree/50307d4c4cde6860d4eee73e2547cd786fe8e8a4",
+      "download_command": "hf download z-lab/Qwen3.8-27B-DFlash2 --revision 50307d4c4cde6860d4eee73e2547cd786fe8e8a4 --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-dflash2-draft\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1581
+        },
+        {
+          "name": "README.md",
+          "bytes": 5397
+        },
+        {
+          "name": "assets/dflash2-figure.png",
+          "bytes": 286889
+        },
+        {
+          "name": "config.json",
+          "bytes": 1239
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 3848817896
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1581
+        },
+        {
+          "name": "README.md",
+          "bytes": 5397
+        },
+        {
+          "name": "assets/dflash2-figure.png",
+          "bytes": 286889
+        },
+        {
+          "name": "config.json",
+          "bytes": 1239
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 3848817896
+        }
+      ],
+      "copied_bytes": 3849113002
+    },
+    {
+      "directory": "qwen3.8-27b-int8-dflash2",
+      "repo": "lued/Qwen3.8-27B-INT8-W8A16-DFlash2",
+      "revision": "2971c64ba386dd3faa6884cc215f67b3b2477a3e",
+      "url": "https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-DFlash2/tree/2971c64ba386dd3faa6884cc215f67b3b2477a3e",
+      "download_command": "hf download lued/Qwen3.8-27B-INT8-W8A16-DFlash2 --revision 2971c64ba386dd3faa6884cc215f67b3b2477a3e --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-27b-int8-dflash2\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 5308
+        },
+        {
+          "name": "TECHNICAL.md",
+          "bytes": 29435
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9123
+        },
+        {
+          "name": "config.json",
+          "bytes": 21287
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 5303923016
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 5346441704
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 5306281544
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 5283366472
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 5318425808
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 2976756968
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 197264
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 269
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1123
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 5308
+        },
+        {
+          "name": "TECHNICAL.md",
+          "bytes": 29435
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9123
+        },
+        {
+          "name": "config.json",
+          "bytes": 21287
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "bytes": 5303923016
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "bytes": 5346441704
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "bytes": 5306281544
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "bytes": 5283366472
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "bytes": 5318425808
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "bytes": 2976756968
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 197264
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 269
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1123
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        }
+      ],
+      "copied_bytes": 29555451193
+    },
+    {
+      "directory": "ornith-1.5-35b-int4-tp2",
+      "repo": "cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4",
+      "revision": "8cace5667cfc076c9f06b36854a1dbe255b79600",
+      "url": "https://huggingface.co/cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4/tree/8cace5667cfc076c9f06b36854a1dbe255b79600",
+      "download_command": "hf download cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4 --revision 8cace5667cfc076c9f06b36854a1dbe255b79600 --local-dir \"$HOME/.local/share/vllm/models/ornith-1.5-35b-int4-tp2\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1757
+        },
+        {
+          "name": "README.md",
+          "bytes": 31517
+        },
+        {
+          "name": "assets/ornith_35b_eval.png",
+          "bytes": 709405
+        },
+        {
+          "name": "assets/ornith_logo.png",
+          "bytes": 962441
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7536
+        },
+        {
+          "name": "config.json",
+          "bytes": 72838
+        },
+        {
+          "name": "configuration.json",
+          "bytes": 58
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 214
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00005.safetensors",
+          "bytes": 5375139968
+        },
+        {
+          "name": "model-00002-of-00005.safetensors",
+          "bytes": 5371223176
+        },
+        {
+          "name": "model-00003-of-00005.safetensors",
+          "bytes": 5371217480
+        },
+        {
+          "name": "model-00004-of-00005.safetensors",
+          "bytes": 5371542080
+        },
+        {
+          "name": "model-00005-of-00005.safetensors",
+          "bytes": 4630738480
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 14062238
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989424
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1125
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1757
+        },
+        {
+          "name": "README.md",
+          "bytes": 31517
+        },
+        {
+          "name": "assets/ornith_35b_eval.png",
+          "bytes": 709405
+        },
+        {
+          "name": "assets/ornith_logo.png",
+          "bytes": 962441
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7536
+        },
+        {
+          "name": "config.json",
+          "bytes": 72838
+        },
+        {
+          "name": "configuration.json",
+          "bytes": 58
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 214
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00005.safetensors",
+          "bytes": 5375139968
+        },
+        {
+          "name": "model-00002-of-00005.safetensors",
+          "bytes": 5371223176
+        },
+        {
+          "name": "model-00003-of-00005.safetensors",
+          "bytes": 5371217480
+        },
+        {
+          "name": "model-00004-of-00005.safetensors",
+          "bytes": 5371542080
+        },
+        {
+          "name": "model-00005-of-00005.safetensors",
+          "bytes": 4630738480
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 14062238
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989424
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1125
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 26165777721
+    },
+    {
+      "directory": "gemma-4-31b-int4-tp2",
+      "repo": "cyankiwi/gemma-4-31B-it-AWQ-4bit",
+      "revision": "6f1b616c64bca2a05d67fdd6437c5500a8509327",
+      "url": "https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-4bit/tree/6f1b616c64bca2a05d67fdd6437c5500a8509327",
+      "download_command": "hf download cyankiwi/gemma-4-31B-it-AWQ-4bit --revision 6f1b616c64bca2a05d67fdd6437c5500a8509327 --local-dir \"$HOME/.local/share/vllm/models/gemma-4-31b-int4-tp2\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 28323
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 16934
+        },
+        {
+          "name": "config.json",
+          "bytes": 18531
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        },
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "bytes": 5355204180
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "bytes": 5357229670
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "bytes": 5350852868
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "bytes": 4841151098
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 250861
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1689
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 32169626
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 2095
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 28323
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 16934
+        },
+        {
+          "name": "config.json",
+          "bytes": 18531
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        },
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "bytes": 5355204180
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "bytes": 5357229670
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "bytes": 5350852868
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "bytes": 4841151098
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 250861
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1689
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 32169626
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 2095
+        }
+      ],
+      "copied_bytes": 20936927653
+    },
+    {
+      "directory": "gemma-4-31b-int8-tp2",
+      "repo": "cyankiwi/gemma-4-31B-it-AWQ-8bit",
+      "revision": "34ca187d836de874b2c7e3edf48f439b9f583772",
+      "url": "https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-8bit/tree/34ca187d836de874b2c7e3edf48f439b9f583772",
+      "download_command": "hf download cyankiwi/gemma-4-31B-it-AWQ-8bit --revision 34ca187d836de874b2c7e3edf48f439b9f583772 --local-dir \"$HOME/.local/share/vllm/models/gemma-4-31b-int8-tp2\"",
+      "download_manifest": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 26717
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 16448
+        },
+        {
+          "name": "config.json",
+          "bytes": 18524
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 5363852522
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 5340707862
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 5328998500
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 5340730812
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 5334859614
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 5328998516
+        },
+        {
+          "name": "model-00007-of-00007.safetensors",
+          "bytes": 3051992902
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 206900
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1689
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 32169626
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 2095
+        }
+      ],
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 26717
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 16448
+        },
+        {
+          "name": "config.json",
+          "bytes": 18524
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 5363852522
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 5340707862
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 5328998500
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 5340730812
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 5334859614
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 5328998516
+        },
+        {
+          "name": "model-00007-of-00007.safetensors",
+          "bytes": 3051992902
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 206900
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1689
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 32169626
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 2095
+        }
+      ],
+      "copied_bytes": 35122584505
+    },
+    {
+      "directory": "gemma-4-26b-a4b-exl3-8bpw.2x",
+      "repo": "UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw",
+      "revision": "198e29717e14fbd92bb47c08ce593d4331f27141",
+      "url": "https://huggingface.co/UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw/tree/198e29717e14fbd92bb47c08ce593d4331f27141",
+      "download_command": "hf download UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw --revision 198e29717e14fbd92bb47c08ce593d4331f27141 --local-dir \"$HOME/.local/share/vllm/models/gemma-4-26b-a4b-exl3-8bpw.2x\"",
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1631
+        },
+        {
+          "name": "README.md",
+          "bytes": 4885
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 12045
+        },
+        {
+          "name": "config.json",
+          "bytes": 4730
+        },
+        {
+          "name": "excat_gemma-4-26B-A4B-it.png",
+          "bytes": 25828
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        }
+      ],
+      "copied_bytes": 49327
+    },
+    {
+      "directory": "gemma-4-26b-a4b.tabbyapi.64k",
+      "repo": "turboderp/gemma-4-26B-A4B-it-exl3",
+      "revision": "241bce8ff2259445258144a660678c47030867cf",
+      "url": "https://huggingface.co/turboderp/gemma-4-26B-A4B-it-exl3/tree/241bce8ff2259445258144a660678c47030867cf",
+      "download_command": "hf download turboderp/gemma-4-26B-A4B-it-exl3 --revision 241bce8ff2259445258144a660678c47030867cf --local-dir \"$HOME/.local/share/vllm/models/gemma-4-26b-a4b.tabbyapi.64k\"",
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1769
+        },
+        {
+          "name": "README.md",
+          "bytes": 26695
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 12045
+        },
+        {
+          "name": "config.json",
+          "bytes": 4730
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 208
+        },
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "bytes": 8304550079
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "bytes": 8528896619
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "bytes": 3413169741
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 4914245
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1689
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 15098116
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 32169626
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 2068
+        }
+      ],
+      "copied_bytes": 20298847630
+    },
+    {
+      "directory": "ornith-1.5-35b-a3b.tabbyapi.128k",
+      "repo": "ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw",
+      "revision": "875ac67dae8e793770396908c575c507f4cd5f75",
+      "url": "https://huggingface.co/ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw/tree/875ac67dae8e793770396908c575c507f4cd5f75",
+      "download_command": "hf download ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw --revision 875ac67dae8e793770396908c575c507f4cd5f75 --local-dir \"$HOME/.local/share/vllm/models/ornith-1.5-35b-a3b.tabbyapi.128k\"",
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1880
+        },
+        {
+          "name": ".model_only_pruned",
+          "bytes": 0
+        },
+        {
+          "name": "README.md",
+          "bytes": 2741
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7536
+        },
+        {
+          "name": "config.json",
+          "bytes": 4163
+        },
+        {
+          "name": "configuration.json",
+          "bytes": 58
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "bytes": 8258812099
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "bytes": 8518637300
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "bytes": 2979508166
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 13712344
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 40377301
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12807982
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 16718
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 19833966474
+    },
+    {
+      "directory": "ornith-1.5-9b.tabbyapi.128k",
+      "repo": "ultimatechris/Ornith-1.5-9B-EXL3-4bpw",
+      "revision": "8d1e89ef430f9ba3a12789b198abf1385670ceb0",
+      "url": "https://huggingface.co/ultimatechris/Ornith-1.5-9B-EXL3-4bpw/tree/8d1e89ef430f9ba3a12789b198abf1385670ceb0",
+      "download_command": "hf download ultimatechris/Ornith-1.5-9B-EXL3-4bpw --revision 8d1e89ef430f9ba3a12789b198abf1385670ceb0 --local-dir \"$HOME/.local/share/vllm/models/ornith-1.5-9b.tabbyapi.128k\"",
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1691
+        },
+        {
+          "name": "README.md",
+          "bytes": 2530
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 7593
+        },
+        {
+          "name": "config.json",
+          "bytes": 3689
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 7185596558
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 314824
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12807982
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 16710
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 7208829561
+    },
+    {
+      "directory": "qwen3.8-27b.sglang.208k",
+      "repo": "turboderp/Qwen3.8-27B-exl3",
+      "revision": "6fe61ad620abfe97c5b49f9722c2bceeea4ccc28",
+      "url": "https://huggingface.co/turboderp/Qwen3.8-27B-exl3/tree/6fe61ad620abfe97c5b49f9722c2bceeea4ccc28",
+      "download_command": "hf download turboderp/Qwen3.8-27B-exl3 --revision 6fe61ad620abfe97c5b49f9722c2bceeea4ccc28 --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-27b.sglang.208k\"",
+      "copied_files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "LICENSE",
+          "bytes": 11544
+        },
+        {
+          "name": "README.md",
+          "bytes": 65012
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 8952
+        },
+        {
+          "name": "config.json",
+          "bytes": 4621
+        },
+        {
+          "name": "crc32.txt",
+          "bytes": 238
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 202
+        },
+        {
+          "name": "merges.txt",
+          "bytes": 3353259
+        },
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "bytes": 8575532487
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "bytes": 5244406822
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 238664
+        },
+        {
+          "name": "preprocessor_config.json",
+          "bytes": 390
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 629045
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 12809320
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 17928
+        },
+        {
+          "name": "video_preprocessor_config.json",
+          "bytes": 385
+        },
+        {
+          "name": "vocab.json",
+          "bytes": 6722759
+        }
+      ],
+      "copied_bytes": 13843803198
+    }
+  ]
+}

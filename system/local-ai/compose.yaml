@@ -1,0 +1,82 @@
+{
+  "services": {
+    "vllm": {
+      "image": "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "container_name": "qwen38-vllm",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/retry150-1791312407",
+        "TRITON_CACHE_DIR": "/cache/triton/retry150-1791312407",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/retry150-1791312407/torchinductor"
+      },
+      "command": [
+        "--model",
+        "/models/qwen3.8-27b-int8",
+        "--served-model-name",
+        "qwen3.8-27b-int8",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--tensor-parallel-size",
+        "2",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "262144",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "8192",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--no-enable-prefix-caching",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--disable-custom-all-reduce",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--enable-auto-tool-choice",
+        "--limit-mm-per-prompt",
+        "{\"image\":1,\"video\":0}",
+        "--mm-processor-kwargs",
+        "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
+        "--speculative-config",
+        "{\"method\":\"mtp\",\"num_speculative_tokens\":3}"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b-int8:/models/qwen3.8-27b-int8:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface"
+      ]
+    }
+  }
+}

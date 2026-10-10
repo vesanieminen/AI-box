@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=GPU lights off
+Comment=Turn off ASUS RTX 3090 lighting at login
+Exec=/usr/bin/openrgb --noautoconnect --device "ASUS TUF GeForce RTX 3090 Gaming OC" --mode Off
+Terminal=false
+StartupNotify=false

@@ -1,0 +1,12 @@
+[Unit]
+Description=Suspend after 15 minutes of desktop and AI server inactivity
+After=docker.service systemd-logind.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/local/libexec/ollama-idle-suspend.py
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
