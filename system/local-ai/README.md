@@ -100,3 +100,11 @@ systemd-run --user --unit=gpu-observatory --property=WorkingDirectory="$HOME/cod
 No SSD path is required by the restored services. One-off copying and installation
 helpers are excluded from Git. Model data, Docker images, caches, generated CDI
 files, credentials and application source code are also outside this repository.
+
+Current validation: vLLM starts successfully, lists the expected model and
+returns a short `OK` chat completion. Both GPUs participate; the advertised
+maximum context is 262144 tokens. Full-context use and an actual reboot have
+not been tested. Persistent network wake is documented in `../network/README.md`.
+
+For LAN API access, apply the recorded subnet-specific UFW rule in
+`../firewall/README.md`. Current API base URL: `http://192.168.0.181:8000/v1`.

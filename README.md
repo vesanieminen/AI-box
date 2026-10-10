@@ -86,3 +86,7 @@ boot backend is vLLM Qwen3.8 INT8 on both RTX 3090 GPUs.
 One-off SSD copying and installation helpers are not retained. App additions
 are package names, overrides are configuration files, and model downloads are
 recorded sources and revisions. No restore command depends on the external SSD.
+
+LAN access and persistent wake are recorded in [firewall settings](system/firewall/README.md)
+and [network wake settings](system/network/README.md). Geekbench 7 is the explicit
+AUR addition; other unrelated SSD apps are excluded.

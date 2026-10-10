@@ -1,0 +1,4 @@
+[Local vLLM]
+title=Local vLLM API
+description=OpenAI-compatible vLLM model-serving API
+ports=8000/tcp

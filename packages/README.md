@@ -26,3 +26,9 @@ sudo pacman -S --needed $(cat packages/official.txt)
 Transitive dependencies are resolved by pacman, not listed as custom additions.
 The AI runtime uses `ollama-cuda` from Arch and a pinned vLLM Docker image;
 see `system/local-ai/README.md`.
+
+Geekbench 7 uses the standard AUR package `geekbench` (7.1.0-1 at import).
+Restore with `yay -S --needed geekbench`. Its package recipe downloads the
+vendor archive and verifies SHA-256 before packaging; build scripts stay in the
+AUR build cache, outside this repository. [AUR package](https://aur.archlinux.org/packages/geekbench),
+[vendor downloads](https://www.geekbench.com/download/). Benchmark runs are manual.

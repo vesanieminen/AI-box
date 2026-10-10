@@ -1,0 +1,9 @@
+# Selected additions at validation; informational, not a version lock.
+ethtool 1:7.1-1
+lact 0.10.1-1
+nvidia-container-toolkit 1.20.0-1
+ollama-cuda 0.33.3-1
+openrgb 1.0rc3-3
+stress-ng 0.22.00-1
+ttf-cascadia-mono-nerd 3.5.1-2
+geekbench 7.1.0-1

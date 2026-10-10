@@ -42,11 +42,11 @@ inspected for clues; sanitized findings are in `ssd-history.md`.
   repository for its future separate repository. Its transient user service
   serves http://127.0.0.1:8765 and reads LACT telemetry. Boot startup is not added.
 - Assets: all 13 model directories and four Ollama model tags were copied; the
-  vLLM cache was copied to save startup work. Weights, caches and runtime binaries
+  vLLM cache was copied to save startup work. Weights and caches
   stay outside Git. `models/` records sources, revisions, file sizes, Ollama
   manifests and download commands. Default Qwen file sizes and every Ollama
   manifest's referenced blob sizes were verified.
-- Runtime: the boot backend is intended to be the exact SSD vLLM image and
+- Runtime: the boot backend uses the exact SSD vLLM image and
   Qwen3.8 INT8 model, described by `system/local-ai/compose.yaml` and
   `vllm-boot.service`. Ollama is installed using Arch's `ollama-cuda`, with the
   SSD model directory/environment retained. See `system/local-ai/README.md` for
@@ -56,12 +56,12 @@ inspected for clues; sanitized findings are in `ssd-history.md`.
   desktop/development apps were declined. Transitive dependencies are not
   duplicated. The SSD's alternate kernel is not an application addition.
 
-Validation so far: Hyprland reload/configerrors clean; idle IPC reports enabled;
+Validation: Hyprland reload/configerrors clean; custom idle IPC responds correctly;
 fontconfig resolves CaskaydiaMono; lighting command exits successfully; idle guard
 and LACT daemon active/enabled; all 12 GPU Observatory tests pass with local
 socket access; captured JSON/TOML and Python syntax valid; all 22 captured files
-match live settings. The vLLM image download and startup validation are
-still in progress. Live backups are temporarily in /tmp/omarchy-ssd-import-backup.
+match live settings. The vLLM image was downloaded, the boot service started and API readiness
+was verified. A short chat completion returned `OK`. Live backups are temporarily in /tmp/omarchy-ssd-import-backup.
 
 - Network wake: recovered Ethernet magic-packet wake (64) and Wi-Fi magic-packet
   wake (8) from the SSD’s NetworkManager profiles. Applied both as persistent
@@ -78,3 +78,28 @@ still in progress. Live backups are temporarily in /tmp/omarchy-ssd-import-backu
 - Verified Arch Ollama 0.33.3 discovers all four copied tags and the custom
   `qwen3.8:3090` model returns `OK` with MTP enabled. Unloaded its weights and
   stopped the temporary validation server before vLLM startup.
+
+- vLLM: `vllm-boot.service` is active/enabled and serves `qwen3.8-27b-int8`
+  on port 8000 using the pinned vLLM 0.29.0 image, TP=2, MTP3 and FP8 E4M3 KV.
+  `/v1/models` advertises a 262144-token maximum; a short non-thinking chat
+  completion returned `OK`. Full-window context, other model recipes and an
+  actual reboot have not been tested. Both GPU limits remain 350 W.
+- The copied standalone Ollama binary and temporary PATH shim were removed after
+  the Arch package passed model discovery and Qwen response validation. The
+  package-managed executable is `/usr/bin/ollama`; system Ollama stays disabled
+  alongside the vLLM boot backend.
+
+- Geekbench 7: installed AUR `geekbench` 7.1.0-1 after reviewing the standard
+  PKGBUILD, verifying its vendor archive SHA-256 and building with makepkg.
+  `geekbench --version` reports 7.1.0; no benchmark was run. Recorded in
+  `packages/foreign.txt`, with source/restoration links in `packages/README.md`.
+
+- LAN API access: confirmed vLLM listens on `0.0.0.0:8000` and that UFW had
+  no incoming rule for that port. Added the `Local vLLM` application profile
+  and persistent TCP 8000 allow rule from `192.168.0.0/24`, preserving all
+  existing firewall rules. The host’s LAN-address `/v1/models` request works;
+  a request from another LAN device is still needed for end-to-end verification.
+  Restoration is in `system/firewall/README.md`.
+- Automatic suspend remains configured. At final validation, the existing
+  runtime Stay Awake indicator was on; this override prevents suspend until
+  toggled off. The indicator is runtime state and is not tracked in Git.
