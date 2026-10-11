@@ -77,11 +77,11 @@
   },
   ".local/share/vllm/profiles/qwen3.8-int8-mtp.json": {
     "source": "dot_local/share/vllm/profiles/qwen3.8-int8-mtp.json",
-    "sha256": "8a1b8e7a47795ddcb89deb6f154b596f2b55b20bf874cbadb8e854f01e1c5a2f"
+    "sha256": "9e252706d7c71b2e9787a3c89d08cd69cad2b86ec7820135195a52b575606ba2"
   },
   ".local/share/vllm/server-config.json": {
     "source": "dot_local/share/vllm/server-config.json",
-    "sha256": "d8e05ac0f84c760b55eb886c5fe25790c63e5a5f814464ae68d4a7a36295772f"
+    "sha256": "f97e47bd856a5b9a82790c862e6b3b4e395b0ca76ed6b3a01376e3e4c29e6f1e"
   },
   ".local/share/vllm/wait-ready.py": {
     "source": "dot_local/share/vllm/wait-ready.py",

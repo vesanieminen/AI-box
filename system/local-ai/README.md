@@ -27,7 +27,9 @@ sudo docker compose -f system/local-ai/compose.yaml create
 
 Compose pins the image digest, inference flags, environment and mounts for each
 profile. INT8 uses MTP3; INT4 uses MTP2. The two default Qwen profiles advertise a 262144-token context,
-use tensor parallelism 2 and FP8 E4M3 KV cache. vLLM backends listen only on
+use tensor parallelism 2 and FP8 E4M3 KV cache. The default Qwen INT8 profile
+accepts up to 10 images per prompt; video input remains disabled. A ten-image
+chat request through llama-swap was verified successfully. vLLM backends listen only on
 localhost ports 5800–5806; EXL3 backends use 5810–5813. `AI_HOME` overrides host mount paths if needed.
 
 4. Install the configuration, units and suspend helper:

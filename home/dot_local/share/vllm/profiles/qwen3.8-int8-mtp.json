@@ -52,7 +52,7 @@
     "qwen3_coder",
     "--enable-auto-tool-choice",
     "--limit-mm-per-prompt",
-    "{\"image\":1,\"video\":0}",
+    "{\"image\":10,\"video\":0}",
     "--mm-processor-kwargs",
     "{\"size\":{\"longest_edge\":1048576,\"shortest_edge\":65536}}",
     "--speculative-config",
