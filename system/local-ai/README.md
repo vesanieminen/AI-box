@@ -123,12 +123,16 @@ weights are reused from local folders and never downloaded on a model switch.
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
 into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 11 IDs
 and their configured context limits under the custom provider `llama-swap`.
-Output limits use the model catalog's separate output field, bounded by the
+The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6
 uses 65536; Gemma 4 uses 32768, except the locally constrained Gemma INT8
 profile is bounded to 8192. Context limits remain the configured backend sizes.
 Input and generated output share the total context, so a prompt reduces the
 remaining generation budget. Full-length generation is not verified.
+These are client budgets, not verified hard generation limits for the self-hosted
+backends. Larger budgets can be configured in OpenCode without adding matching
+limits to LiteLLM or llama-swap. The suggested 131072-token Qwen budget is an
+optional client choice, not a model maximum; it is not applied by this example.
 
 Sources: [Qwen3.8](https://github.com/anomalyco/models.dev/blob/dev/models/alibaba/qwen3.8-27b.toml),
 [Qwen3.6](https://github.com/anomalyco/models.dev/blob/dev/models/alibaba/qwen3.6-35b-a3b.toml),
@@ -141,6 +145,20 @@ field unspecified, using OpenCode's custom-model fallback rather than claiming
 a verified maximum. [OpenCode model fallbacks](https://opencode.ai/v2/docs/models).
 No API key is required for the direct LAN endpoint.
 
+The default `qwen3.8-27b-int8` entry explicitly enables text/image input, text
+output and tools, with `compatibility.reasoningField: "reasoning_content"`.
+Ten small images in one chat request were verified through llama-swap. vLLM
+enforces the ten-image limit across the entire prompt, including prior messages;
+OpenCode needs no separate image-count setting. Other model entries have not
+been given image overrides on the basis of this test.
+
+When using the Raspberry Pi's LiteLLM proxy, keep the client's existing provider
+ID (for example `litellm`) and set `settings.baseURL` to
+`http://192.168.0.218:4000/v1` and `settings.apiKey` to
+`"{env:LITELLM_API_KEY}"`. Provision a valid proxy key outside Git. Merge the
+model entries into that provider and select `litellm/qwen3.8-27b-int8` if its ID
+is `litellm`. The proxy's own timeout settings remain independent of OpenCode's.
+
 Run `/models` in OpenCode and select a `llama-swap/...` entry. The root `model`
 setting sets the default for new work; a session selection takes precedence.
 For an existing working provider, keep its provider ID, package and request
@@ -150,9 +168,9 @@ The example's 900000 ms header/chunk timeouts accommodate cold startup.
 
 List these models explicitly: OpenCode's built-in vLLM discovery filters for
 `owned_by: vllm`, while llama-swap reports `owned_by: llama-swap`. A custom
-provider's explicit model list avoids relying on that filter. The example does
-not change a client's existing tool or reasoning overrides; carry over the
-settings that already work with the relevant backend. Short generation and
+provider's explicit model list avoids relying on that filter. Carry over existing
+working sampling settings and review tool/reasoning settings when merging the
+default Qwen entry. Short generation and
 streaming checks do not establish end-to-end agent/tool reliability for each model.
 
 If using the Raspberry Pi's LiteLLM gateway, set the client URL to that gateway's

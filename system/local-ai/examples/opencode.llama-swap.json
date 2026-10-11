@@ -16,6 +16,19 @@
           "limit": {
             "context": 262144,
             "output": 32768
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "compatibility": {
+            "reasoningField": "reasoning_content"
           }
         },
         "qwen3.8-27b-int4": {
