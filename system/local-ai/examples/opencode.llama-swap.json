@@ -97,6 +97,13 @@
             "context": 212992,
             "output": 32768
           }
+        },
+        "qwen3.8-27b-int8-dflash2-w8": {
+          "name": "Qwen3.8 27B INT8 DFlash2 W8 (256K)",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          }
         }
       }
     }

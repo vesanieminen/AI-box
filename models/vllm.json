@@ -1482,6 +1482,62 @@
         }
       ],
       "copied_bytes": 13843803198
+    },
+    {
+      "directory": "qwen3.8-dflash2-draft-w8",
+      "repo": "lued/Qwen3.8-27B-DFlash2-W8",
+      "revision": "f454fa8e6a84387bf006f849584f72541cc29118",
+      "url": "https://huggingface.co/lued/Qwen3.8-27B-DFlash2-W8/tree/f454fa8e6a84387bf006f849584f72541cc29118",
+      "download_command": "hf download lued/Qwen3.8-27B-DFlash2-W8 --revision f454fa8e6a84387bf006f849584f72541cc29118 --local-dir \"$HOME/.local/share/vllm/models/qwen3.8-dflash2-draft-w8\"",
+      "download_manifest": [
+        {
+          "name": "README.md",
+          "bytes": 3307
+        },
+        {
+          "name": "config.json",
+          "bytes": 2064
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 10011
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 199
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 2172742656,
+          "sha256": "72223787fbfe7e01c4a940f80f98cf3d7a803e9b79aa4ec7bc28a461d767fa18"
+        }
+      ],
+      "role": "companion draft; target weights reused from qwen3.8-27b-int8-dflash2",
+      "downloaded_files": [
+        {
+          "name": "README.md",
+          "bytes": 3307
+        },
+        {
+          "name": "config.json",
+          "bytes": 2064
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 10011
+        },
+        {
+          "name": "recipe.yaml",
+          "bytes": 199
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 2172742656,
+          "sha256": "72223787fbfe7e01c4a940f80f98cf3d7a803e9b79aa4ec7bc28a461d767fa18"
+        }
+      ],
+      "downloaded_bytes": 2172758237,
+      "weight_sha256_verified": true
     }
   ]
 }

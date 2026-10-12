@@ -179,6 +179,20 @@
           "stream_options.include_usage": true
         }
       }
+    },
+    "qwen3.8-27b-int8-dflash2-w8": {
+      "name": "Qwen3.8 27B INT8 DFlash2 W8 (256K)",
+      "description": "vLLM, TP2, 262144-token context, W8 DFlash2 draft",
+      "cmd": "/usr/bin/docker start --attach qwen3.8-27b-int8-dflash2-w8-swap",
+      "cmdStop": "/usr/bin/docker stop --time 60 qwen3.8-27b-int8-dflash2-w8-swap",
+      "proxy": "http://127.0.0.1:5807",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.8-27b-int8-dflash2-w8",
+      "ttl": 0,
+      "unloadTimeout": 90,
+      "capabilities": {
+        "context": 262144
+      }
     }
   },
   "routing": {
@@ -200,7 +214,8 @@
               "gemma-4-26b-a4b-exl3",
               "ornith-1.5-35b-exl3",
               "ornith-1.5-9b-exl3",
-              "qwen3.8-27b-exl3"
+              "qwen3.8-27b-exl3",
+              "qwen3.8-27b-int8-dflash2-w8"
             ]
           }
         }

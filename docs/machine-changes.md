@@ -61,17 +61,30 @@ one model at a time; GPU placement follows the selected backend profile.
 - Llama-swap listens on `0.0.0.0:8000`; API base URL is
   `http://192.168.0.181:8000/v1` and browser UI is
   `http://192.168.0.181:8000/ui/`. INT8 and INT4 vLLM backends listen only on
-  localhost ports 5800 and 5801. Other vLLM backends use 5802–5806;
+  localhost ports 5800 and 5801. Other vLLM backends use 5802–5807;
   EXL3 backends use 5810–5813. Selecting `qwen3.8-27b-int4` unloads INT8 and
   loads the INT4 MTP2 profile; selecting `qwen3.8-27b-int8` switches back.
   Active inference finishes before a queued switch. Existing OpenCode clients
   keep the same endpoint and select models through `/models`. The persistent UFW rule permits TCP 8000
   from `192.168.0.0/24`. Restore it using [firewall instructions](../system/firewall/README.md).
+- Two DFlash2 entries share the previously checksum-verified Qwen3.8 INT8
+  target weights: `qwen3.8-27b-int8-dflash2` uses the BF16 draft with 212992-token
+  context; `qwen3.8-27b-int8-dflash2-w8` uses the separately downloaded W8 draft
+  with 262144-token context. Both target and draft use TP2. The W8 profile has
+  a dedicated vLLM 0.27.1 image with the published DFlash2 backport, its sampler
+  compatibility shim, the packed-embedding constructor fix and the author's
+  Mamba safety patch. Its weight checksum is verified. Runtime caches are separate.
+  The W8 entry uses the published community profile (0.975 memory utilization,
+  prefix caching disabled) and passed short-response serving with the desktop
+  stopped. A synthetic 262080-input-token request generated eight output tokens
+  without error; general long-context quality and multimodal behavior remain
+  unverified.
+  Qwen INT8 MTP remains the boot default.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap
   manages the GPUs.
   The system unit preloads `qwen3.8:3090` when started.
-- Thirteen vLLM model directories and four Ollama tags are available locally.
+- The model directories and four Ollama tags are available locally.
   Weights remain outside Git. [Model records](../models/README.md) contain sources,
   pinned revisions and download commands; restoration requires a separate model
   backup or downloading those assets.
@@ -82,15 +95,17 @@ one model at a time; GPU placement follows the selected backend profile.
 
 ### Model switching and timing metadata
 
-Llama-swap configuration declares 11 complete chat-model routes through vLLM,
+Llama-swap configuration declares 12 complete chat-model routes through vLLM,
 TabbyAPI and SGLang. Runtime images are pinned in `system/local-ai/compose.yaml`;
 weights remain outside Git. The shared DFlash2 draft is used with its Qwen
 INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
 no weights. The model table and restoration steps are in
 [AI services](../system/local-ai/README.md).
 
-All vLLM profiles include per-request timing metrics and forced final streaming
-usage. Llama-swap Activity displays prompt/decode throughput for new responses.
+All vLLM profiles include per-request timing metrics. The W8 DFlash2 profile's
+clients should request `stream_options.include_usage` for final streaming token
+counts; the other profiles force that field through llama-swap. Llama-swap
+Activity displays prompt/decode throughput for new responses.
 Streaming vLLM and TabbyAPI responses report rates in Activity. SGLang reports
 streaming token usage, with throughput available through its separate native
 Prometheus endpoint. Its response format does not expose Activity-compatible

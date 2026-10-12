@@ -21,7 +21,7 @@ another model.
 mkdir -p ~/.local/share/vllm/cache/{vllm,triton,huggingface}
 sudo systemctl enable --now docker.service
 sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
-sudo docker compose -f system/local-ai/compose.yaml build qwen3.8-27b-int8-dflash2
+sudo docker compose -f system/local-ai/compose.yaml build qwen3.8-27b-int8-dflash2 qwen3.8-27b-int8-dflash2-w8
 sudo docker compose -f system/local-ai/compose.yaml create
 ```
 
@@ -30,7 +30,7 @@ profile. INT8 uses MTP3; INT4 uses MTP2. The two default Qwen profiles advertise
 use tensor parallelism 2 and FP8 E4M3 KV cache. The default Qwen INT8 profile
 accepts up to 10 images per prompt; video input remains disabled. A ten-image
 chat request through llama-swap was verified successfully. vLLM backends listen only on
-localhost ports 5800–5806; EXL3 backends use 5810–5813. `AI_HOME` overrides host mount paths if needed.
+localhost ports 5800–5807; EXL3 backends use 5810–5813. `AI_HOME` overrides host mount paths if needed.
 
 4. Install the configuration, units and suspend helper:
 
@@ -86,6 +86,7 @@ inference and stops the previous backend before starting another.
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2; boot default | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
+| `qwen3.8-27b-int8-dflash2-w8` | vLLM, W8 DFlash2 draft, TP2 | 262144 |
 | `qwen3.6-35b-a3b-int4` | vLLM, TP2 | 131072 |
 | `ornith-1.5-35b-int4` | vLLM, TP2 | 262144 |
 | `gemma-4-31b-int4` | vLLM, TP2, automatic KV dtype | 73728 |
@@ -109,6 +110,52 @@ profile uses a 212992-token context, a 2048-token prefill batch and 0.96 GPU
 memory utilization. No additional large image download is needed for this build.
 [Model author's deployment reference](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-DFlash2/blob/2971c64ba386dd3faa6884cc215f67b3b2477a3e/TECHNICAL.md).
 
+The W8 DFlash2 entry shares the same previously checksum-verified target weights
+with the BF16 entry. Its separate 2.02 GiB draft is pinned in `models/vllm.json`.
+Target TP2 and seven speculative tokens follow the published deployment.
+The W8 entry uses the published community setup for the same target and W8
+companion: 262144 tokens, TP2, seven speculative tokens, a 2048-token prefill
+batch, four sequences, FP8 E4M3 KV, explicit FlashInfer and 0.975 GPU memory
+utilization. Prefix caching is disabled. The recipe requests Mamba `align` and
+prefix matching unit 16; vLLM selects Mamba cache mode `none` with prefix caching
+disabled. The expandable CUDA allocator uses `max_split_size_mb:512`.
+There is no explicit KV-memory cap. The local model IDs, read-only mounts and
+localhost port 5807 integrate the recipe with llama-swap.
+
+The dedicated image uses the vLLM 0.27.1 base pinned by digest. Its DFlash2
+backport and sampler compatibility shim are vendored unchanged from
+`noonghunna/club-3090` revision `33e19a3b282d53990f729601ef45cf4457625be1`,
+path `models/qwen3.8-27b/vllm/patches/vllm-dflash2-backport`. The image also applies
+the author's Mamba safety patch from revision
+`e4d525aa6503d1798a047210225862345b9e1a2e` and the packed-embedding constructor
+fix. [The published community deployment](https://github.com/noonghunna/club-3090/discussions/1080)
+records its long-context verification and the differences from the original
+model-card recipe: the runtime, 0.975 memory budget and disabled prefix caching.
+The bundled backport supports both W4 and W8 packed draft projection weights.
+
+Select either DFlash2 ID in the llama-swap UI or the client model selector.
+Qwen INT8 MTP remains the boot default on its existing vLLM 0.29.0 runtime.
+The W8 entry returned the expected short response through llama-swap on this
+machine with the desktop stopped. Its KV pool contains 268290 tokens. A
+near-maximum-context capacity test completed: 262080 input tokens plus eight
+generated tokens, with a correct `4` at the start of the answer to `2 + 2`.
+The synthetic prompt repeated a sentence; this verifies capacity, not general
+long-context quality. Prefill took 284.6 seconds. Long-context quality and
+multimodal behavior remain unverified. The BF16 entry's runtime validation is
+outstanding.
+
+Two greedy prose runs with 2048 input tokens and 512 output tokens measured
+66.34 and 66.10 decode tokens/second, excluding prefill. End-to-end response
+times were 9.09 and 8.98 seconds. These measurements establish local behavior
+for that workload; they do not establish a speed advantage over the MTP profile.
+
+This profile was validated with SDDM stopped, leaving both GPUs available for
+inference. SDDM remains enabled for normal boot. From SSH or a text console,
+stop graphics with `sudo systemctl stop sddm` before selecting the W8 entry.
+To restore graphics, finish any active request, unload the model using the
+llama-swap UI, then run `sudo systemctl start sddm`. Desktop applications close
+when SDDM stops; llama-swap and Docker continue as system services.
+
 TabbyAPI configuration is stored in `etc/tabbyapi/` and mounted by Compose.
 Its model loads at process startup, so llama-swap owns all backend lifecycles.
 The EXL3 containers use the user configured by their image; the vLLM containers
@@ -121,7 +168,7 @@ weights are reused from local folders and never downloaded on a model switch.
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
-into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 11 IDs
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 12 IDs
 and their configured context limits under the custom provider `llama-swap`.
 The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6

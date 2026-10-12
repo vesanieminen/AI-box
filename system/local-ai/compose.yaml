@@ -740,6 +740,97 @@
         "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b.sglang.208k:/models/turboderp-Qwen3.8-27B-exl3-3.00bpw:ro"
       ],
       "entrypoint": "/opt/entrypoint.sh"
+    },
+    "qwen3.8-27b-int8-dflash2-w8": {
+      "image": "local-ai/vllm-qwen-dflash-w8:0.27.1-candidate",
+      "container_name": "qwen3.8-27b-int8-dflash2-w8-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_CUMEM_ENABLE": "0",
+        "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+        "OMP_NUM_THREADS": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1",
+        "HOME": "/tmp",
+        "VLLM_CACHE_ROOT": "/cache/vllm/qwen3.8-27b-int8-dflash2-w8-v027",
+        "TRITON_CACHE_DIR": "/cache/triton/qwen3.8-27b-int8-dflash2-w8-v027",
+        "HF_HOME": "/cache/huggingface",
+        "TORCHINDUCTOR_CACHE_DIR": "/cache/vllm/qwen3.8-27b-int8-dflash2-w8-v027/torchinductor",
+        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True,max_split_size_mb:512"
+      },
+      "command": [
+        "/models/qwen3.8-27b-int8-dflash2",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5807",
+        "--served-model-name",
+        "qwen3.8-27b-int8-dflash2-w8",
+        "--tensor-parallel-size",
+        "2",
+        "--pipeline-parallel-size",
+        "1",
+        "--dtype",
+        "bfloat16",
+        "--performance-mode",
+        "balanced",
+        "--max-model-len",
+        "262144",
+        "--gpu-memory-utilization",
+        "0.975",
+        "--max-num-seqs",
+        "4",
+        "--max-num-batched-tokens",
+        "2048",
+        "--kv-cache-dtype",
+        "fp8_e4m3",
+        "--enable-chunked-prefill",
+        "--mamba-cache-mode",
+        "align",
+        "--prefix-match-unit",
+        "16",
+        "--enable-prompt-tokens-details",
+        "--enable-per-request-metrics",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_xml",
+        "--enable-auto-tool-choice",
+        "--no-enable-prefix-caching",
+        "--disable-custom-all-reduce",
+        "--trust-remote-code",
+        "--override-generation-config",
+        "{\"temperature\":1.0,\"top_p\":0.95,\"top_k\":20,\"min_p\":0.0,\"repetition_penalty\":1.0,\"presence_penalty\":0.0}",
+        "--speculative-config",
+        "{\"method\": \"dflash\", \"model\": \"/models/qwen3.8-dflash2-draft-w8\", \"num_speculative_tokens\": 7}",
+        "--attention-backend",
+        "FLASHINFER"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-27b-int8-dflash2:/models/qwen3.8-27b-int8-dflash2:ro",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/vllm:/cache/vllm",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/triton:/cache/triton",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/cache/huggingface:/cache/huggingface",
+        "${AI_HOME:-/home/vesanieminen}/.local/share/vllm/models/qwen3.8-dflash2-draft-w8:/models/qwen3.8-dflash2-draft-w8:ro"
+      ],
+      "build": {
+        "context": "./images/vllm-qwen-dflash-w8"
+      }
     }
   }
 }

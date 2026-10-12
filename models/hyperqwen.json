@@ -1,0 +1,199 @@
+{
+  "source_repository": "https://github.com/syv-ai/HyperQwen",
+  "source_revision": "7af097b5ea3acfecd60aabbff5bc457e503b2dc5",
+  "project_directory": "~/Projects/HyperQwen",
+  "image": "ghcr.io/syv-ai/hyperqwen@sha256:25bfa39ca4b71d5ba5ea32e5486c841dd4fb8b6429846c012ec5d1b06b2457a6",
+  "models": [
+    {
+      "directory": "hyperqwen/Qwen3.8-27B-DFlash2-W4A16",
+      "files": [
+        {
+          "name": "README.md",
+          "bytes": 2621
+        },
+        {
+          "name": "config.json",
+          "bytes": 2264
+        },
+        {
+          "name": "model.safetensors",
+          "bytes": 1280633960
+        }
+      ],
+      "bytes": 1280638845
+    },
+    {
+      "directory": "hyperqwen/Qwen3.8-27B-W4A16-AutoRound",
+      "files": [
+        {
+          "name": ".gitattributes",
+          "bytes": 1570
+        },
+        {
+          "name": "README.md",
+          "bytes": 7566
+        },
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9651
+        },
+        {
+          "name": "config.json",
+          "bytes": 17060
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 219
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 3211003472
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 3217442568
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 699275200
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 1291274752
+        },
+        {
+          "name": "model-00007-of-00007.safetensors",
+          "bytes": 1291264320
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 200180
+        },
+        {
+          "name": "model_extra_tensors.safetensors",
+          "bytes": 644356792
+        },
+        {
+          "name": "mtp_draft_vocab_ids.pt",
+          "bytes": 329426
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 11112
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1166
+        }
+      ],
+      "bytes": 16765239778
+    },
+    {
+      "directory": "hyperqwen/Qwen3.8-27B-W4A16-AutoRound-fast",
+      "files": [
+        {
+          "name": "chat_template.jinja",
+          "bytes": 9651
+        },
+        {
+          "name": "config.json",
+          "bytes": 17060
+        },
+        {
+          "name": "generation_config.json",
+          "bytes": 219
+        },
+        {
+          "name": "model-00001-of-00007.safetensors",
+          "bytes": 3211003472
+        },
+        {
+          "name": "model-00002-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00003-of-00007.safetensors",
+          "bytes": 3195027104
+        },
+        {
+          "name": "model-00004-of-00007.safetensors",
+          "bytes": 3217442568
+        },
+        {
+          "name": "model-00005-of-00007.safetensors",
+          "bytes": 699275200
+        },
+        {
+          "name": "model-00006-of-00007.safetensors",
+          "bytes": 1291274752
+        },
+        {
+          "name": "model-00007-of-00007.safetensors",
+          "bytes": 655565120
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "bytes": 200180
+        },
+        {
+          "name": "model_extra_tensors.safetensors",
+          "bytes": 327162544
+        },
+        {
+          "name": "mtp_draft_vocab_ids.pt",
+          "bytes": 329341
+        },
+        {
+          "name": "processor_config.json",
+          "bytes": 1191
+        },
+        {
+          "name": "quantization_config.json",
+          "bytes": 11112
+        },
+        {
+          "name": "tokenizer.json",
+          "bytes": 19989325
+        },
+        {
+          "name": "tokenizer_config.json",
+          "bytes": 1166
+        }
+      ],
+      "bytes": 15812337109
+    }
+  ],
+  "origin": "prepared model files copied from the external SSD; not the lued INT8 DFlash2 checkpoint",
+  "serving_validation": "outstanding",
+  "unique_bytes": 19049165532,
+  "copy_verification": "rsync recursive checksum comparison against SSD completed with no differences",
+  "input_models": [
+    {
+      "repo": "dbirks/Qwen3.8-27B-W4A16-AutoRound",
+      "revision": "1f05c441c4e64ae0549de44fa9ea5a6d43610314",
+      "download_command": "hf download dbirks/Qwen3.8-27B-W4A16-AutoRound --revision 1f05c441c4e64ae0549de44fa9ea5a6d43610314"
+    },
+    {
+      "repo": "syvai/Qwen3.8-27B-DFlash2-W4A16",
+      "revision": "4d30ec736ffc6b8688dc2ae2b502d9b48bdec279",
+      "download_command": "hf download syvai/Qwen3.8-27B-DFlash2-W4A16 --revision 4d30ec736ffc6b8688dc2ae2b502d9b48bdec279"
+    }
+  ],
+  "restore_note": "The base and fast target folders are prepared derivatives; restore exact prepared weights from a separate backup. Raw input downloads require the pinned HyperQwen preparation pipeline. Fast-variant Hub input revision remains unconfirmed."
+}

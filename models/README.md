@@ -1,6 +1,15 @@
 # Model assets
 
-Weights are stored outside Git. All 13 model directories and four Ollama tags were copied from the SSD on 2026-10-10, avoiding another download. vLLM model files total approximately 248 GB (231 GiB), plus approximately 39 GiB of Ollama data. Cache files are optional and excluded from the inventory.
+Weights are stored outside Git. The original 13 model directories and four Ollama tags were copied from the SSD on 2026-10-10, avoiding another download. vLLM model files total approximately 248 GB (231 GiB), plus approximately 39 GiB of Ollama data. Cache files are optional and excluded from the inventory.
+
+The additional W8 DFlash2 companion draft is stored in
+`~/.local/share/vllm/models/qwen3.8-dflash2-draft-w8` and pinned to
+`f454fa8e6a84387bf006f849584f72541cc29118`. Its 2,172,742,656-byte weight file
+was downloaded from Hugging Face and verified against published SHA-256
+`72223787fbfe7e01c4a940f80f98cf3d7a803e9b79aa4ec7bc28a461d767fa18`.
+The BF16 and W8 llama-swap entries reuse the target model previously verified
+during download to the external SSD and then copied to this machine's M.2 drive.
+No target weights were redownloaded.
 
 ## Default boot model
 
@@ -28,6 +37,8 @@ weights; the DFlash2 draft is a companion, not a standalone chat model. See [ser
 | `ornith-1.5-35b-a3b.tabbyapi.128k` | [ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw/tree/875ac67dae8e793770396908c575c507f4cd5f75) | `875ac67dae8e793770396908c575c507f4cd5f75` | 18.5 |
 | `ornith-1.5-9b.tabbyapi.128k` | [ultimatechris/Ornith-1.5-9B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-9B-EXL3-4bpw/tree/8d1e89ef430f9ba3a12789b198abf1385670ceb0) | `8d1e89ef430f9ba3a12789b198abf1385670ceb0` | 6.7 |
 | `qwen3.8-27b.sglang.208k` | [turboderp/Qwen3.8-27B-exl3](https://huggingface.co/turboderp/Qwen3.8-27B-exl3/tree/6fe61ad620abfe97c5b49f9722c2bceeea4ccc28) | `6fe61ad620abfe97c5b49f9722c2bceeea4ccc28` | 12.9 |
+
+The W8 draft source is [lued/Qwen3.8-27B-DFlash2-W8](https://huggingface.co/lued/Qwen3.8-27B-DFlash2-W8/tree/f454fa8e6a84387bf006f849584f72541cc29118); its pinned download command and file inventory are in `vllm.json`.
 
 Install the Arch `python-huggingface-hub` package for `hf` only when downloads are needed. It is not required to serve the already copied models. Download only missing assets; already copied assets do not need redownloading. For example:
 
@@ -65,3 +76,35 @@ snapshot: its old addresses, server-status text, verification labels and 175 W
 manual benchmark plans do not describe changes applied to this box. GPU power
 limits remain 350 W, and model service configuration and current validation are documented separately
 in `system/local-ai/README.md`.
+
+## HyperQwen prepared assets
+
+The pinned [HyperQwen source](https://github.com/syv-ai/HyperQwen/tree/7af097b5ea3acfecd60aabbff5bc457e503b2dc5)
+is retained at `~/Projects/HyperQwen`. Three prepared model components are stored
+under `~/.local/share/vllm/models/hyperqwen`, with the project's `models` symlink
+pointing there. Hardlinks between the base and fast variants are preserved;
+the unique model files occupy 17.74 GiB. A recursive checksum comparison against
+the SSD found no differences. [hyperqwen.json](hyperqwen.json) records the source
+commit, original runtime digest, known input revisions and file inventory.
+
+Restore the source and model link with:
+
+```bash
+git clone https://github.com/syv-ai/HyperQwen.git ~/Projects/HyperQwen
+git -C ~/Projects/HyperQwen checkout 7af097b5ea3acfecd60aabbff5bc457e503b2dc5
+# Restore the prepared model folders from their separate backup first:
+ln -s "$HOME/.local/share/vllm/models/hyperqwen" "$HOME/Projects/HyperQwen/models"
+```
+
+The original runtime image is
+`ghcr.io/syv-ai/hyperqwen@sha256:25bfa39ca4b71d5ba5ea32e5486c841dd4fb8b6429846c012ec5d1b06b2457a6`.
+The copied source documents preparation and Docker restoration. Exact prepared
+weights require their separate backup; input download commands in `hyperqwen.json`
+restore raw sources rather than the prepared target folders. The fast-variant
+Hub input revision remains unconfirmed. Serving these prepared assets on this
+installation is outstanding; the active llama-swap setup uses the separate
+lued INT8 checkpoints.
+
+Eleven original recipe JSON files for retained model families are preserved in
+`~/.local/share/vllm/recipes/` as reference data. Current service flags and pinned
+weights are recorded in this repository's service and model records.
