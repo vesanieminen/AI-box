@@ -173,6 +173,7 @@ weights are reused from local folders and never downloaded on a model switch.
 Strata v0.1.43.1, automatic splitting across GPUs 0 and 1, four speculative
 MTP tokens, INT8 KV cache and 262144 configured context tokens. GPU vision
 uses the published BF16 projector, a 700 MiB VRAM reserve and 1024 image tokens.
+Model discovery advertises text and image input, text output and `vision: true`.
 Backend port 5808 is localhost only. The container explicitly passes the host
 and port to `serve.server` and uses the installer's retained config in
 `etc/strata/strata-iq3_s.json`. It runs directly without invoking setup during

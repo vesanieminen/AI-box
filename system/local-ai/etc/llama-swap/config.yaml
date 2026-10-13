@@ -205,7 +205,14 @@
       "ttl": 0,
       "unloadTimeout": 90,
       "capabilities": {
-        "context": 262144
+        "context": 262144,
+        "in": [
+          "text",
+          "image"
+        ],
+        "out": [
+          "text"
+        ]
       }
     }
   },
