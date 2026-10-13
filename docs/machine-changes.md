@@ -28,7 +28,7 @@ are recorded in [versions.txt](../packages/versions.txt).
 
 ## User configuration
 
-Chezmoi manages 24 files. Configure it with `scripts/setup-chezmoi.sh` from this
+Chezmoi manages 26 files. Configure it with `scripts/setup-chezmoi.sh` from this
 checkout, review `chezmoi diff`, then run `chezmoi apply` to restore settings.
 The capture allowlist is `tracked-files.json`. Python bytecode is excluded;
 empty preference files use Chezmoi's `empty_` attribute.
@@ -42,6 +42,10 @@ empty preference files use Chezmoi's `empty_` attribute.
 - The custom idle plugin publishes desktop activity to the AI-aware suspend guard.
   Automatic suspend occurs after 15 minutes without desktop or AI activity.
   The runtime Stay Awake switch overrides idle behavior and is not managed by Git.
+- `~/.local/bin/disconnect-ssh` prints and closes incoming SSH connections and
+  login sessions that can block the suspend guard. Use `--list` to inspect them
+  without disconnecting. Chezmoi restores the executable; usage and verification
+  are in [idle behavior](../system/local-ai/README.md#idle-lighting-and-monitoring).
 - OpenRGB's desktop autostart entry turns off ASUS RTX 3090 lighting.
 - `~/Documents/Local-AI/Models.html` retains the supplied model catalog. It is a
   reference snapshot, not live service status; model provenance is in `models/`.

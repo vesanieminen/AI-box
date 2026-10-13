@@ -1,0 +1,101 @@
+#!/usr/bin/python3
+"""List or close incoming SSH connections that can block AI-aware suspend."""
+import argparse
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+
+
+def command(*args):
+    return subprocess.check_output(args, text=True, timeout=15).strip()
+
+
+def sessions():
+    found = []
+    for line in command('loginctl', 'list-sessions', '--no-legend', '--no-pager').splitlines():
+        session_id = line.split()[0]
+        info = dict(line.split('=', 1) for line in command(
+            'loginctl', 'show-session', session_id, '-p', 'Service', '-p', 'Remote',
+            '-p', 'Name', '-p', 'RemoteHost', '-p', 'State').splitlines())
+        if info.get('Service') == 'sshd' and info.get('Remote') == 'yes':
+            found.append((session_id, info))
+    return found
+
+
+def connections():
+    listener = int(command('systemctl', 'show', 'sshd.service', '-p', 'MainPID', '--value'))
+    found = []
+    if not listener:
+        return found
+    for proc in Path('/proc').glob('[0-9]*'):
+        fd = None
+        try:
+            # Pin the process before reading it so PID reuse cannot target another process.
+            fd = os.pidfd_open(int(proc.name))
+            status = dict(line.split(':', 1) for line in (proc / 'status').read_text().splitlines())
+            if int(status['PPid']) != listener or status['Name'].strip() not in (
+                    'sshd', 'sshd-session', 'sshd-auth'):
+                continue
+            title = (proc / 'cmdline').read_bytes().replace(b'\0', b' ').decode(errors='replace').strip()
+            found.append((int(proc.name), fd, title))
+            fd = None
+        except ProcessLookupError:
+            continue
+        except FileNotFoundError:
+            continue
+        finally:
+            if fd is not None:
+                os.close(fd)
+    return found
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, epilog=(
+        'Default: print and disconnect all current incoming SSH sessions and tunnels. '
+        'Use a local terminal: your own SSH session is included. New logins remain possible; '
+        'normal desktop/AI idle checks still apply.'))
+    parser.add_argument('--list', '--dry-run', action='store_true', help='print open connections without disconnecting')
+    args = parser.parse_args()
+    if not args.list and os.geteuid() != 0:
+        os.execvp('sudo', ['sudo', '--', '/usr/bin/python3', str(Path(__file__).resolve()), *sys.argv[1:]])
+
+    open_sessions = sessions()
+    open_connections = connections()
+    print('Open incoming SSH connections:', flush=True)
+    for pid, _, title in open_connections:
+        print(f'  PID {pid}: {title}', flush=True)
+    print('SSH login sessions (these block the AI-aware suspend guard):', flush=True)
+    for session_id, info in open_sessions:
+        print(f"  Session {session_id}: {info.get('Name', '?')} from {info.get('RemoteHost') or '?'} ({info.get('State', '?')})", flush=True)
+    if not open_connections and not open_sessions:
+        print('  None.')
+    if args.list:
+        for _, fd, _ in open_connections:
+            os.close(fd)
+        return 0
+
+    failed = False
+    for session_id, _ in open_sessions:
+        print(f'Disconnecting SSH session {session_id}...', flush=True)
+        result = subprocess.run(['loginctl', 'terminate-session', session_id], timeout=15)
+        failed |= result.returncode != 0
+    for pid, fd, _ in open_connections:
+        try:
+            print(f'Closing SSH connection PID {pid}...', flush=True)
+            signal.pidfd_send_signal(fd, signal.SIGTERM)
+        except ProcessLookupError:
+            pass  # Session termination may already have closed the connection.
+        finally:
+            os.close(fd)
+    print('SSH disconnect requested. Automatic suspend still depends on desktop and AI inactivity.', flush=True)
+    return int(failed)
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        print(f'disconnect-ssh: {error}', file=sys.stderr)
+        sys.exit(1)

@@ -55,6 +55,10 @@
     "source": "dot_local/bin/ai-desktop-idle.py",
     "sha256": "62a51bad5a73904ebcda60a31f7c74d9e6b6720d41dc5b54bb909a0b715186e8"
   },
+  ".local/bin/disconnect-ssh": {
+    "source": "dot_local/bin/executable_disconnect-ssh",
+    "sha256": "6c9862014537d1dbfd83a6f3492d425ee88b55b1688001789ad8e8f2f556bd40"
+  },
   ".local/bin/gh": {
     "source": "dot_local/bin/executable_gh",
     "sha256": "9c56b0b9705dd0305ca302f92dc9b4cfbc7db0221c05e1b191e11e610841a3cb"

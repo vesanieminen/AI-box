@@ -41,7 +41,7 @@ committing.
 ## Chezmoi setup and restore
 
 Chezmoi is installed and configured on this machine to use this checkout.
-All 25 managed files match live settings. Restoration into an empty temporary
+All 26 managed files match live settings. Restoration into an empty temporary
 directory was verified for the original 24 files and their permissions.
 Generated Python bytecode is excluded by `home/.chezmoiignore`, including files already ignored by Git.
 

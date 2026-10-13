@@ -347,6 +347,27 @@ requests and recent completed inference/model-management requests. Keeping the
 UI or model list open does not count as inference activity. Failure to verify
 activity prevents suspend. The Stay Awake switch overrides the idle policy.
 
+Remote SSH login sessions also block the guard, even when idle. The managed
+`~/.local/bin/disconnect-ssh` command prints current incoming SSH connection
+processes and SSH login sessions (user, remote host and state), then terminates
+those sessions and closes the captured SSH connection processes, including
+tunnels. It requests sudo privileges when disconnecting. Run it from a local
+terminal: an SSH session used to invoke it is also disconnected, and processes
+inside terminated login sessions are stopped. The SSH listener stays running
+and new connections remain possible.
+
+```bash
+~/.local/bin/disconnect-ssh --list  # Print only; --dry-run is equivalent
+~/.local/bin/disconnect-ssh         # Print and disconnect current incoming SSH
+```
+
+Restore the command with `chezmoi apply` after configuring this dotfiles
+checkout. This command does not request suspend or change the guard: desktop
+activity, AI activity and Stay Awake continue to apply. Live listing was
+verified against two SSH sessions; syntax and mocked list/disconnect checks
+passed. Live session termination and subsequent automatic suspend remain
+unverified.
+
 The screensaver is disabled; the lock timeout is 300 seconds. Both settings are
 managed by Chezmoi. On a headless machine, review the desktop heartbeat policy.
 Persistent network wake is in [network restoration](../network/README.md).
