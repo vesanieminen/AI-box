@@ -62,7 +62,7 @@ one model at a time; GPU placement follows the selected backend profile.
   `http://192.168.0.181:8000/v1` and browser UI is
   `http://192.168.0.181:8000/ui/`. INT8 and INT4 vLLM backends listen only on
   localhost ports 5800 and 5801. Other vLLM backends use 5802–5807;
-  EXL3 backends use 5810–5813. Selecting `qwen3.8-27b-int4` unloads INT8 and
+  Strata uses localhost 5808; EXL3 backends use 5810–5813. Selecting `qwen3.8-27b-int4` unloads INT8 and
   loads the INT4 MTP2 profile; selecting `qwen3.8-27b-int8` switches back.
   Active inference finishes before a queued switch. Existing OpenCode clients
   keep the same endpoint and select models through `/models`. The persistent UFW rule permits TCP 8000
@@ -80,6 +80,15 @@ one model at a time; GPU placement follows the selected backend profile.
   without error; general long-context quality and multimodal behavior remain
   unverified.
   Qwen INT8 MTP remains the boot default.
+- Strata v0.1.43.1 serves standard Qwen3.8 Flash Next IQ3_S as the on-demand
+  `qwen3.8-flash-next-iq3-s` entry, with both RTX 3090 GPUs, MTP4, INT8 KV,
+  262144 configured context and GPU vision. Its official Dockerfile is built
+  for CUDA architecture 86 from a pinned source revision. The model assets,
+  generated packs and MTP subset are in `~/.local/share/strata`, outside Git.
+  Text, image input and Activity timing statistics passed through llama-swap
+  with the desktop stopped. Full-context capacity and desktop coexistence
+  remain unverified. Runtime updates are manual; the MTP boot default is retained.
+  The suspend guard watches port 5808 as well as the DFlash backend on 5807.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap
   manages the GPUs.
@@ -95,8 +104,8 @@ one model at a time; GPU placement follows the selected backend profile.
 
 ### Model switching and timing metadata
 
-Llama-swap configuration declares 12 complete chat-model routes through vLLM,
-TabbyAPI and SGLang. Runtime images are pinned in `system/local-ai/compose.yaml`;
+Llama-swap configuration declares 13 complete chat-model routes through vLLM,
+TabbyAPI, SGLang and Strata. Runtime images are pinned in `system/local-ai/compose.yaml`;
 weights remain outside Git. The shared DFlash2 draft is used with its Qwen
 INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
 no weights. The model table and restoration steps are in

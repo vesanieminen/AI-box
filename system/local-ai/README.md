@@ -2,7 +2,7 @@
 
 Llama-swap serves the LAN API on port 8000 and manages one model at a time
 using the available GPUs. Qwen3.8 27B INT8 MTP is preloaded on startup.
-Other models are available on demand through vLLM, TabbyAPI or SGLang, using
+Other models are available on demand through vLLM, TabbyAPI, SGLang or Strata, using
 pinned runtime images and existing local weights. Model switching stops the old container before loading
 another model.
 
@@ -15,14 +15,15 @@ another model.
    Adjust them for another machine.
 2. Restore model weights from a separate backup or follow `models/README.md`.
    Runtime caches can be recreated.
-3. Create the containers using the declarative Compose file:
+3. Build Strata and prepare its model using the Strata instructions below, then
+   create the containers using the declarative Compose file:
 
 ```bash
 mkdir -p ~/.local/share/vllm/cache/{vllm,triton,huggingface}
 sudo systemctl enable --now docker.service
 sudo nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 sudo docker compose -f system/local-ai/compose.yaml build qwen3.8-27b-int8-dflash2 qwen3.8-27b-int8-dflash2-w8
-sudo docker compose -f system/local-ai/compose.yaml create
+sudo docker compose --project-name local-ai -f system/local-ai/compose.yaml create
 ```
 
 Compose pins the image digest, inference flags, environment and mounts for each
@@ -83,6 +84,7 @@ inference and stops the previous backend before starting another.
 
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
+| `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2; boot default | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
@@ -165,10 +167,59 @@ The EXL3 images are the immutable image digests recorded in the SSD recipes;
 normal `docker compose ... create` downloads missing runtime images. Model
 weights are reused from local folders and never downloaded on a model switch.
 
+### Strata Flash Next with vision
+
+`qwen3.8-flash-next-iq3-s` uses the standard ISTA-DASLab IQ3_S quantization,
+Strata v0.1.43.1, automatic splitting across GPUs 0 and 1, four speculative
+MTP tokens, INT8 KV cache and 262144 configured context tokens. GPU vision
+uses the published BF16 projector, a 700 MiB VRAM reserve and 1024 image tokens.
+Backend port 5808 is localhost only. The container explicitly passes the host
+and port to `serve.server` and uses the installer's retained config in
+`etc/strata/strata-iq3_s.json`. It runs directly without invoking setup during
+model switches. Qwen 27B INT8 MTP remains the boot default.
+
+Restore the pinned source and build the official Dockerfile for the RTX 3090:
+
+```bash
+git clone https://github.com/Niko1221/Strata ~/Projects/Strata
+git -C ~/Projects/Strata checkout a0116b2782a5b82622358c04a06496485d12b2d6
+sudo docker build --build-arg CUDA_ARCHITECTURES=86 -t local-ai/strata:0.1.43.1 ~/Projects/Strata
+mkdir -p ~/.local/share/strata
+sudo docker run --rm --device nvidia.com/gpu=all \
+  -v "$HOME/.local/share/strata:/data" \
+  --entrypoint /bin/bash local-ai/strata:0.1.43.1 -lc '
+set -e
+/opt/strata/.venv/bin/python /opt/strata/setup.py \
+  --setup --yes --family qwen --model IQ3_S --gpus 0,1 \
+  --context 262144 --vision gpu --data-dir /data \
+  --host 127.0.0.1 --port 5808 --no-start
+mkdir -p /data/config
+cp /opt/strata/strata-iq3_s.json /data/config/
+'
+sudo install -Dm644 system/local-ai/etc/strata/strata-iq3_s.json \
+  "$HOME/.local/share/strata/config/strata-iq3_s.json"
+```
+
+The setup downloads missing model assets and generates packs and the MTP draft
+subset. Restoring the existing data directory avoids downloading the weights
+again. Sources, revisions and published shard hashes are in `models/strata.json`.
+No unattended updates are configured: updating requires a deliberate source
+update, image rebuild, settings refresh and container recreation.
+
+Verified with the desktop stopped: loading on both RTX 3090 GPUs, text and
+image requests through llama-swap, and streaming timing statistics in Activity.
+A 111-output-token text test reported 133.8 decode tokens/second and 104.3
+prompt tokens/second; short tests do not predict sustained coding performance.
+The image test read the letters and digits of `VISION-7426` but replaced the
+hyphen with a space. Full-context capacity, long-context quality and operation
+with the desktop running remain unverified. Startup loads about 46.84 GiB of
+experts into system RAM before filling the GPU expert cache; allow several
+minutes when switching to this model.
+
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
-into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 12 IDs
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 13 IDs
 and their configured context limits under the custom provider `llama-swap`.
 The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6

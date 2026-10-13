@@ -5,7 +5,7 @@ Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 Conflicts=vllm-boot.service ollama.service
-RequiresMountsFor=/home/vesanieminen/.local/share/vllm/models /home/vesanieminen/.local/share/vllm/cache
+RequiresMountsFor=/home/vesanieminen/.local/share/vllm/models /home/vesanieminen/.local/share/vllm/cache /home/vesanieminen/.local/share/strata
 
 [Service]
 Type=simple

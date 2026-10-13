@@ -11,6 +11,18 @@ The BF16 and W8 llama-swap entries reuse the target model previously verified
 during download to the external SSD and then copied to this machine's M.2 drive.
 No target weights were redownloaded.
 
+## Strata Flash Next assets
+
+The standard IQ3_S model and BF16 vision projector are installed under
+`~/.local/share/strata/models`; generated packs and the extracted MTP subset
+remain under the same data directory. The two GGUF shards total 77.88 GiB.
+`strata.json` records their source revision, published hashes, the pinned Strata
+runtime and MTP checkpoint. Local shard sizes match the published inventory;
+independent full-shard SHA-256 verification is outstanding. Text and image
+requests through llama-swap passed; full-context capacity is unverified.
+[Build, download and preparation commands](../system/local-ai/README.md#strata-flash-next-with-vision)
+reuse existing assets when present. No host Hugging Face CLI is needed.
+
 ## Default boot model
 
 `qwen3.8-27b-int8`: Qwen3.8 27B INT8 W8A16 with MTP, served through llama-swap on port 8000 across two RTX 3090 GPUs.
