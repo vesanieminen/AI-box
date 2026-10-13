@@ -46,6 +46,13 @@ empty preference files use Chezmoi's `empty_` attribute.
 - `~/Documents/Local-AI/Models.html` retains the supplied model catalog. It is a
   reference snapshot, not live service status; model provenance is in `models/`.
 
+## Shell prompt
+
+`~/.config/starship.toml` prefixes every interactive Bash prompt with the short
+hostname, including local and SSH sessions. On this machine the prefix is
+`ai-box`. Starship rendering was verified; existing shells pick up the change
+at the next prompt. The configuration is managed by Chezmoi.
+
 ## AI services and models
 
 Follow [AI service restoration](../system/local-ai/README.md) to create the

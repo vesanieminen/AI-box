@@ -41,9 +41,9 @@ committing.
 ## Chezmoi setup and restore
 
 Chezmoi is installed and configured on this machine to use this checkout.
-All 24 managed files match live settings; restoration into an empty temporary
-directory was verified for contents and permissions. Generated Python bytecode
-is excluded by `home/.chezmoiignore`, including files already ignored by Git.
+All 25 managed files match live settings. Restoration into an empty temporary
+directory was verified for the original 24 files and their permissions.
+Generated Python bytecode is excluded by `home/.chezmoiignore`, including files already ignored by Git.
 
 Capturing changes also works without chezmoi. On a fresh machine, install it using
 `sudo pacman -S --needed chezmoi`, then configure deployment:

@@ -39,6 +39,10 @@
     "source": "dot_config/omarchy/shell.json",
     "sha256": "177e96f6c5fc54e51a6e8fdc1b95be9cc1947d576336debf7dee963df0cda0f2"
   },
+  ".config/starship.toml": {
+    "source": "dot_config/starship.toml",
+    "sha256": "494aa1f7fb69de2626140d8c3780f8751e7942a876736534114f46b53d0b3b30"
+  },
   ".config/systemd/user/local-ai-lan.service": {
     "source": "dot_config/systemd/user/local-ai-lan.service",
     "sha256": "ae6f963fa0777870612089ea322c1ba865c72fa8fe0371a5afa36148d84da9b8"
