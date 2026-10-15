@@ -120,3 +120,17 @@ lued INT8 checkpoints.
 Eleven original recipe JSON files for retained model families are preserved in
 `~/.local/share/vllm/recipes/` as reference data. Current service flags and pinned
 weights are recorded in this repository's service and model records.
+
+## Nemotron 3.5 Bolt assets
+
+The native IQ2 model and vision projector are downloaded directly from
+`nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF` revision
+`724e3fee41becc4048998e2204748147876ed56b`, into
+`~/.local/share/llama.cpp/models/nemotron-bolt`. They total 23,752,019,264 bytes
+(22.12 GiB). [nemotron-bolt.json](nemotron-bolt.json) records each published
+SHA-256, file size and exact resumable curl command. Weights remain outside Git.
+Both files are downloaded; their local sizes and SHA-256 hashes match the
+pinned published inventory. Short text and synthetic image-color identification
+passed through llama-swap. Full-context capacity and general quality remain
+unverified. Serving configuration and
+restore commands are in [the Bolt service record](../system/local-ai/README.md#nemotron-35-bolt).

@@ -1,0 +1,24 @@
+{
+  "repository": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF",
+  "revision": "724e3fee41becc4048998e2204748147876ed56b",
+  "directory": "~/.local/share/llama.cpp/models/nemotron-bolt",
+  "llama_cpp_revision": "620d2225cc436ab0b001e3200e590e3b286ef9ab",
+  "files": [
+    {
+      "filename": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+      "bytes": 22018326528,
+      "sha256": "91d63363e782c8a3d5f4be42816eba8e0d42dd2530bd07a7d0d2dc440599af75",
+      "download_command": "curl -fL --retry 5 -C - -o \"$HOME/.local/share/llama.cpp/models/nemotron-bolt/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf\" https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF/resolve/724e3fee41becc4048998e2204748147876ed56b/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf"
+    },
+    {
+      "filename": "mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+      "bytes": 1733692736,
+      "sha256": "0ee891eadc7bf0cae6289b249c74eb1ef420534351f6ef8b64d49f0ca6a926b0",
+      "download_command": "curl -fL --retry 5 -C - -o \"$HOME/.local/share/llama.cpp/models/nemotron-bolt/mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf\" https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF/resolve/724e3fee41becc4048998e2204748147876ed56b/mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf"
+    }
+  ],
+  "verification": "Both local GGUF file sizes and SHA-256 hashes match the pinned Hugging Face inventory. Image built successfully. Short text, streaming with final usage counts and synthetic image-color identification passed through llama-swap. Switching between Flash Next and Bolt passed. Full-context capacity, sustained performance, general vision quality and tool use remain unverified.",
+  "runtime_image": "local-ai/llama-bolt:620d2225cc43",
+  "built_image_id": "sha256:cc303cb4a4e08f962a67a0706d499e22410008dd947e2f7398fa0372df2092ef",
+  "built_image_manifest": "sha256:2b0600d51d103edddc2097b9c7f925c01b830f403531e75539952376e9ce2021"
+}

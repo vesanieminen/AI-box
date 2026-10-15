@@ -875,6 +875,67 @@
       "volumes": [
         "${AI_HOME:-/home/vesanieminen}/.local/share/strata:/data"
       ]
+    },
+    "nemotron-bolt": {
+      "image": "local-ai/llama-bolt:620d2225cc43",
+      "build": {
+        "context": "./images/llama-bolt"
+      },
+      "container_name": "nemotron-bolt-swap",
+      "user": "1000:1000",
+      "init": true,
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "2g",
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "command": [
+        "--model",
+        "/models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+        "--mmproj",
+        "/models/mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+        "--alias",
+        "nemotron-bolt",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5809",
+        "--n-gpu-layers",
+        "all",
+        "--split-mode",
+        "layer",
+        "--tensor-split",
+        "1,1",
+        "--ctx-size",
+        "32768",
+        "--parallel",
+        "1",
+        "--batch-size",
+        "2048",
+        "--ubatch-size",
+        "512",
+        "--cache-type-k",
+        "q8_0",
+        "--cache-type-v",
+        "q8_0",
+        "--flash-attn",
+        "on",
+        "--temp",
+        "1.0",
+        "--top-p",
+        "0.95",
+        "--jinja"
+      ],
+      "volumes": [
+        "${AI_HOME:-/home/vesanieminen}/.local/share/llama.cpp/models/nemotron-bolt:/models:ro"
+      ]
     }
   }
 }

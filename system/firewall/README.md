@@ -9,8 +9,8 @@ The Strata web UI is available through llama-swap at
 with the trailing slash. Its assets and API use the same proxy path, so the
 existing port-8000 LAN rule covers the UI. Port 5808 stays bound to localhost.
 Page/assets, status/settings and a chat request with the browser Origin passed
-through this LAN URL from the host. Independent remote-browser verification
-remains outstanding.
+through this LAN URL from the host. Remote-browser access from 192.168.0.75
+is confirmed by successful page/metrics requests.
 
 Omarchy's existing UFW firewall remains enabled. Add only this application
 profile and local-subnet rule; do not replace the existing firewall rules:

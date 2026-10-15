@@ -104,8 +104,18 @@ one model at a time; GPU placement follows the selected backend profile.
   Strata's web UI is served to the LAN through llama-swap at
   `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s/`.
   Page/assets, status/settings and browser-Origin chat passed through the LAN
-  address from this host. No new listener or firewall rule is needed; a browser
-  check from another LAN device remains outstanding.
+  address from this host. Browser access from 192.168.0.75 is confirmed by
+  successful page/metrics requests. No new listener or firewall rule is needed.
+- Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
+  localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
+  weights and the matching vision projector. Its initial context is 32768,
+  split across both RTX 3090 GPUs with q8_0 K/V caches and one sequence.
+  The installed suspend guard includes its port. Both weights are downloaded
+  and checksum verified; the image built successfully. Text generation,
+  streaming with final usage counts and synthetic image-color identification passed through llama-swap, and model
+  switching passed. Full-context capacity, sustained performance, general
+  vision quality and tool use remain unverified. Flash Next IQ3_S remains the
+  boot default; its preload passed after the service restart.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap
   manages the GPUs.

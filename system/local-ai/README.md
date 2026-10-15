@@ -90,6 +90,7 @@ inference and stops the previous backend before starting another.
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
+| `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision | 32768 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
@@ -186,8 +187,8 @@ model switches. The system service preloads this profile on startup and waits
 for its health endpoint. A fresh boot with this default remains unverified.
 The Strata UI is proxied through the LAN URL above. Its page, JavaScript, CSS,
 status/settings endpoints and a chat request with the LAN browser Origin were
-verified through the machine's LAN address from this host; an independent
-browser check from another LAN device remains outstanding.
+verified through the machine's LAN address from this host. Remote-browser
+access from 192.168.0.75 is also confirmed by successful page/metrics requests.
 
 Restore the pinned source and build the official Dockerfile for the RTX 3090:
 
@@ -409,3 +410,59 @@ TabbyAPI and SGLang. vLLM and TabbyAPI rates reach Activity; SGLang's native
 Prometheus endpoint returns HTTP 200, including generation-throughput metrics.
 Other LAN clients successfully reached the API and web UI, including an OpenCode
 streaming request.
+
+## Nemotron 3.5 Bolt
+
+The on-demand `nemotron-bolt` profile uses NVIDIA's native IQ2 GGUF and its
+matching vision projector, mounted read-only from
+`~/.local/share/llama.cpp/models/nemotron-bolt`. Model revisions, sizes,
+SHA-256 checksums and resumable download commands are in
+`models/nemotron-bolt.json`. Create the directory before running those commands.
+No Hugging Face package or host build tools are required.
+
+`images/llama-bolt/Dockerfile` builds llama-server from llama.cpp revision
+`620d2225cc436ab0b001e3200e590e3b286ef9ab` (v0.7.0), which includes Bolt support
+from PR #30520. The CUDA 12.8.1 build targets the RTX 3090's architecture 86,
+uses two compile jobs, and produces a server image without an embedded web UI.
+The llama-swap UI remains available. No draft model is configured.
+
+The backend binds only `127.0.0.1:5809`, uses both GPUs with equal layer splitting,
+one sequence, 32768 context, q8_0 K/V caches, Flash Attention, temperature 1.0
+and top_p 0.95. Context is an initial configured limit; the model supports up to
+262144 tokens, but larger contexts need local capacity validation. The model
+is in the existing exclusive GPU group and has no container restart policy;
+llama-swap owns loading and unloading. Flash Next IQ3_S remains the boot default.
+The suspend guard includes port 5809 alongside existing backend ports.
+
+Restore after downloading and verifying both model files:
+
+```bash
+sudo docker compose -f system/local-ai/compose.yaml build nemotron-bolt
+sudo docker compose -f system/local-ai/compose.yaml create nemotron-bolt
+llama-swap -config system/local-ai/etc/llama-swap/config.yaml -validate
+sudo install -Dm644 system/local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo systemctl restart ollama-idle-suspend.service llama-swap.service
+```
+
+Select `nemotron-bolt` in the llama-swap UI or set the API request's `model` to
+`nemotron-bolt` at `http://192.168.0.181:8000/v1`.
+
+```bash
+curl --fail http://127.0.0.1:8000/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"nemotron-bolt","messages":[{"role":"user","content":"What is 2 + 2?"}],"max_tokens":128,"chat_template_kwargs":{"enable_thinking":false}}'
+```
+
+Both model files passed size and SHA-256 verification against the pinned
+Hugging Face inventory. Compose and llama-swap configuration validation passed.
+The image built successfully. Short text generation, streaming with final
+usage counts and synthetic image-color identification passed through llama-swap; the red image was identified as red.
+Switching between Flash Next and Bolt passed, and the service restart
+successfully preloaded Flash Next. All 12 suspend-guard regression tests passed.
+Full-context capacity, sustained performance, general vision quality and tool
+use remain unverified.
+
+Close Strata UI tabs before selecting Bolt: model-specific upstream requests
+from those tabs can request Flash Next again. Use the llama-swap UI to switch
+models.
