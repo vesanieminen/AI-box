@@ -16,7 +16,7 @@ No target weights were redownloaded.
 The standard IQ3_S model and BF16 vision projector are installed under
 `~/.local/share/strata/models`; generated packs and the extracted MTP subset
 remain under the same data directory. The two GGUF shards total 77.88 GiB.
-`strata.json` records their source revision, published hashes, the pinned Strata
+[strata.json](strata.json) records their source revision, published hashes, the pinned Strata
 runtime and MTP checkpoint. Local shard sizes match the published inventory;
 independent full-shard SHA-256 verification is outstanding. Text and image
 requests through llama-swap passed; full-context capacity is unverified.
@@ -34,8 +34,14 @@ weights; the DFlash2 draft is a companion, not a standalone chat model. See [ser
 
 `vllm.json` records each repository, exact revision, file sizes and a download command. Folder names preserve the SSD naming; EXL3 folders use TabbyAPI or SGLang through llama-swap; they are not vLLM model formats. Some SSD folders were pruned to model files; downloading the pinned repository can restore additional documentation.
 
-| Local directory | Download source | Revision | Copied GiB |
+The Strata entry uses `~/.local/share/strata/models`; its size covers the two
+IQ3_S GGUF shards. Its projector, MTP assets and preparation steps are documented
+in [Strata Flash Next assets](#strata-flash-next-assets) above. Other directory
+names below are relative to `~/.local/share/vllm/models`.
+
+| Local directory | Download source | Revision | Stored GiB |
 | --- | --- | --- | --- |
+| `~/.local/share/strata/models` (Strata Flash Next IQ3_S, boot default) | [ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/ed59f92082b1e93c0e96d60a8b11aab089b52f09) | `ed59f92082b1e93c0e96d60a8b11aab089b52f09` | 77.88 |
 | `qwen3.8-27b-int8` | [lued/Qwen3.8-27B-INT8-W8A16-MTP](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-MTP/tree/7c12373712d1363e2b76655cb3332c9c124627d7) | `7c12373712d1363e2b76655cb3332c9c124627d7` | 29.5 |
 | `qwen3.6-35b-a3b.vllm.128k.2x` | [Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency](https://huggingface.co/Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency/tree/d14fd7339b09364ea2aabc542ea20f7dccd97ca1) | `d14fd7339b09364ea2aabc542ea20f7dccd97ca1` | 20.1 |
 | `qwen3.8-27b-int4-mtp` | [Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency](https://huggingface.co/Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency/tree/75e632dd5cc71fa0ee3a000f99f6840afc0375e2) | `75e632dd5cc71fa0ee3a000f99f6840afc0375e2` | 17.0 |
