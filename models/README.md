@@ -39,22 +39,22 @@ IQ3_S GGUF shards. Its projector, MTP assets and preparation steps are documente
 in [Strata Flash Next assets](#strata-flash-next-assets) above. Other directory
 names below are relative to `~/.local/share/vllm/models`.
 
-| Local directory | Download source | Revision | Stored GiB |
-| --- | --- | --- | --- |
-| `~/.local/share/strata/models` (Strata Flash Next IQ3_S, boot default) | [ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/ed59f92082b1e93c0e96d60a8b11aab089b52f09) | `ed59f92082b1e93c0e96d60a8b11aab089b52f09` | 77.88 |
-| `qwen3.8-27b-int8` | [lued/Qwen3.8-27B-INT8-W8A16-MTP](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-MTP/tree/7c12373712d1363e2b76655cb3332c9c124627d7) | `7c12373712d1363e2b76655cb3332c9c124627d7` | 29.5 |
-| `qwen3.6-35b-a3b.vllm.128k.2x` | [Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency](https://huggingface.co/Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency/tree/d14fd7339b09364ea2aabc542ea20f7dccd97ca1) | `d14fd7339b09364ea2aabc542ea20f7dccd97ca1` | 20.1 |
-| `qwen3.8-27b-int4-mtp` | [Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency](https://huggingface.co/Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency/tree/75e632dd5cc71fa0ee3a000f99f6840afc0375e2) | `75e632dd5cc71fa0ee3a000f99f6840afc0375e2` | 17.0 |
-| `qwen3.8-dflash2-draft` | [z-lab/Qwen3.8-27B-DFlash2](https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2/tree/50307d4c4cde6860d4eee73e2547cd786fe8e8a4) | `50307d4c4cde6860d4eee73e2547cd786fe8e8a4` | 3.6 |
-| `qwen3.8-27b-int8-dflash2` | [lued/Qwen3.8-27B-INT8-W8A16-DFlash2](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-DFlash2/tree/2971c64ba386dd3faa6884cc215f67b3b2477a3e) | `2971c64ba386dd3faa6884cc215f67b3b2477a3e` | 27.5 |
-| `ornith-1.5-35b-int4-tp2` | [cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4](https://huggingface.co/cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4/tree/8cace5667cfc076c9f06b36854a1dbe255b79600) | `8cace5667cfc076c9f06b36854a1dbe255b79600` | 24.4 |
-| `gemma-4-31b-int4-tp2` | [cyankiwi/gemma-4-31B-it-AWQ-4bit](https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-4bit/tree/6f1b616c64bca2a05d67fdd6437c5500a8509327) | `6f1b616c64bca2a05d67fdd6437c5500a8509327` | 19.5 |
-| `gemma-4-31b-int8-tp2` | [cyankiwi/gemma-4-31B-it-AWQ-8bit](https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-8bit/tree/34ca187d836de874b2c7e3edf48f439b9f583772) | `34ca187d836de874b2c7e3edf48f439b9f583772` | 32.7 |
-| `gemma-4-26b-a4b-exl3-8bpw.2x` | [UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw](https://huggingface.co/UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw/tree/198e29717e14fbd92bb47c08ce593d4331f27141) | `198e29717e14fbd92bb47c08ce593d4331f27141` | 0.0 |
-| `gemma-4-26b-a4b.tabbyapi.64k` | [turboderp/gemma-4-26B-A4B-it-exl3](https://huggingface.co/turboderp/gemma-4-26B-A4B-it-exl3/tree/241bce8ff2259445258144a660678c47030867cf) | `241bce8ff2259445258144a660678c47030867cf` | 18.9 |
-| `ornith-1.5-35b-a3b.tabbyapi.128k` | [ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw/tree/875ac67dae8e793770396908c575c507f4cd5f75) | `875ac67dae8e793770396908c575c507f4cd5f75` | 18.5 |
-| `ornith-1.5-9b.tabbyapi.128k` | [ultimatechris/Ornith-1.5-9B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-9B-EXL3-4bpw/tree/8d1e89ef430f9ba3a12789b198abf1385670ceb0) | `8d1e89ef430f9ba3a12789b198abf1385670ceb0` | 6.7 |
-| `qwen3.8-27b.sglang.208k` | [turboderp/Qwen3.8-27B-exl3](https://huggingface.co/turboderp/Qwen3.8-27B-exl3/tree/6fe61ad620abfe97c5b49f9722c2bceeea4ccc28) | `6fe61ad620abfe97c5b49f9722c2bceeea4ccc28` | 12.9 |
+| Local directory / model | Runtime | Download source | Revision | Stored GiB |
+| --- | --- | --- | --- | --- |
+| `~/.local/share/strata/models` — Qwen3.8 Flash Next IQ3_S (Strata), boot default | Strata | [ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF/tree/ed59f92082b1e93c0e96d60a8b11aab089b52f09) | `ed59f92082b1e93c0e96d60a8b11aab089b52f09` | 77.88 |
+| `qwen3.8-27b-int8` | vLLM | [lued/Qwen3.8-27B-INT8-W8A16-MTP](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-MTP/tree/7c12373712d1363e2b76655cb3332c9c124627d7) | `7c12373712d1363e2b76655cb3332c9c124627d7` | 29.5 |
+| `qwen3.6-35b-a3b.vllm.128k.2x` | vLLM | [Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency](https://huggingface.co/Twu31/Qwen3.6-35B-A3B-GPTQ-INT4-W4A16-LowLatency/tree/d14fd7339b09364ea2aabc542ea20f7dccd97ca1) | `d14fd7339b09364ea2aabc542ea20f7dccd97ca1` | 20.1 |
+| `qwen3.8-27b-int4-mtp` | vLLM | [Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency](https://huggingface.co/Twu31/Qwen3.8-27B-AWQ-INT4-MTP-LowLatency/tree/75e632dd5cc71fa0ee3a000f99f6840afc0375e2) | `75e632dd5cc71fa0ee3a000f99f6840afc0375e2` | 17.0 |
+| `qwen3.8-dflash2-draft` | vLLM (companion draft) | [z-lab/Qwen3.8-27B-DFlash2](https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2/tree/50307d4c4cde6860d4eee73e2547cd786fe8e8a4) | `50307d4c4cde6860d4eee73e2547cd786fe8e8a4` | 3.6 |
+| `qwen3.8-27b-int8-dflash2` | vLLM | [lued/Qwen3.8-27B-INT8-W8A16-DFlash2](https://huggingface.co/lued/Qwen3.8-27B-INT8-W8A16-DFlash2/tree/2971c64ba386dd3faa6884cc215f67b3b2477a3e) | `2971c64ba386dd3faa6884cc215f67b3b2477a3e` | 27.5 |
+| `ornith-1.5-35b-int4-tp2` | vLLM | [cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4](https://huggingface.co/cyankiwi/Ornith-1.5-35B-A3B-AWQ-INT4/tree/8cace5667cfc076c9f06b36854a1dbe255b79600) | `8cace5667cfc076c9f06b36854a1dbe255b79600` | 24.4 |
+| `gemma-4-31b-int4-tp2` | vLLM | [cyankiwi/gemma-4-31B-it-AWQ-4bit](https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-4bit/tree/6f1b616c64bca2a05d67fdd6437c5500a8509327) | `6f1b616c64bca2a05d67fdd6437c5500a8509327` | 19.5 |
+| `gemma-4-31b-int8-tp2` | vLLM | [cyankiwi/gemma-4-31B-it-AWQ-8bit](https://huggingface.co/cyankiwi/gemma-4-31B-it-AWQ-8bit/tree/34ca187d836de874b2c7e3edf48f439b9f583772) | `34ca187d836de874b2c7e3edf48f439b9f583772` | 32.7 |
+| `gemma-4-26b-a4b-exl3-8bpw.2x` | TabbyAPI / ExLlamaV3 (weights absent) | [UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw](https://huggingface.co/UnstableLlama/gemma-4-26B-A4B-it-exl3-8.00bpw/tree/198e29717e14fbd92bb47c08ce593d4331f27141) | `198e29717e14fbd92bb47c08ce593d4331f27141` | 0.0 |
+| `gemma-4-26b-a4b.tabbyapi.64k` | TabbyAPI / ExLlamaV3 | [turboderp/gemma-4-26B-A4B-it-exl3](https://huggingface.co/turboderp/gemma-4-26B-A4B-it-exl3/tree/241bce8ff2259445258144a660678c47030867cf) | `241bce8ff2259445258144a660678c47030867cf` | 18.9 |
+| `ornith-1.5-35b-a3b.tabbyapi.128k` | TabbyAPI / ExLlamaV3 | [ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-35B-A3B-EXL3-4bpw/tree/875ac67dae8e793770396908c575c507f4cd5f75) | `875ac67dae8e793770396908c575c507f4cd5f75` | 18.5 |
+| `ornith-1.5-9b.tabbyapi.128k` | TabbyAPI / ExLlamaV3 | [ultimatechris/Ornith-1.5-9B-EXL3-4bpw](https://huggingface.co/ultimatechris/Ornith-1.5-9B-EXL3-4bpw/tree/8d1e89ef430f9ba3a12789b198abf1385670ceb0) | `8d1e89ef430f9ba3a12789b198abf1385670ceb0` | 6.7 |
+| `qwen3.8-27b.sglang.208k` | SGLang / ExLlamaV3 | [turboderp/Qwen3.8-27B-exl3](https://huggingface.co/turboderp/Qwen3.8-27B-exl3/tree/6fe61ad620abfe97c5b49f9722c2bceeea4ccc28) | `6fe61ad620abfe97c5b49f9722c2bceeea4ccc28` | 12.9 |
 
 The W8 draft source is [lued/Qwen3.8-27B-DFlash2-W8](https://huggingface.co/lued/Qwen3.8-27B-DFlash2-W8/tree/f454fa8e6a84387bf006f849584f72541cc29118); its pinned download command and file inventory are in `vllm.json`.
 
