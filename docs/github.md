@@ -29,8 +29,14 @@ GH_TOKEN="$(< ~/.config/gh/pat)" gh auth setup-git --hostname github.com
 GH_TOKEN="$(< ~/.config/gh/pat)" git -C ~/Projects/dotfiles push -u origin main
 ```
 
-Choose the repository URL before adding `origin`. Publishing is an explicit
-step; local commits do not automatically push. A fine-grained token for an
+The `origin` remote is `https://github.com/vesanieminen/AI-box.git`, with `main`
+tracking `origin/main`. Clone it on a fresh machine with:
+
+```bash
+git clone https://github.com/vesanieminen/AI-box.git ~/Projects/dotfiles
+```
+
+Publishing is an explicit step; local commits do not automatically push. A fine-grained token for an
 existing repository needs Contents read/write permission to push. Provision
 credentials again on a fresh installation; they are never restored from Git.
 
