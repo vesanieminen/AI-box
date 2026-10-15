@@ -90,7 +90,7 @@ inference and stops the previous backend before starting another.
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
-| `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision | 32768 |
+| `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
@@ -424,17 +424,20 @@ No Hugging Face package or host build tools are required.
 `620d2225cc436ab0b001e3200e590e3b286ef9ab` (v0.7.0), which includes Bolt support
 from PR #30520. The CUDA 12.8.1 build targets the RTX 3090's architecture 86,
 uses two compile jobs, and produces a server image without an embedded web UI.
-The llama-swap UI remains available. No draft model is configured.
+The llama-swap UI remains available. NVIDIA's matching LiLiCorr GGUF draft
+is installed in the same model directory and pinned in the model record.
 
 The backend binds only `127.0.0.1:5809`, uses both GPUs with equal layer splitting,
-one sequence, 32768 context, q8_0 K/V caches, Flash Attention, temperature 1.0
-and top_p 0.95. Context is an initial configured limit; the model supports up to
-262144 tokens, but larger contexts need local capacity validation. The model
+one sequence, 262144 context, FP16 K/V caches, Flash Attention, temperature 1.0
+and top_p 0.95. It follows NVIDIA's published 256K recipe: a 4096-token batch,
+2048-token microbatch and `draft-dflash` with up to seven draft tokens. Both
+target and draft are GPU offloaded. This fits the two RTX 3090s; the measured
+loaded allocation after testing was approximately 18.9 and 19.5 GiB. The model
 is in the existing exclusive GPU group and has no container restart policy;
 llama-swap owns loading and unloading. Flash Next IQ3_S remains the boot default.
 The suspend guard includes port 5809 alongside existing backend ports.
 
-Restore after downloading and verifying both model files:
+Restore after downloading and verifying the target, projector and draft files:
 
 ```bash
 sudo docker compose -f system/local-ai/compose.yaml build nemotron-bolt
@@ -454,14 +457,27 @@ curl --fail http://127.0.0.1:8000/v1/chat/completions \
   -d '{"model":"nemotron-bolt","messages":[{"role":"user","content":"What is 2 + 2?"}],"max_tokens":128,"chat_template_kwargs":{"enable_thinking":false}}'
 ```
 
-Both model files passed size and SHA-256 verification against the pinned
+All three GGUF files passed size and SHA-256 verification against their pinned
 Hugging Face inventory. Compose and llama-swap configuration validation passed.
 The image built successfully. Short text generation, streaming with final
 usage counts and synthetic image-color identification passed through llama-swap; the red image was identified as red.
 Switching between Flash Next and Bolt passed, and the service restart
 successfully preloaded Flash Next. All 12 suspend-guard regression tests passed.
-Full-context capacity, sustained performance, general vision quality and tool
-use remain unverified.
+A near-limit synthetic request accepted 262012 input tokens and generated the
+correct answer `4` to a final arithmetic question. Prefill took 216.0 seconds
+(1212.9 tokens/second). This verifies text capacity, not long-context quality
+or maximum-context multimodal capacity. General vision quality and tool use
+remain unverified.
+
+Two greedy tutorial-generation runs with 2265 prompt tokens and 512 output
+tokens each measured 109.0 and 113.2 decode tokens/second, compared with
+90.2 and 90.3 without the draft and with q8_0 KV and 2048/512 prefill batches.
+The same prompts, temperature 0, seed 42 and disabled thinking were used;
+results describe this workload rather than all tasks. Average end-to-end time
+was 6.54 versus 7.04 seconds. The full recipe improved decode about 23%, while
+prompt processing was slower: the same near-limit prompt took 128.4 seconds
+without the draft, versus 216.0 seconds with the full recipe. Runtime defaults
+remain NVIDIA's temperature 1.0 and top_p 0.95.
 
 Close Strata UI tabs before selecting Bolt: model-specific upstream requests
 from those tabs can request Flash Next again. Use the llama-swap UI to switch

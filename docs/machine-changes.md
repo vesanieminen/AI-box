@@ -108,13 +108,16 @@ one model at a time; GPU placement follows the selected backend profile.
   successful page/metrics requests. No new listener or firewall rule is needed.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
   localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
-  weights and the matching vision projector. Its initial context is 32768,
-  split across both RTX 3090 GPUs with q8_0 K/V caches and one sequence.
-  The installed suspend guard includes its port. Both weights are downloaded
-  and checksum verified; the image built successfully. Text generation,
-  streaming with final usage counts and synthetic image-color identification passed through llama-swap, and model
-  switching passed. Full-context capacity, sustained performance, general
-  vision quality and tool use remain unverified. Flash Next IQ3_S remains the
+  target, vision projector and NVIDIA's LiLiCorr draft. All three files are
+  pinned and checksum verified. NVIDIA's 256K recipe uses both RTX 3090 GPUs,
+  one sequence, FP16 K/V caches, 4096/2048 prefill batches and DFlash7.
+  The installed suspend guard includes its port. Text, streaming with final
+  usage counts, synthetic image-color identification and model switching passed.
+  A near-limit request accepted 262012 input tokens and correctly answered a
+  final arithmetic question. General long-context quality, maximum-context
+  multimodal capacity and tool use remain unverified. Two 512-token greedy
+  runs measured 109.0 and 113.2 decode tokens/second; the detailed benchmark
+  and prefill tradeoff are in the service record. Flash Next IQ3_S remains the
   boot default; its preload passed after the service restart.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap

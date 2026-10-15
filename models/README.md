@@ -129,8 +129,12 @@ The native IQ2 model and vision projector are downloaded directly from
 `~/.local/share/llama.cpp/models/nemotron-bolt`. They total 23,752,019,264 bytes
 (22.12 GiB). [nemotron-bolt.json](nemotron-bolt.json) records each published
 SHA-256, file size and exact resumable curl command. Weights remain outside Git.
-Both files are downloaded; their local sizes and SHA-256 hashes match the
-pinned published inventory. Short text and synthetic image-color identification
-passed through llama-swap. Full-context capacity and general quality remain
-unverified. Serving configuration and
-restore commands are in [the Bolt service record](../system/local-ai/README.md#nemotron-35-bolt).
+The matching 998242560-byte LiLiCorr draft is installed in the same directory,
+from `nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr-GGUF` revision
+`182d2987939e12f458298b5d5f6ef98912f4ad6c`. Its source, hash and download
+command are also recorded in `nemotron-bolt.json`. All three files are
+downloaded and their local sizes and SHA-256 hashes match the pinned inventory.
+Text, synthetic image-color identification and a 262012-input-token capacity
+test passed with NVIDIA's DFlash7 recipe. General quality, tool use and
+maximum-context multimodal capacity remain unverified. Serving configuration,
+benchmarks and restore commands are in [the Bolt service record](../system/local-ai/README.md#nemotron-35-bolt).

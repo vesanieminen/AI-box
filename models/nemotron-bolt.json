@@ -17,8 +17,17 @@
       "download_command": "curl -fL --retry 5 -C - -o \"$HOME/.local/share/llama.cpp/models/nemotron-bolt/mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf\" https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF/resolve/724e3fee41becc4048998e2204748147876ed56b/mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf"
     }
   ],
-  "verification": "Both local GGUF file sizes and SHA-256 hashes match the pinned Hugging Face inventory. Image built successfully. Short text, streaming with final usage counts and synthetic image-color identification passed through llama-swap. Switching between Flash Next and Bolt passed. Full-context capacity, sustained performance, general vision quality and tool use remain unverified.",
+  "verification": "Target, projector and draft sizes and SHA-256 match pinned inventories. Text, streaming with final usage counts and synthetic image-color identification passed through llama-swap. A 262012-input-token synthetic capacity test returned the correct final arithmetic answer at 262144 configured context using FP16 KV, 4096/2048 batches and DFlash7. Two greedy 512-output-token runs measured 109.0 and 113.2 decode tokens/second. General long-context quality, maximum-context multimodal capacity and tool use remain unverified.",
   "runtime_image": "local-ai/llama-bolt:620d2225cc43",
   "built_image_id": "sha256:cc303cb4a4e08f962a67a0706d499e22410008dd947e2f7398fa0372df2092ef",
-  "built_image_manifest": "sha256:2b0600d51d103edddc2097b9c7f925c01b830f403531e75539952376e9ce2021"
+  "built_image_manifest": "sha256:2b0600d51d103edddc2097b9c7f925c01b830f403531e75539952376e9ce2021",
+  "draft": {
+    "repository": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr-GGUF",
+    "revision": "182d2987939e12f458298b5d5f6ef98912f4ad6c",
+    "filename": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr.gguf",
+    "bytes": 998242560,
+    "sha256": "080e1ea41c9562a7804dbf30c6fbd4d17e216c6b8ff666f88e6edb1816010194",
+    "download_command": "curl -fL --retry 5 -C - -o \"$HOME/.local/share/llama.cpp/models/nemotron-bolt/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr.gguf\" https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr-GGUF/resolve/182d2987939e12f458298b5d5f6ef98912f4ad6c/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-LiLiCorr.gguf",
+    "verification": "Local size and SHA-256 match the pinned inventory. DFlash7 target verification and draft acceptance confirmed; text, image and near-limit text-context tests passed."
+  }
 }
