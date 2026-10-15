@@ -25,9 +25,9 @@ reuse existing assets when present. No host Hugging Face CLI is needed.
 
 ## Default boot model
 
-`qwen3.8-27b-int8`: Qwen3.8 27B INT8 W8A16 with MTP, served through llama-swap on port 8000 across two RTX 3090 GPUs.
+`qwen3.8-flash-next-iq3-s`: Qwen3.8 Flash Next IQ3_S with MTP4 and GPU vision, served by Strata through llama-swap on port 8000 across two RTX 3090 GPUs.
 The complete chat models are configured for on-demand switching through vLLM,
-TabbyAPI or SGLang. The Gemma 26B 8bpw folder contains configuration but no
+TabbyAPI, SGLang or Strata. The Gemma 26B 8bpw folder contains configuration but no
 weights; the DFlash2 draft is a companion, not a standalone chat model. See [service restoration](../system/local-ai/README.md).
 
 ## Hugging Face models

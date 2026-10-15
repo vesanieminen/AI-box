@@ -62,10 +62,10 @@ at the next prompt. The configuration is managed by Chezmoi.
 Follow [AI service restoration](../system/local-ai/README.md) to create the
 containers and install the system units. Docker, `llama-swap.service`,
 `ollama-idle-suspend.service` and `lactd.service` are enabled. The direct
-`vllm-boot.service` is disabled. Llama-swap preloads INT8 on boot and manages
+`vllm-boot.service` is disabled. Llama-swap preloads Flash Next IQ3_S on boot and manages
 one model at a time; GPU placement follows the selected backend profile.
 
-- Default backend: `vllm/vllm-openai:v0.29.0`, pinned by digest in
+- Qwen INT8 alternative: `vllm/vllm-openai:v0.29.0`, pinned by digest in
   `system/local-ai/compose.yaml`, serving `lued/Qwen3.8-27B-INT8-W8A16-MTP`.
   It uses both RTX 3090 GPUs, tensor parallelism 2, MTP3 and FP8 E4M3 KV cache.
   The advertised maximum context is 262144 tokens.
@@ -90,15 +90,16 @@ one model at a time; GPU placement follows the selected backend profile.
   stopped. A synthetic 262080-input-token request generated eight output tokens
   without error; general long-context quality and multimodal behavior remain
   unverified.
-  Qwen INT8 MTP remains the boot default.
-- Strata v0.1.43.1 serves standard Qwen3.8 Flash Next IQ3_S as the on-demand
+  Flash Next IQ3_S is the boot default.
+- Strata v0.1.43.1 serves standard Qwen3.8 Flash Next IQ3_S as the boot-default
   `qwen3.8-flash-next-iq3-s` entry, with both RTX 3090 GPUs, MTP4, INT8 KV,
   262144 configured context and GPU vision. Its official Dockerfile is built
   for CUDA architecture 86 from a pinned source revision. The model assets,
   generated packs and MTP subset are in `~/.local/share/strata`, outside Git.
   Text, image input and Activity timing statistics passed through llama-swap
   with the desktop stopped. Full-context capacity and desktop coexistence
-  remain unverified. Runtime updates are manual; the MTP boot default is retained.
+  remain unverified. Runtime updates are manual. The system service waits for
+  the Flash Next health endpoint on startup; a fresh boot remains unverified.
   The suspend guard watches port 5808 as well as the DFlash backend on 5807.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap

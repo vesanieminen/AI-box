@@ -1,7 +1,7 @@
 # AI box services
 
 Llama-swap serves the LAN API on port 8000 and manages one model at a time
-using the available GPUs. Qwen3.8 27B INT8 MTP is preloaded on startup.
+using the available GPUs. Qwen3.8 Flash Next IQ3_S with GPU vision is preloaded on startup.
 Other models are available on demand through vLLM, TabbyAPI, SGLang or Strata, using
 pinned runtime images and existing local weights. Model switching stops the old container before loading
 another model.
@@ -27,8 +27,8 @@ sudo docker compose --project-name local-ai -f system/local-ai/compose.yaml crea
 ```
 
 Compose pins the image digest, inference flags, environment and mounts for each
-profile. INT8 uses MTP3; INT4 uses MTP2. The two default Qwen profiles advertise a 262144-token context,
-use tensor parallelism 2 and FP8 E4M3 KV cache. The default Qwen INT8 profile
+profile. INT8 uses MTP3; INT4 uses MTP2. The two Qwen 27B profiles advertise a 262144-token context,
+use tensor parallelism 2 and FP8 E4M3 KV cache. The Qwen INT8 profile
 accepts up to 10 images per prompt; video input remains disabled. A ten-image
 chat request through llama-swap was verified successfully. vLLM backends listen only on
 localhost ports 5800–5807; EXL3 backends use 5810–5813. `AI_HOME` overrides host mount paths if needed.
@@ -47,7 +47,7 @@ sudo systemctl enable --now llama-swap.service ollama-idle-suspend.service lactd
 The root system service needs Docker access to start and stop the containers;
 no user Docker group membership is needed. It regenerates NVIDIA CDI discovery
 and validates llama-swap configuration before starting. Its `ExecStartPost`
-loads Qwen INT8 through llama-swap and waits for the model health endpoint before
+loads Flash Next IQ3_S through llama-swap and waits for the model health endpoint before
 the system service reports startup complete. Container restart is
 disabled because llama-swap owns the model lifecycle. The former direct vLLM
 boot unit is retained as a disabled alternative; do not start it alongside
@@ -73,7 +73,7 @@ curl http://127.0.0.1:8000/running
 Loading can take several minutes. The readiness timeout is 900 seconds and the
 container stop deadline is 60 seconds. Models stay loaded until a switch,
 manual unload or service stop; there is no automatic model-unload TTL.
-Restarting llama-swap preloads INT8 again. No weights are redownloaded during
+Restarting llama-swap preloads Flash Next IQ3_S again. No weights are redownloaded during
 normal switching. Configuration is in `etc/llama-swap/config.yaml`; container
 definitions are in `compose.yaml`.
 
@@ -84,8 +84,8 @@ inference and stops the previous backend before starting another.
 
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
-| `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision | 262144 |
-| `qwen3.8-27b-int8` | vLLM, MTP3, TP2; boot default | 262144 |
+| `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
+| `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
 | `qwen3.8-27b-int8-dflash2-w8` | vLLM, W8 DFlash2 draft, TP2 | 262144 |
@@ -136,7 +136,7 @@ model-card recipe: the runtime, 0.975 memory budget and disabled prefix caching.
 The bundled backport supports both W4 and W8 packed draft projection weights.
 
 Select either DFlash2 ID in the llama-swap UI or the client model selector.
-Qwen INT8 MTP remains the boot default on its existing vLLM 0.29.0 runtime.
+Flash Next IQ3_S is the boot default. Qwen INT8 MTP remains available on its existing vLLM 0.29.0 runtime.
 The W8 entry returned the expected short response through llama-swap on this
 machine with the desktop stopped. Its KV pool contains 268290 tokens. A
 near-maximum-context capacity test completed: 262080 input tokens plus eight
@@ -177,7 +177,8 @@ Model discovery advertises text and image input, text output and `vision: true`.
 Backend port 5808 is localhost only. The container explicitly passes the host
 and port to `serve.server` and uses the installer's retained config in
 `etc/strata/strata-iq3_s.json`. It runs directly without invoking setup during
-model switches. Qwen 27B INT8 MTP remains the boot default.
+model switches. The system service preloads this profile on startup and waits
+for its health endpoint. A fresh boot with this default remains unverified.
 
 Restore the pinned source and build the official Dockerfile for the RTX 3090:
 
@@ -393,8 +394,8 @@ previous container. The suspend guard's regression checks are
 `python3 -B -m unittest discover -s tests -v`. A real reboot, full-context model
 operation and wake from another LAN device require end-to-end testing.
 All 11 selectable models returned a short generated response. INT8 → INT4 →
-INT8 switching was verified, and the default INT8 profile is selected after
-validation. Streaming with automatic final usage was verified across vLLM,
+INT8 switching was verified. Flash Next is currently selected and its health
+endpoint reports the model loaded with vision enabled. Streaming with automatic final usage was verified across vLLM,
 TabbyAPI and SGLang. vLLM and TabbyAPI rates reach Activity; SGLang's native
 Prometheus endpoint returns HTTP 200, including generation-throughput metrics.
 Other LAN clients successfully reached the API and web UI, including an OpenCode
