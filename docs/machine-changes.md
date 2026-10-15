@@ -101,6 +101,11 @@ one model at a time; GPU placement follows the selected backend profile.
   remain unverified. Runtime updates are manual. The system service waits for
   the Flash Next health endpoint on startup; a fresh boot remains unverified.
   The suspend guard watches port 5808 as well as the DFlash backend on 5807.
+  Strata's web UI is served to the LAN through llama-swap at
+  `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s/`.
+  Page/assets, status/settings and browser-Origin chat passed through the LAN
+  address from this host. No new listener or firewall rule is needed; a browser
+  check from another LAN device remains outstanding.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap
   manages the GPUs.

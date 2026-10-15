@@ -4,6 +4,14 @@ Llama-swap listens on `0.0.0.0:8000` and proxies to private vLLM backends. The c
 is `192.168.0.181/24`; the OpenAI API base URL is
 `http://192.168.0.181:8000/v1`. Model discovery is `/v1/models`.
 
+The Strata web UI is available through llama-swap at
+`http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s/`
+with the trailing slash. Its assets and API use the same proxy path, so the
+existing port-8000 LAN rule covers the UI. Port 5808 stays bound to localhost.
+Page/assets, status/settings and a chat request with the browser Origin passed
+through this LAN URL from the host. Independent remote-browser verification
+remains outstanding.
+
 Omarchy's existing UFW firewall remains enabled. Add only this application
 profile and local-subnet rule; do not replace the existing firewall rules:
 

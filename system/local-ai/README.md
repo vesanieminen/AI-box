@@ -57,6 +57,11 @@ llama-swap. Their system units conflict to prevent simultaneous startup.
 
 API base URL: `http://192.168.0.181:8000/v1`.
 Browser UI: `http://192.168.0.181:8000/ui/`.
+Strata chat/monitor/settings UI:
+`http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s/`
+(keep the trailing slash). Opening it starts Flash Next through llama-swap if
+needed. Its backend remains on localhost; the existing LAN port 8000 serves
+the UI and its API requests.
 
 Select `qwen3.8-27b-int8` or `qwen3.8-27b-int4` in the client model dropdown,
 or send that ID in the request's `model` field. A request starts the selected
@@ -179,6 +184,10 @@ and port to `serve.server` and uses the installer's retained config in
 `etc/strata/strata-iq3_s.json`. It runs directly without invoking setup during
 model switches. The system service preloads this profile on startup and waits
 for its health endpoint. A fresh boot with this default remains unverified.
+The Strata UI is proxied through the LAN URL above. Its page, JavaScript, CSS,
+status/settings endpoints and a chat request with the LAN browser Origin were
+verified through the machine's LAN address from this host; an independent
+browser check from another LAN device remains outstanding.
 
 Restore the pinned source and build the official Dockerfile for the RTX 3090:
 
