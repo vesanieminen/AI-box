@@ -92,7 +92,7 @@ inference and stops the previous backend before starting another.
 | --- | --- | --- |
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
 | `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
-| `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 32768 |
+| `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
@@ -488,9 +488,9 @@ models.
 ### Project Maya
 
 Project Maya 1.1.13 serves GLM-5.3-Flash Maya-S24 across both RTX 3090 GPUs,
-with 32768-token context, MTP drafting and GPU image encoding. Expert weights
+with 262144-token context, MTP drafting and GPU image encoding. Expert weights
 are cached across VRAM, pinned RAM and the NVMe. The retained settings leave
-1536 MiB of VRAM per card beside the expert pool and request 12 GiB of RAM
+1536 MiB of VRAM per card beside the expert pool and request 8 GiB of RAM
 headroom for the desktop. Expert caching and prefill are automatic; KV streaming
 is enabled. Sampling defaults to temperature 1.0, top_p 0.95 and high reasoning
 effort. Upstream calibration retained `STRATA_GLM_PCIE_SHARE=0.50`; CPU thread
@@ -513,8 +513,8 @@ git -C ~/Projects/project-maya checkout 797819e20fd44dfeb4deeaa8a3b1f3f350407e78
 cd ~/Projects/project-maya
 ./setup.sh --yes --plain --no-start --model Maya-S24 \
   --models-dir "$HOME/.local/share/project-maya/models" \
-  --gpus 0,1 --context 32768 --host-compiler g++-15 \
-  --vram-reserve-mib 1536 --env STRATA_GLM_RAM_HEADROOM_GB=12 --port 5814
+  --gpus 0,1 --context 262144 --host-compiler g++-15 \
+  --vram-reserve-mib 1536 --env STRATA_GLM_RAM_HEADROOM_GB=8 --port 5814
 ```
 
 Before setup, run the pinned `download_command` entries in
@@ -539,12 +539,14 @@ All five model/vision files passed size and SHA-256 verification. Upstream
 `./setup.sh` completed all eight steps after the downloads, including pack,
 tokenizer and vision preparation. `./maya.sh --plain --config
 ~/.config/project-maya/maya-s24.json --calibrate --no-start` selected PCIe share
-0.50 with a confirmed 23.0 tokens/second on its calibration workload.
+0.50 with a confirmed 25.6 tokens/second at 256K on its calibration workload.
 
 System activation is pending administrator authentication: the Maya llama-swap
 route and suspend-guard update are prepared in this repository but have not
 been installed into `/etc` and `/usr/local`. The running selector still has
-14 models. Once no inference is active, activate from this repository root:
+14 models. Stop any standalone Maya server before loading the selector-managed
+copy; hot reload does not adopt an existing server. Once no inference is active,
+activate from this repository root:
 
 ```bash
 llama-swap -config system/local-ai/etc/llama-swap/config.yaml -validate
@@ -556,14 +558,37 @@ sudo systemctl restart ollama-idle-suspend.service
 
 The hot reload does not change the boot service or run its default preload.
 
-The upstream benchmark measured decode at 21.8, 24.7 and 24.3 tokens/second
-(mean 23.6) across three 256-token greedy answers with thinking disabled.
-Prefill measured 381 tokens/second at 2048 tokens and 865 at 8192. These
-measurements describe that workload, not sustained coding or reasoning speed.
-At model load the GPU expert pools were 18.36 and 18.55 GiB; total GPU usage
-was about 44.1 GiB. The automatic pinned-RAM cache varies with available
-memory (37.4–38.4 GiB during testing). The full model remains on NVMe; cache
-capacities are not disjoint pieces of the model.
+With Maya stopped, rerun the upstream tuners against the retained profile:
+
+```bash
+cd ~/Projects/project-maya
+./maya.sh --plain --config "$HOME/.config/project-maya/maya-s24.json" --calibrate --no-start
+./maya.sh --plain --config "$HOME/.config/project-maya/maya-s24.json" --speed-calibration --no-start
+```
+
+The drafter comparison measured 1536 generated tokens per side after an
+8192-token document and an uncounted warm-up, using the configured temperature
+1.0, top_p 0.95 and high reasoning effort. MTP sustained 24.03 tokens/second;
+DFlash2 sustained 17.35. Maya retained MTP. The optional 697 MB DFlash2 file is
+checksum-verified and cached, with its source, license and restoration command
+in `models/maya-s24.json`; it is not loaded by the retained profile. A future
+comparison can use it without another download. CPU thread count and SSD
+read chunking remain automatic.
+
+At 256K with 8 GiB RAM headroom, three 256-token greedy answers with
+thinking disabled measured 20.7, 26.3 and 25.6 decode tokens/second (mean 24.2)
+before the final calibration. These describe that workload, not sustained
+coding or reasoning speed. The full model remains on NVMe; VRAM and RAM
+cache capacities are not disjoint pieces of the model.
+
+Text capacity passed at both 128K and 256K: synthetic repeated-prose prompts
+of 130587 and 261651 input tokens each produced the correct answer `4` to a
+final arithmetic question. The 256K prompt took 186.1 seconds of prefill
+(1406 tokens/second). This verifies capacity, not long-context comprehension.
+KV streaming keeps 32768 positions in VRAM and the full latent cache in
+pinned RAM (1.5 GiB at 128K; 3 GiB at 256K). The automatic RAM expert cache
+uses more of available RAM with 8 GiB headroom; loaded cache sizes vary with
+other applications.
 
 Standalone localhost checks passed: health and dashboard HTTP 200, short text
 generation, streaming with final usage counts, and a synthetic red image
@@ -571,5 +596,5 @@ identified as red. The prepared suspend guard detected real active inference
 and the completed-request timestamp; dashboard polling preserved that timestamp.
 All 18 suspend-guard regression tests passed. Graceful server shutdown released
 its engine and GPU allocation. Selector activation, proxy requests, model
-switching, full-context capacity, tool use and general model/vision quality
-remain unverified.
+switching, long-context comprehension, maximum-context multimodal capacity,
+tool use and general model/vision quality remain unverified.

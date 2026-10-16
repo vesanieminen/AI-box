@@ -4,7 +4,7 @@
   "--glm-pack",
   "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/pack",
   "--max-context",
-  "32768",
+  "262144",
   "--expert-cache",
   "auto",
   "--prefill",
@@ -34,7 +34,7 @@
  ],
  "port": 5814,
  "env": {
-  "STRATA_GLM_RAM_HEADROOM_GB": "12",
+  "STRATA_GLM_RAM_HEADROOM_GB": "8",
   "STRATA_GLM_PCIE_SHARE": "0.50"
  },
  "vision": {
@@ -49,7 +49,18 @@
   "quant": "Maya-S24",
   "gguf": null,
   "gguf_dir": null,
-  "draft": "mtp"
+  "draft": "mtp",
+  "speed_calibration": {
+   "date": "2026-10-16 16:03",
+   "version": "1.1.13",
+   "dflash2_tok_s": 17.35,
+   "mtp_tok_s": 24.03,
+   "tokens": [
+    1536,
+    1536
+   ],
+   "kept": "mtp"
+  }
  },
  "host": "127.0.0.1"
 }

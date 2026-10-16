@@ -153,7 +153,10 @@ GLM-5.3-Flash Maya-S24 IQ2_XXS_S and its BF16 vision encoder are stored under
 sizes, published SHA-256 hashes, resumable download commands and runtime commit.
 The model shards total 94,701,676,224 bytes (88.20 GiB); the vision projector and
 vocabulary add 1,137,473,824 bytes. Generated packs, tokenizer files, logs and
-conversation state remain outside Git.
+conversation state remain outside Git. The optional DFlash2 Q4_K_M drafter
+(697017248 bytes) is cached separately, pinned and checksum-verified in the
+same inventory. It uses CC BY-NC-ND 4.0 (non-commercial); the retained serving
+profile uses the built-in MTP block after the speed comparison.
 
 [Installation and restoration](../system/local-ai/README.md#project-maya) describe
 the source build and model preparation. All five downloaded files passed size

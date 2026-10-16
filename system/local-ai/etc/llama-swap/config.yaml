@@ -237,7 +237,7 @@
       }
     },
     "glm-5.3-flash-maya-s24": {
-      "name": "GLM-5.3 Flash Maya-S24 (32K, Vision)",
+      "name": "GLM-5.3 Flash Maya-S24 (256K, Vision)",
       "description": "Project Maya 1.1.13, two RTX 3090 GPUs, IQ2_XXS_S, MTP, VRAM/RAM/NVMe expert cache",
       "cmd": "/usr/bin/setpriv --reuid=vesanieminen --regid=vesanieminen --init-groups --reset-env /home/vesanieminen/Projects/project-maya/.venv/bin/python /home/vesanieminen/Projects/project-maya/serve/server.py --engine strata --config /home/vesanieminen/.config/project-maya/maya-s24.json --port 5814",
       "proxy": "http://127.0.0.1:5814",
@@ -246,7 +246,7 @@
       "ttl": 0,
       "unloadTimeout": 90,
       "capabilities": {
-        "context": 32768,
+        "context": 262144,
         "in": [
           "text",
           "image"

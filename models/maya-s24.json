@@ -44,5 +44,15 @@
       "sha256": "3627575df16bd152db0f3fd7e488d270b33f3a9e6c7fa3b1b8ac381faafde882",
       "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24/vision\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/vision/mmproj-GLM-5.3-Flash-F16.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/vision/mmproj-GLM-5.3-Flash-F16.gguf"
     }
-  ]
+  ],
+  "optional_drafter": {
+    "model": "GLM-5.3-Flash DFlash2 Q4_K_M",
+    "source": "https://huggingface.co/Anbeeld/GLM-5.3-Flash-DFlash2-GGUF",
+    "revision": "f3569acb7f9cee95e66d24442d75536eb00ab842",
+    "license": "CC BY-NC-ND 4.0 (non-commercial)",
+    "path": "$HOME/.local/share/project-maya/models/GLM-5.3-Flash-DFlash2/GLM-5.3-Flash-DFlash2-Q4_K_M.gguf",
+    "bytes": 697017248,
+    "sha256": "f4158ffb805b26c4fe439669c2009908a80ea89e1576ecea4d03eaded18f017c",
+    "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/GLM-5.3-Flash-DFlash2\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/GLM-5.3-Flash-DFlash2/GLM-5.3-Flash-DFlash2-Q4_K_M.gguf\" https://huggingface.co/Anbeeld/GLM-5.3-Flash-DFlash2-GGUF/resolve/f3569acb7f9cee95e66d24442d75536eb00ab842/GLM-5.3-Flash-DFlash2-Q4_K_M.gguf"
+  }
 }

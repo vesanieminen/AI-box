@@ -204,5 +204,7 @@ and guard templates still requires administrator authentication.
 and [pinned model provenance](../models/maya-s24.json) record the retained
 installation. All five downloaded files passed size and SHA-256 verification;
 upstream setup and calibration completed. Standalone text, streaming and
-synthetic image checks passed; the upstream benchmark averaged 23.6 decode
-tokens/second. System activation and proxy/switching verification remain pending.
+synthetic image checks passed. The retained context is 262144 tokens with
+8 GiB requested RAM headroom. Synthetic text-capacity tests passed at 128K and
+256K; 261651 input tokens produced the expected short answer at 256K.
+System activation and proxy/switching verification remain pending.
