@@ -138,8 +138,8 @@ The retained llama-swap template declares 15 chat-model routes through vLLM,
 TabbyAPI, SGLang, Strata, llama.cpp and Maya. Runtime images are pinned in
 `system/local-ai/compose.yaml`; Maya source is pinned in `models/maya-s24.json`;
 the running service exposes all 15 routes. Model weights remain outside Git.
-The shared DFlash2 draft is used with its Qwen INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
-no weights. The model table and restoration steps are in
+The shared DFlash2 draft is used with its Qwen INT8 target. The incomplete
+Gemma 26B 8bpw folder is excluded because it has no weights. The model table and restoration steps are in
 [AI services](../system/local-ai/README.md).
 
 All vLLM profiles include per-request timing metrics. The W8 DFlash2 profile's

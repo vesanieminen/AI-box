@@ -405,8 +405,8 @@ previous container. The suspend guard's regression checks are
 `python3 -B -m unittest discover -s tests -v`. A real reboot, full-context model
 operation and wake from another LAN device require end-to-end testing.
 The vLLM, TabbyAPI and SGLang routes returned short generated responses. INT8 → INT4 →
-INT8 switching was verified. Flash Next is currently selected and its health
-endpoint reports the model loaded with vision enabled. Streaming with automatic final usage was verified across vLLM,
+INT8 switching was verified. Flash Next is the boot default; its health
+endpoint was verified with the model loaded and vision enabled. Streaming with automatic final usage was verified across vLLM,
 TabbyAPI and SGLang. vLLM and TabbyAPI rates reach Activity; SGLang's native
 Prometheus endpoint returns HTTP 200, including generation-throughput metrics.
 Other LAN clients successfully reached the API and web UI, including an OpenCode
