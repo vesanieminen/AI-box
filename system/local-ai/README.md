@@ -191,16 +191,22 @@ status/settings endpoints and a chat request with the LAN browser Origin were
 verified through the machine's LAN address from this host. Remote-browser
 access from 192.168.0.75 is also confirmed by successful page/metrics requests.
 
+The restore templates target v0.1.44.1 (source commit
+`296b59d2f73c8f04a805df29c2fa97655adace78`). Building and activating this
+update, and runtime verification, are pending administrator execution; the
+currently verified installation is v0.1.43.1. Retain the old image for rollback.
+The saved model settings are unchanged.
+
 Restore the pinned source and build the official Dockerfile for the RTX 3090:
 
 ```bash
 git clone https://github.com/Niko1221/Strata ~/Projects/Strata
-git -C ~/Projects/Strata checkout a0116b2782a5b82622358c04a06496485d12b2d6
-sudo docker build --build-arg CUDA_ARCHITECTURES=86 -t local-ai/strata:0.1.43.1 ~/Projects/Strata
+git -C ~/Projects/Strata checkout 296b59d2f73c8f04a805df29c2fa97655adace78
+sudo docker build --build-arg CUDA_ARCHITECTURES=86 -t local-ai/strata:0.1.44.1 ~/Projects/Strata
 mkdir -p ~/.local/share/strata
 sudo docker run --rm --device nvidia.com/gpu=all \
   -v "$HOME/.local/share/strata:/data" \
-  --entrypoint /bin/bash local-ai/strata:0.1.43.1 -lc '
+  --entrypoint /bin/bash local-ai/strata:0.1.44.1 -lc '
 set -e
 /opt/strata/.venv/bin/python /opt/strata/setup.py \
   --setup --yes --family qwen --model IQ3_S --gpus 0,1 \

@@ -833,7 +833,7 @@
       }
     },
     "qwen3.8-flash-next-iq3-s": {
-      "image": "local-ai/strata:0.1.43.1",
+      "image": "local-ai/strata:0.1.44.1",
       "container_name": "qwen3.8-flash-next-iq3-s-swap",
       "init": true,
       "network_mode": "host",

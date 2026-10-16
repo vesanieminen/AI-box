@@ -98,7 +98,9 @@ one model at a time; GPU placement follows the selected backend profile.
   generated packs and MTP subset are in `~/.local/share/strata`, outside Git.
   Text, image input and Activity timing statistics passed through llama-swap
   with the desktop stopped. Full-context capacity and desktop coexistence
-  remain unverified. Runtime updates are manual. The system service waits for
+  remain unverified. The restore templates target v0.1.44.1; image build,
+  activation and runtime verification of that update await administrator
+  execution. Runtime updates are manual. The system service waits for
   the Flash Next health endpoint on startup; a fresh boot remains unverified.
   The suspend guard watches port 5808 as well as the DFlash backend on 5807.
   Strata's web UI is served to the LAN through llama-swap at

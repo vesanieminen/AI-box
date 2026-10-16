@@ -196,7 +196,7 @@
     },
     "qwen3.8-flash-next-iq3-s": {
       "name": "Qwen3.8 Flash Next IQ3_S (256K, Vision)",
-      "description": "Strata 0.1.43.1, two RTX 3090 GPUs, MTP4, 262144-token context, GPU vision",
+      "description": "Strata 0.1.44.1, two RTX 3090 GPUs, MTP4, 262144-token context, GPU vision",
       "cmd": "/usr/bin/docker start --attach qwen3.8-flash-next-iq3-s-swap",
       "cmdStop": "/usr/bin/docker stop --time 60 qwen3.8-flash-next-iq3-s-swap",
       "proxy": "http://127.0.0.1:5808",
