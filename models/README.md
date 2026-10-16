@@ -144,3 +144,18 @@ Text, synthetic image-color identification and a 262012-input-token capacity
 test passed with NVIDIA's DFlash7 recipe. General quality, tool use and
 maximum-context multimodal capacity remain unverified. Serving configuration,
 benchmarks and restore commands are in [the Bolt service record](../system/local-ai/README.md#nemotron-35-bolt).
+
+## Project Maya assets
+
+GLM-5.3-Flash Maya-S24 IQ2_XXS_S and its BF16 vision encoder are stored under
+`~/.local/share/project-maya/models/Maya-S24` on the internal NVMe.
+[maya-s24.json](maya-s24.json) records the pinned Hugging Face revision, file
+sizes, published SHA-256 hashes, resumable download commands and runtime commit.
+The model shards total 94,701,676,224 bytes (88.20 GiB); the vision projector and
+vocabulary add 1,137,473,824 bytes. Generated packs, tokenizer files, logs and
+conversation state remain outside Git.
+
+[Installation and restoration](../system/local-ai/README.md#project-maya) describe
+the source build and model preparation. All five downloaded files passed size
+and SHA-256 verification against the pinned inventory. Serving validation is
+recorded separately in the service instructions.

@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+from urllib.error import URLError
 from urllib.request import urlopen
 
 IDLE_SECONDS = 900
@@ -49,6 +50,21 @@ def ollama_connected():
     # idle keep-alive. This protects long streaming and queued requests.
     return bool(command('ss', '-Htn', 'state', 'established',
                         '( sport = :11434 or sport = :5800 or sport = :5801 or sport = :5802 or sport = :5803 or sport = :5804 or sport = :5805 or sport = :5806 or sport = :5807 or sport = :5808 or sport = :5809 or sport = :5810 or sport = :5811 or sport = :5812 or sport = :5813 )').strip())
+
+
+def recent_maya_request():
+    # Dashboard polling is not inference. Maya reports queued/running requests
+    # and the last inference timestamp, including chats sent directly to its UI.
+    try:
+        with urlopen('http://127.0.0.1:5814/v1/status', timeout=5) as response:
+            activity = json.load(response)['activity']
+    except URLError as error:
+        if isinstance(error.reason, ConnectionRefusedError):
+            return 0.0  # Maya is not loaded; llama-swap tracks startup/shutdown.
+        raise
+    if activity['in_flight'] > 0:
+        return time.time()
+    return float(activity['last_request_at'] or 0)
 
 
 def swap_busy():
@@ -136,7 +152,8 @@ def downloads_active():
 def inspect(last_activity):
     now = time.time()
     connected = ollama_connected() or swap_busy() or downloads_active()
-    last_activity = max(last_activity, recent_ollama_request(), recent_swap_request())
+    last_activity = max(last_activity, recent_ollama_request(), recent_swap_request(),
+                        recent_maya_request())
     if connected:
         last_activity = now
     desktop = desktop_idle()
@@ -164,7 +181,8 @@ def main():
             last_activity, status = inspect(last_activity)
             if status['would_suspend']:
                 # Repeat the connection check immediately before requesting sleep.
-                if not ollama_connected() and not swap_busy() and not downloads_active() and desktop_idle():
+                if (not ollama_connected() and not swap_busy() and not downloads_active()
+                        and time.time() - recent_maya_request() >= IDLE_SECONDS and desktop_idle()):
                     print('Desktop and AI server idle for 15 minutes; requesting suspend', flush=True)
                     subprocess.run(['systemctl', 'suspend'], check=True, timeout=30)
                 last_activity = time.time()

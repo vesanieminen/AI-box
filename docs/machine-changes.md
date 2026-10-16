@@ -134,8 +134,10 @@ one model at a time; GPU placement follows the selected backend profile.
 
 ### Model switching and timing metadata
 
-Llama-swap configuration declares 13 complete chat-model routes through vLLM,
-TabbyAPI, SGLang and Strata. Runtime images are pinned in `system/local-ai/compose.yaml`;
+The retained llama-swap template declares 15 chat-model routes through vLLM,
+TabbyAPI, SGLang, Strata, llama.cpp and Maya. Runtime images are pinned in
+`system/local-ai/compose.yaml`; Maya source is pinned in `models/maya-s24.json`;
+the running service has 14 routes until the Maya template is activated. Model
 weights remain outside Git. The shared DFlash2 draft is used with its Qwen
 INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
 no weights. The model table and restoration steps are in
@@ -168,9 +170,10 @@ The authentication directory is excluded from capture, Chezmoi and Git.
 
 ## Verified behavior
 
-- All 24 managed files match live settings and restore into an empty home with
-  matching contents and permissions; Chezmoi verification passes.
-- All 11 selectable models generate a short response through llama-swap.
+- All 27 managed files match live settings and restore into an empty home with
+  matching contents and permissions (umask 022); Chezmoi verification passes.
+- The vLLM, TabbyAPI and SGLang routes generate short responses through llama-swap.
+  Model-specific Strata, Bolt and Maya validation is recorded in the service instructions.
   Both Qwen MTP profiles return `OK`; INT8 → INT4 → INT8
   switching is verified. Each uses both GPUs and one model runs at a time.
   The browser UI returns HTTP 200. API and UI requests from other LAN devices
@@ -183,3 +186,23 @@ The authentication directory is excluded from capture, Chezmoi and Git.
 
 An actual reboot, suspend with remote wake and full-context model operation
 still require end-to-end verification.
+
+## Project Maya
+
+Project Maya is installed from pinned upstream source to serve GLM-5.3-Flash
+Maya-S24 with MTP and GPU vision on both RTX 3090 GPUs. Its private Python
+environment and generated build stay in `~/Projects/project-maya`; model
+weights and packs stay on the internal NVMe under
+`~/.local/share/project-maya/models`. No new system packages are required.
+The optional llama-swap entry uses localhost port 5814 and the existing
+exclusive GPU group; the boot service and Flash Next default are retained.
+The prepared suspend-guard update reads Maya's inference activity so idle
+dashboard polling does not prevent automatic suspend. Installing the selector
+and guard templates still requires administrator authentication.
+
+[Runtime, settings and restoration](../system/local-ai/README.md#project-maya)
+and [pinned model provenance](../models/maya-s24.json) record the retained
+installation. All five downloaded files passed size and SHA-256 verification;
+upstream setup and calibration completed. Standalone text, streaming and
+synthetic image checks passed; the upstream benchmark averaged 23.6 decode
+tokens/second. System activation and proxy/switching verification remain pending.

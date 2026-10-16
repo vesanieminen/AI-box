@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import unittest
 from unittest.mock import Mock, patch
+from urllib.error import URLError
 
 path = Path(__file__).resolve().parents[1] / 'system/local-ai/usr/local/libexec/ollama-idle-suspend.py'
 spec = importlib.util.spec_from_file_location('idle_guard', path)
@@ -27,6 +28,9 @@ class ActivityTests(unittest.TestCase):
         service = patch.object(guard, 'command', return_value='active\n')
         service.start()
         self.addCleanup(service.stop)
+        maya = patch.object(guard, 'recent_maya_request', return_value=0)
+        maya.start()
+        self.addCleanup(maya.stop)
 
     def test_stopped_swap_allows_manual_ollama_idle_policy(self):
         with patch.object(guard, 'command', return_value='inactive\n'), \
@@ -72,6 +76,7 @@ class ActivityTests(unittest.TestCase):
             self.assertIn(':11434', selector)
             self.assertIn(':5806', selector)
             self.assertIn(':5813', selector)
+            self.assertNotIn(':5814', selector)
 
     def test_standard_model_and_runtime_downloads_block_suspend(self):
         for argv in (b'/usr/bin/docker\0pull\0image\0',
@@ -116,6 +121,53 @@ class ActivityTests(unittest.TestCase):
             _, status = guard.inspect(1000)
             self.assertFalse(status['would_suspend'])
             self.assertEqual(status['ollama_idle_seconds'], 10)
+
+
+class MayaActivityTests(unittest.TestCase):
+    def test_unloaded_maya_does_not_prevent_suspend(self):
+        with patch.object(guard, 'urlopen', side_effect=URLError(ConnectionRefusedError())):
+            self.assertEqual(guard.recent_maya_request(), 0)
+
+    def test_idle_dashboard_has_no_inference_activity(self):
+        with patch.object(guard, 'urlopen', return_value=response({
+                'activity': {'in_flight': 0, 'last_request_at': None}})):
+            self.assertEqual(guard.recent_maya_request(), 0)
+
+    def test_queued_or_running_requests_keep_maya_active(self):
+        with patch.object(guard.time, 'time', return_value=2000), \
+             patch.object(guard, 'urlopen', return_value=response({
+                 'activity': {'in_flight': 2, 'last_request_at': 1000}})):
+            self.assertEqual(guard.recent_maya_request(), 2000)
+
+    def test_completed_direct_request_preserves_idle_grace(self):
+        with patch.object(guard, 'urlopen', return_value=response({
+                'activity': {'in_flight': 0, 'last_request_at': 1990}})):
+            self.assertEqual(guard.recent_maya_request(), 1990)
+
+    def test_suspend_decision_uses_direct_maya_activity(self):
+        for activity, expected in (({'in_flight': 0, 'last_request_at': 1000}, True),
+                                   ({'in_flight': 0, 'last_request_at': 1990}, False),
+                                   ({'in_flight': 1, 'last_request_at': 1000}, False)):
+            with self.subTest(activity=activity), \
+                 patch.object(guard.time, 'time', return_value=2000), \
+                 patch.object(guard, 'ollama_connected', return_value=False), \
+                 patch.object(guard, 'swap_busy', return_value=False), \
+                 patch.object(guard, 'downloads_active', return_value=False), \
+                 patch.object(guard, 'desktop_idle', return_value=True), \
+                 patch.object(guard, 'recent_ollama_request', return_value=0), \
+                 patch.object(guard, 'recent_swap_request', return_value=0), \
+                 patch.object(guard, 'urlopen', return_value=response({'activity': activity})):
+                _, status = guard.inspect(1000)
+                self.assertEqual(status['would_suspend'], expected)
+
+    def test_unverifiable_activity_prevents_suspend(self):
+        for error in (URLError(TimeoutError()), URLError('connection failed')):
+            with self.subTest(error=error), patch.object(guard, 'urlopen', side_effect=error):
+                with self.assertRaises(URLError):
+                    guard.recent_maya_request()
+        with patch.object(guard, 'urlopen', return_value=response({})):
+            with self.assertRaises(KeyError):
+                guard.recent_maya_request()
 
 
 if __name__ == '__main__':

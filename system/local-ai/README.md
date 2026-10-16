@@ -84,13 +84,15 @@ definitions are in `compose.yaml`.
 
 ### Available model IDs
 
-All entries belong to one exclusive GPU group. Switching waits for active
+All entries belong to one exclusive GPU group. The Maya entry is staged and
+requires the activation commands in its section below. Switching waits for active
 inference and stops the previous backend before starting another.
 
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
 | `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
+| `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 32768 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
 | `qwen3.8-27b-int4` | vLLM, MTP2, TP2 | 262144 |
 | `qwen3.8-27b-int8-dflash2` | vLLM, shared BF16 DFlash2 draft, TP2 | 212992 |
@@ -403,7 +405,7 @@ Check each model with a short chat request and verify switching stops the
 previous container. The suspend guard's regression checks are
 `python3 -B -m unittest discover -s tests -v`. A real reboot, full-context model
 operation and wake from another LAN device require end-to-end testing.
-All 11 selectable models returned a short generated response. INT8 → INT4 →
+The vLLM, TabbyAPI and SGLang routes returned short generated responses. INT8 → INT4 →
 INT8 switching was verified. Flash Next is currently selected and its health
 endpoint reports the model loaded with vision enabled. Streaming with automatic final usage was verified across vLLM,
 TabbyAPI and SGLang. vLLM and TabbyAPI rates reach Activity; SGLang's native
@@ -462,7 +464,7 @@ Hugging Face inventory. Compose and llama-swap configuration validation passed.
 The image built successfully. Short text generation, streaming with final
 usage counts and synthetic image-color identification passed through llama-swap; the red image was identified as red.
 Switching between Flash Next and Bolt passed, and the service restart
-successfully preloaded Flash Next. All 12 suspend-guard regression tests passed.
+successfully preloaded Flash Next. All 18 suspend-guard regression tests passed.
 A near-limit synthetic request accepted 262012 input tokens and generated the
 correct answer `4` to a final arithmetic question. Prefill took 216.0 seconds
 (1212.9 tokens/second). This verifies text capacity, not long-context quality
@@ -482,3 +484,92 @@ remain NVIDIA's temperature 1.0 and top_p 0.95.
 Close Strata UI tabs before selecting Bolt: model-specific upstream requests
 from those tabs can request Flash Next again. Use the llama-swap UI to switch
 models.
+
+### Project Maya
+
+Project Maya 1.1.13 serves GLM-5.3-Flash Maya-S24 across both RTX 3090 GPUs,
+with 32768-token context, MTP drafting and GPU image encoding. Expert weights
+are cached across VRAM, pinned RAM and the NVMe. The retained settings leave
+1536 MiB of VRAM per card beside the expert pool and request 12 GiB of RAM
+headroom for the desktop. Expert caching and prefill are automatic; KV streaming
+is enabled. Sampling defaults to temperature 1.0, top_p 0.95 and high reasoning
+effort. Upstream calibration retained `STRATA_GLM_PCIE_SHARE=0.50`; CPU thread
+and SSD read settings remain automatic. The backend listens on localhost port 5814; llama-swap
+exposes model ID `glm-5.3-flash-maya-s24` through its existing LAN API and
+exclusive GPU group. The boot default remains Flash Next IQ3_S.
+
+No configured Arch or AUR package named `project-maya` was available at setup.
+The upstream source checkout is retained at `~/Projects/project-maya`, with
+Python dependencies, CMake and Ninja in its private `.venv`. CUDA and GCC 15
+are existing Arch packages (`cuda`, `gcc15`); CUDA 13.3 requires GCC 15 rather
+than this installation's default GCC 16. Model files remain outside Git.
+
+Restore the pinned checkout and build/preparation with:
+
+```bash
+sudo pacman -S --needed cuda gcc15 python git
+git clone https://github.com/mw00/project-maya.git ~/Projects/project-maya
+git -C ~/Projects/project-maya checkout 797819e20fd44dfeb4deeaa8a3b1f3f350407e78
+cd ~/Projects/project-maya
+./setup.sh --yes --plain --no-start --model Maya-S24 \
+  --models-dir "$HOME/.local/share/project-maya/models" \
+  --gpus 0,1 --context 32768 --host-compiler g++-15 \
+  --vram-reserve-mib 1536 --env STRATA_GLM_RAM_HEADROOM_GB=12 --port 5814
+```
+
+Before setup, run the pinned `download_command` entries in
+[`models/maya-s24.json`](../../models/maya-s24.json) to restore missing weights.
+The upstream setup verifies model hashes and generates its pack/tokenizer.
+Restore the managed `~/.config/project-maya/maya-s24.json` through chezmoi
+after preparation, then install the llama-swap and suspend-guard templates
+using the existing restoration procedure. Llama-swap starts the Python server
+as user `vesanieminen` through `setpriv`; the server and its child engine are
+stopped together when switching models. There is no separate boot service.
+
+Select the Maya model in `http://192.168.0.181:8000/ui/` or send a chat request
+with model `glm-5.3-flash-maya-s24` to the existing `/v1/chat/completions` API.
+Once loaded, Maya's own local dashboard is `http://127.0.0.1:5814/`.
+Do not start a second standalone copy while another GPU backend is loaded.
+The AI-aware suspend guard reads Maya's `/v1/status` inference count and last
+request timestamp, alongside llama-swap's loading state and in-flight requests.
+Running/queued requests and recent completed chats prevent suspend; idle
+dashboard polling does not reset the idle deadline.
+
+All five model/vision files passed size and SHA-256 verification. Upstream
+`./setup.sh` completed all eight steps after the downloads, including pack,
+tokenizer and vision preparation. `./maya.sh --plain --config
+~/.config/project-maya/maya-s24.json --calibrate --no-start` selected PCIe share
+0.50 with a confirmed 23.0 tokens/second on its calibration workload.
+
+System activation is pending administrator authentication: the Maya llama-swap
+route and suspend-guard update are prepared in this repository but have not
+been installed into `/etc` and `/usr/local`. The running selector still has
+14 models. Once no inference is active, activate from this repository root:
+
+```bash
+llama-swap -config system/local-ai/etc/llama-swap/config.yaml -validate
+sudo install -Dm644 system/local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo systemctl kill --kill-whom=main --signal=HUP llama-swap.service
+sudo systemctl restart ollama-idle-suspend.service
+```
+
+The hot reload does not change the boot service or run its default preload.
+
+The upstream benchmark measured decode at 21.8, 24.7 and 24.3 tokens/second
+(mean 23.6) across three 256-token greedy answers with thinking disabled.
+Prefill measured 381 tokens/second at 2048 tokens and 865 at 8192. These
+measurements describe that workload, not sustained coding or reasoning speed.
+At model load the GPU expert pools were 18.36 and 18.55 GiB; total GPU usage
+was about 44.1 GiB. The automatic pinned-RAM cache varies with available
+memory (37.4–38.4 GiB during testing). The full model remains on NVMe; cache
+capacities are not disjoint pieces of the model.
+
+Standalone localhost checks passed: health and dashboard HTTP 200, short text
+generation, streaming with final usage counts, and a synthetic red image
+identified as red. The prepared suspend guard detected real active inference
+and the completed-request timestamp; dashboard polling preserved that timestamp.
+All 18 suspend-guard regression tests passed. Graceful server shutdown released
+its engine and GPU allocation. Selector activation, proxy requests, model
+switching, full-context capacity, tool use and general model/vision quality
+remain unverified.

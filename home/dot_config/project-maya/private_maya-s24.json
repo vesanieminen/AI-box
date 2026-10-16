@@ -1,0 +1,55 @@
+{
+ "exe": "/home/vesanieminen/Projects/project-maya/build/strata",
+ "args": [
+  "--glm-pack",
+  "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/pack",
+  "--max-context",
+  "32768",
+  "--expert-cache",
+  "auto",
+  "--prefill",
+  "auto",
+  "--kv-streaming",
+  "on",
+  "--expert-profile",
+  "/home/vesanieminen/Projects/project-maya/data/expert-profile-glm.bin",
+  "--vram-reserve-mib",
+  "1536"
+ ],
+ "cwd": "/home/vesanieminen/Projects/project-maya",
+ "tokenizer": "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/pack/tokenizer",
+ "model_name": "glm-5.3-flash",
+ "gpu": [
+  0,
+  1
+ ],
+ "sampling": {
+  "temperature": 1.0,
+  "top_p": 0.95
+ },
+ "reasoning_effort": "high",
+ "lib_dirs": [
+  "/opt/cuda/lib64",
+  "/opt/cuda/targets/x86_64-linux/lib"
+ ],
+ "port": 5814,
+ "env": {
+  "STRATA_GLM_RAM_HEADROOM_GB": "12",
+  "STRATA_GLM_PCIE_SHARE": "0.50"
+ },
+ "vision": {
+  "exe": "/home/vesanieminen/Projects/project-maya/build-vision/bin/strata-vision",
+  "mmproj": "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/vision/mmproj-GLM-5.3-Flash-F16.gguf",
+  "model": "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/vision/GLM-5.3-Flash-vocab.gguf",
+  "gpu": true
+ },
+ "log": "/home/vesanieminen/.local/state/project-maya/maya-s24.log",
+ "installer": {
+  "models_dir": "/home/vesanieminen/.local/share/project-maya/models",
+  "quant": "Maya-S24",
+  "gguf": null,
+  "gguf_dir": null,
+  "draft": "mtp"
+ },
+ "host": "127.0.0.1"
+}

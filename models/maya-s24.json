@@ -1,0 +1,48 @@
+{
+  "model": "GLM-5.3-Flash Maya-S24 IQ2_XXS_S",
+  "source": "https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF",
+  "revision": "f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da",
+  "runtime": {
+    "source": "https://github.com/mw00/project-maya",
+    "revision": "797819e20fd44dfeb4deeaa8a3b1f3f350407e78",
+    "version": "1.1.13",
+    "llama_cpp_revision": "3cf03257f219afbe7334045ff7c6a06ac68c627d"
+  },
+  "files": [
+    {
+      "path": "$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
+      "source_path": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
+      "bytes": 46886573024,
+      "sha256": "8ebd5c74bcf65ece2a8699b7b6fd2b8d177f350ed252cee252fdd99b86a0138c",
+      "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf"
+    },
+    {
+      "path": "$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf",
+      "source_path": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf",
+      "bytes": 46982144736,
+      "sha256": "4bd445da3a0128a9c5b32228c924e0a622aa4a132c7a8dc9a2c207a4beea8e34",
+      "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf"
+    },
+    {
+      "path": "$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf",
+      "source_path": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf",
+      "bytes": 832958464,
+      "sha256": "a6fd4e88007ac49b431c7d02be34e43ab7a09224d53a0c52782327613cb41917",
+      "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf"
+    },
+    {
+      "path": "$HOME/.local/share/project-maya/models/Maya-S24/vision/GLM-5.3-Flash-vocab.gguf",
+      "source_path": "vision/GLM-5.3-Flash-vocab.gguf",
+      "bytes": 9426880,
+      "sha256": "8f53cb1bd2e631c14ef413e3284735d9e53f3c508d07a6f609e705b487105912",
+      "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24/vision\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/vision/GLM-5.3-Flash-vocab.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/vision/GLM-5.3-Flash-vocab.gguf"
+    },
+    {
+      "path": "$HOME/.local/share/project-maya/models/Maya-S24/vision/mmproj-GLM-5.3-Flash-F16.gguf",
+      "source_path": "vision/mmproj-GLM-5.3-Flash-F16.gguf",
+      "bytes": 1128046944,
+      "sha256": "3627575df16bd152db0f3fd7e488d270b33f3a9e6c7fa3b1b8ac381faafde882",
+      "download_command": "mkdir -p \"$HOME/.local/share/project-maya/models/Maya-S24/vision\" && curl -fL --retry 5 -C - -o \"$HOME/.local/share/project-maya/models/Maya-S24/vision/mmproj-GLM-5.3-Flash-F16.gguf\" https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF/resolve/f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da/vision/mmproj-GLM-5.3-Flash-F16.gguf"
+    }
+  ]
+}
