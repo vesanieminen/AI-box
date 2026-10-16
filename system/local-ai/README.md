@@ -490,8 +490,9 @@ Project Maya 1.1.13 serves GLM-5.3-Flash Maya-S24 across both RTX 3090 GPUs,
 with 262144-token context, MTP drafting and GPU image encoding. Expert weights
 are cached across VRAM, pinned RAM and the NVMe. The retained settings leave
 1536 MiB of VRAM per card beside the expert pool and request 8 GiB of RAM
-headroom for the desktop. Expert caching and prefill are automatic; KV streaming
-is enabled. Sampling defaults to temperature 1.0, top_p 0.95 and high reasoning
+headroom for the desktop. Expert caching and prefill are automatic. KV streaming
+is enabled with INT8 latent-cache storage (`--kv int8`) and a 32768-position
+VRAM window. Sampling defaults to temperature 1.0, top_p 0.95 and high reasoning
 effort. Upstream calibration retained `STRATA_GLM_PCIE_SHARE=0.50`; CPU thread
 and SSD read settings remain automatic. The backend listens on localhost port 5814; llama-swap
 exposes model ID `glm-5.3-flash-maya-s24` through its existing LAN API and
@@ -538,7 +539,9 @@ All five model/vision files passed size and SHA-256 verification. Upstream
 `./setup.sh` completed all eight steps after the downloads, including pack,
 tokenizer and vision preparation. `./maya.sh --plain --config
 ~/.config/project-maya/maya-s24.json --calibrate --no-start` selected PCIe share
-0.50 with a confirmed 25.6 tokens/second at 256K on its calibration workload.
+0.50 with a confirmed 25.6 tokens/second at 256K on its FP16-KV calibration
+workload. The selected CPU/PCIe settings are retained with INT8 KV; their
+performance after the cache-format change has not been recalibrated.
 
 The Maya route and inference-aware suspend guard are installed in `/etc` and
 `/usr/local`; the running selector exposes 15 models. For restoration or a
@@ -564,8 +567,8 @@ cd ~/Projects/project-maya
 ./maya.sh --plain --config "$HOME/.config/project-maya/maya-s24.json" --speed-calibration --no-start
 ```
 
-The drafter comparison measured 1536 generated tokens per side after an
-8192-token document and an uncounted warm-up, using the configured temperature
+The drafting selection was measured with FP16 KV: 1536 generated tokens per
+side after an 8192-token document and an uncounted warm-up, using temperature
 1.0, top_p 0.95 and high reasoning effort. MTP sustained 24.03 tokens/second;
 DFlash2 sustained 17.35. Maya retained MTP. The optional 697 MB DFlash2 file is
 checksum-verified and cached, with its source, license and restoration command
@@ -573,21 +576,22 @@ in `models/maya-s24.json`; it is not loaded by the retained profile. A future
 comparison can use it without another download. CPU thread count and SSD
 read chunking remain automatic.
 
-At 256K with 8 GiB RAM headroom, three 256-token greedy answers with
-thinking disabled measured 20.7, 26.3 and 25.6 decode tokens/second (mean 24.2)
-before the final calibration. These describe that workload, not sustained
-coding or reasoning speed. The full model remains on NVMe; VRAM and RAM
-cache capacities are not disjoint pieces of the model.
+Sustained INT8-KV decode throughput has not yet been benchmarked. The full
+model remains on NVMe; VRAM and RAM cache capacities are not disjoint pieces
+of the model.
 
-Text capacity passed at both 128K and 256K: synthetic repeated-prose prompts
-of 130587 and 261651 input tokens each produced the correct answer `4` to a
-final arithmetic question. The 256K prompt took 186.1 seconds of prefill
-(1406 tokens/second). This verifies capacity, not long-context comprehension.
+Text capacity passed at 128K with FP16 KV and at 256K with INT8 KV: synthetic
+repeated-prose prompts of 130587 and 261651 input tokens each produced the
+correct answer `4` to a final arithmetic question. The INT8 256K prompt took
+177.3 seconds of prefill (1476 tokens/second). This verifies capacity, not
+long-context comprehension.
 KV streaming keeps 32768 positions in VRAM and the full latent cache in
-pinned RAM (1.5 GiB at 128K; 3 GiB at 256K). The automatic RAM expert cache
+pinned RAM (about 1.59 GiB at 262144 tokens with INT8). At the verified reload,
+the expert pools held 36.7 GiB in VRAM and 40.9 GiB in pinned RAM. The RAM tier
 uses more of available RAM with 8 GiB headroom; loaded cache sizes vary with
 other applications.
 
+Text, image and streaming checks passed after the INT8-KV reload.
 Standalone and llama-swap-proxied checks passed: health and selector UI HTTP
 200, short text generation, streaming with final usage counts, and a synthetic
 red image identified as red. Discovery advertises 262144 context tokens and

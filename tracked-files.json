@@ -41,7 +41,7 @@
   },
   ".config/project-maya/maya-s24.json": {
     "source": "dot_config/project-maya/private_maya-s24.json",
-    "sha256": "5915e6f46f015f25128be3f61565b125229e01def8be6d91cbaf792e00cd1b41"
+    "sha256": "92d88e612e575c8b1fc5f32bacee3b493f783f8c0f9a1cf82d2e8b119c98ced5"
   },
   ".config/starship.toml": {
     "source": "dot_config/starship.toml",

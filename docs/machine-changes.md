@@ -204,8 +204,9 @@ and [pinned model provenance](../models/maya-s24.json) record the retained
 installation. All five downloaded files passed size and SHA-256 verification;
 upstream setup and calibration completed. Standalone text, streaming and
 synthetic image checks passed. The retained context is 262144 tokens with
-8 GiB requested RAM headroom. Synthetic text-capacity tests passed at 128K and
-256K; 261651 input tokens produced the expected short answer at 256K.
+INT8 KV streaming and 8 GiB requested RAM headroom. Synthetic text-capacity
+tests passed at 128K and 256K; the INT8-KV test accepted 261651 input tokens
+and produced the expected short answer at 256K.
 Text, image and streaming requests through llama-swap and live suspend-guard
 activity detection passed. Maya → Nemotron Bolt → Maya switching passed; Maya
 was left loaded at 256K. The boot default remains Flash Next.

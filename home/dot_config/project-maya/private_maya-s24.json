@@ -14,7 +14,9 @@
   "--expert-profile",
   "/home/vesanieminen/Projects/project-maya/data/expert-profile-glm.bin",
   "--vram-reserve-mib",
-  "1536"
+  "1536",
+  "--kv",
+  "int8"
  ],
  "cwd": "/home/vesanieminen/Projects/project-maya",
  "tokenizer": "/home/vesanieminen/.local/share/project-maya/models/Maya-S24/pack/tokenizer",
