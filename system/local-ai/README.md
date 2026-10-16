@@ -84,8 +84,7 @@ definitions are in `compose.yaml`.
 
 ### Available model IDs
 
-All entries belong to one exclusive GPU group. The Maya entry is staged and
-requires the activation commands in its section below. Switching waits for active
+All entries belong to one exclusive GPU group. Switching waits for active
 inference and stops the previous backend before starting another.
 
 | Model ID | Backend | Context limit |
@@ -541,12 +540,11 @@ tokenizer and vision preparation. `./maya.sh --plain --config
 ~/.config/project-maya/maya-s24.json --calibrate --no-start` selected PCIe share
 0.50 with a confirmed 25.6 tokens/second at 256K on its calibration workload.
 
-System activation is pending administrator authentication: the Maya llama-swap
-route and suspend-guard update are prepared in this repository but have not
-been installed into `/etc` and `/usr/local`. The running selector still has
-14 models. Stop any standalone Maya server before loading the selector-managed
-copy; hot reload does not adopt an existing server. Once no inference is active,
-activate from this repository root:
+The Maya route and inference-aware suspend guard are installed in `/etc` and
+`/usr/local`; the running selector exposes 15 models. For restoration or a
+configuration update, stop any standalone Maya server before loading the
+selector-managed copy; hot reload does not adopt an existing server. Once no
+inference is active, install and reload from this repository root:
 
 ```bash
 llama-swap -config system/local-ai/etc/llama-swap/config.yaml -validate
@@ -590,11 +588,14 @@ pinned RAM (1.5 GiB at 128K; 3 GiB at 256K). The automatic RAM expert cache
 uses more of available RAM with 8 GiB headroom; loaded cache sizes vary with
 other applications.
 
-Standalone localhost checks passed: health and dashboard HTTP 200, short text
-generation, streaming with final usage counts, and a synthetic red image
-identified as red. The prepared suspend guard detected real active inference
-and the completed-request timestamp; dashboard polling preserved that timestamp.
+Standalone and llama-swap-proxied checks passed: health and selector UI HTTP
+200, short text generation, streaming with final usage counts, and a synthetic
+red image identified as red. Discovery advertises 262144 context tokens and
+image input. The installed suspend guard detected real active inference and
+the completed-request timestamp; dashboard polling preserved that timestamp.
 All 18 suspend-guard regression tests passed. Graceful server shutdown released
-its engine and GPU allocation. Selector activation, proxy requests, model
-switching, long-context comprehension, maximum-context multimodal capacity,
+its engine and GPU allocation. Maya → Nemotron Bolt → Maya switching passed
+through the exclusive group, with the old Maya engine confirmed stopped and
+Maya ready at 256K afterward. The enabled llama-swap unit still preloads Flash
+Next on boot. Long-context comprehension, maximum-context multimodal capacity,
 tool use and general model/vision quality remain unverified.

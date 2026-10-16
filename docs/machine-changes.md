@@ -137,9 +137,8 @@ one model at a time; GPU placement follows the selected backend profile.
 The retained llama-swap template declares 15 chat-model routes through vLLM,
 TabbyAPI, SGLang, Strata, llama.cpp and Maya. Runtime images are pinned in
 `system/local-ai/compose.yaml`; Maya source is pinned in `models/maya-s24.json`;
-the running service has 14 routes until the Maya template is activated. Model
-weights remain outside Git. The shared DFlash2 draft is used with its Qwen
-INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
+the running service exposes all 15 routes. Model weights remain outside Git.
+The shared DFlash2 draft is used with its Qwen INT8 target. The incomplete Gemma 26B 8bpw folder is excluded because it has
 no weights. The model table and restoration steps are in
 [AI services](../system/local-ai/README.md).
 
@@ -196,9 +195,9 @@ weights and packs stay on the internal NVMe under
 `~/.local/share/project-maya/models`. No new system packages are required.
 The optional llama-swap entry uses localhost port 5814 and the existing
 exclusive GPU group; the boot service and Flash Next default are retained.
-The prepared suspend-guard update reads Maya's inference activity so idle
-dashboard polling does not prevent automatic suspend. Installing the selector
-and guard templates still requires administrator authentication.
+The installed suspend guard reads Maya's inference activity so idle dashboard
+polling does not prevent automatic suspend. The selector exposes Maya at 256K
+with text and image input.
 
 [Runtime, settings and restoration](../system/local-ai/README.md#project-maya)
 and [pinned model provenance](../models/maya-s24.json) record the retained
@@ -207,4 +206,6 @@ upstream setup and calibration completed. Standalone text, streaming and
 synthetic image checks passed. The retained context is 262144 tokens with
 8 GiB requested RAM headroom. Synthetic text-capacity tests passed at 128K and
 256K; 261651 input tokens produced the expected short answer at 256K.
-System activation and proxy/switching verification remain pending.
+Text, image and streaming requests through llama-swap and live suspend-guard
+activity detection passed. Maya → Nemotron Bolt → Maya switching passed; Maya
+was left loaded at 256K. The boot default remains Flash Next.
