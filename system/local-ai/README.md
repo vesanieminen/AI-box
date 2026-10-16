@@ -177,7 +177,7 @@ weights are reused from local folders and never downloaded on a model switch.
 ### Strata Flash Next with vision
 
 `qwen3.8-flash-next-iq3-s` uses the standard ISTA-DASLab IQ3_S quantization,
-Strata v0.1.43.1, automatic splitting across GPUs 0 and 1, four speculative
+Strata v0.1.44.1, automatic splitting across GPUs 0 and 1, four speculative
 MTP tokens, INT8 KV cache and 262144 configured context tokens. GPU vision
 uses the published BF16 projector, a 700 MiB VRAM reserve and 1024 image tokens.
 Model discovery advertises text and image input, text output and `vision: true`.
@@ -191,11 +191,13 @@ status/settings endpoints and a chat request with the LAN browser Origin were
 verified through the machine's LAN address from this host. Remote-browser
 access from 192.168.0.75 is also confirmed by successful page/metrics requests.
 
-The restore templates target v0.1.44.1 (source commit
-`296b59d2f73c8f04a805df29c2fa97655adace78`). Building and activating this
-update, and runtime verification, are pending administrator execution; the
-currently verified installation is v0.1.43.1. Retain the old image for rollback.
-The saved model settings are unchanged.
+The installed image is v0.1.44.1, built from source commit
+`296b59d2f73c8f04a805df29c2fa97655adace78`. Runtime telemetry confirms this
+version with 262144 context, INT8 KV and MTP4. Text, streaming with final
+usage counts and synthetic image-color identification passed through llama-swap.
+The v0.1.43.1 image is retained for rollback. Resident-expert mode and
+asynchronous updates remain off; sustained performance on v0.1.44.1 has not
+yet been benchmarked.
 
 Restore the pinned source and build the official Dockerfile for the RTX 3090:
 

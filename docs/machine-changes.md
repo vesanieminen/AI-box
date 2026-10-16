@@ -91,16 +91,18 @@ one model at a time; GPU placement follows the selected backend profile.
   without error; general long-context quality and multimodal behavior remain
   unverified.
   Flash Next IQ3_S is the boot default.
-- Strata v0.1.43.1 serves standard Qwen3.8 Flash Next IQ3_S as the boot-default
+- Strata v0.1.44.1 serves standard Qwen3.8 Flash Next IQ3_S as the boot-default
   `qwen3.8-flash-next-iq3-s` entry, with both RTX 3090 GPUs, MTP4, INT8 KV,
   262144 configured context and GPU vision. Its official Dockerfile is built
   for CUDA architecture 86 from a pinned source revision. The model assets,
   generated packs and MTP subset are in `~/.local/share/strata`, outside Git.
   Text, image input and Activity timing statistics passed through llama-swap
   with the desktop stopped. Full-context capacity and desktop coexistence
-  remain unverified. The restore templates target v0.1.44.1; image build,
-  activation and runtime verification of that update await administrator
-  execution. Runtime updates are manual. The system service waits for
+  remain unverified. Runtime version and retained settings are verified; text,
+  streaming with final usage and synthetic image-color identification passed
+  on v0.1.44.1. Sustained performance remains unbenchmarked on this version.
+  Resident-expert mode and asynchronous updates remain off. Runtime updates
+  are manual. The system service waits for
   the Flash Next health endpoint on startup; a fresh boot remains unverified.
   The suspend guard watches port 5808 as well as the DFlash backend on 5807.
   Strata's web UI is served to the LAN through llama-swap at
