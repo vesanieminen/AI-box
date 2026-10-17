@@ -394,8 +394,10 @@ passed. Live session termination and subsequent automatic suspend remain
 unverified.
 
 All 22 suspend-guard regression tests pass, including closing and connected
-SSH sessions and the Stay Awake override. Installation of the closing-session
-policy and live verification remain pending. Apply it with:
+SSH sessions and the Stay Awake override. The installed guard matches this
+template, and the restarted service is active. Its read-only diagnostic runs
+successfully; an actual automatic suspend with retained Orca processes remains
+unverified. Restore the guard with:
 
 ```bash
 cd ~/Projects/dotfiles

@@ -43,7 +43,7 @@ empty preference files use Chezmoi's `empty_` attribute.
   Automatic suspend occurs after 15 minutes without desktop or AI activity.
   The guard template ignores ended SSH sessions in `State=closing`, even when
   Orca retains background processes; connected SSH sessions still block suspend.
-  This policy passes regression tests; privileged installation is pending.
+  The policy is installed, its service is active, and all 22 regression tests pass.
   The runtime Stay Awake switch overrides idle behavior and is not managed by Git.
 - `~/.local/bin/disconnect-ssh` prints and closes incoming SSH connections and
   login sessions that can block the suspend guard. Use `--list` to inspect them
