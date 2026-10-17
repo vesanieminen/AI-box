@@ -367,7 +367,12 @@ requests and recent completed inference/model-management requests. Keeping the
 UI or model list open does not count as inference activity. Failure to verify
 activity prevents suspend. The Stay Awake switch overrides the idle policy.
 
-Remote SSH login sessions also block the guard, even when idle. The managed
+Connected remote SSH login sessions also block the guard, even when idle.
+Sessions in `State=closing` are ignored: the login has ended, but Orca or other
+background processes may remain for reconnection. These processes survive
+suspend, but their work pauses until wake; use Stay Awake for unattended tasks
+that the AI activity checks do not cover. Unknown session states remain blocking.
+The managed
 `~/.local/bin/disconnect-ssh` command prints current incoming SSH connection
 processes and SSH login sessions (user, remote host and state), then terminates
 those sessions and closes the captured SSH connection processes, including
@@ -387,6 +392,17 @@ activity, AI activity and Stay Awake continue to apply. Live listing was
 verified against two SSH sessions; syntax and mocked list/disconnect checks
 passed. Live session termination and subsequent automatic suspend remain
 unverified.
+
+All 22 suspend-guard regression tests pass, including closing and connected
+SSH sessions and the Stay Awake override. Installation of the closing-session
+policy and live verification remain pending. Apply it with:
+
+```bash
+cd ~/Projects/dotfiles
+sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo systemctl restart ollama-idle-suspend.service
+python3 /usr/local/libexec/ollama-idle-suspend.py --check
+```
 
 The screensaver is disabled; the lock timeout is 300 seconds. Both settings are
 managed by Chezmoi. On a headless machine, review the desktop heartbeat policy.

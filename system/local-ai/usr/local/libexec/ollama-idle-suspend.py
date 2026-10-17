@@ -28,8 +28,12 @@ def desktop_idle():
             continue
         info = dict(item.split('=', 1) for item in command(
             'loginctl', 'show-session', fields[0], '-p', 'Type', '-p', 'Class',
-            '-p', 'User', '-p', 'IdleHint', '-p', 'Remote').splitlines())
+            '-p', 'User', '-p', 'IdleHint', '-p', 'Remote', '-p', 'State').splitlines())
         if info.get('Class') != 'user':
+            continue
+        # Disconnected logins can retain Orca terminals and other background
+        # processes indefinitely. Their presence alone should not block sleep.
+        if info.get('State') == 'closing':
             continue
         if info.get('User') != '1000' or info.get('Remote') == 'yes':
             return False

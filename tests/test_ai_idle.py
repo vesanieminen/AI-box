@@ -23,6 +23,31 @@ def events(requests):
     return io.BytesIO(b''.join(b'data: ' + json.dumps(frame).encode() + b'\n\n' for frame in frames))
 
 
+class DesktopSessionTests(unittest.TestCase):
+    def desktop_idle(self, states, stay_awake=False):
+        sessions = [f'Class=user\nUser=1000\nType=tty\nRemote=yes\nIdleHint=no\nState={state}\n'
+                    for state in states]
+        with patch.object(guard, 'STAY_AWAKE') as awake, \
+             patch.object(guard, 'command', side_effect=[
+                 '\n'.join(str(i) for i in range(len(sessions))), *sessions]):
+            awake.exists.return_value = stay_awake
+            return guard.desktop_idle()
+
+    def test_closing_remote_session_does_not_block_suspend(self):
+        self.assertTrue(self.desktop_idle(['closing']))
+
+    def test_connected_or_unknown_remote_session_blocks_suspend(self):
+        for state in ('active', 'online', ''):
+            with self.subTest(state=state):
+                self.assertFalse(self.desktop_idle([state]))
+
+    def test_closing_session_does_not_hide_connected_session(self):
+        self.assertFalse(self.desktop_idle(['closing', 'active']))
+
+    def test_stay_awake_still_blocks_closing_sessions(self):
+        self.assertFalse(self.desktop_idle(['closing'], stay_awake=True))
+
+
 class ActivityTests(unittest.TestCase):
     def setUp(self):
         service = patch.object(guard, 'command', return_value='active\n')
