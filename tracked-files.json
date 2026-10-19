@@ -81,7 +81,7 @@
   },
   ".local/share/strata-beta/compose.yaml": {
     "source": "dot_local/share/strata-beta/private_compose.yaml",
-    "sha256": "3924f433ee535062230ddd3baac773aad5d79ab1ddfc76772422743ea57bc90b"
+    "sha256": "f2429cd973c4e6d7b313ba20f3eb5693c9a041f19c054dcdb6c283afded62f0f"
   },
   ".local/share/strata-beta/config/strata-iq3_s-beta.json": {
     "source": "dot_local/share/strata-beta/config/private_strata-iq3_s-beta.json",

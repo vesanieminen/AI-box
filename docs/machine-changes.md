@@ -117,7 +117,10 @@ one model at a time; GPU placement follows the selected backend profile.
   engine package 0.1.45.3 and a separate stopped-container Compose definition in
   `~/.local/share/strata-beta/compose.yaml`. Port 5815 is localhost only; existing
   IQ3_S assets are reused read-only and beta runtime state is separate. The
-  package archive, manifest files, binary dependencies, Compose configuration
+  beta runs as UID/GID 1000:1000 to access its user-owned private configuration
+  and runtime directory while retaining dropped capabilities. User access and
+  Compose validation pass; startup with this user setting remains unverified.
+  The package archive, manifest files, binary dependencies, Compose configuration
   and local Terminal packaging are verified. The user reports successful Docker
   image build and container creation. Independent container inspection and
   inference validation remain outstanding. Restoration and manual testing with a

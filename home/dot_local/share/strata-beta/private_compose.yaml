@@ -73,7 +73,8 @@
           "STRATA_VERSION": "0.2.0-beta",
           "ENGINE_LABEL": "0.1.45.3-linux-x86_64-cuda-cuda13"
         }
-      }
+      },
+      "user": "1000:1000"
     }
   }
 }

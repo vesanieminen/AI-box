@@ -245,6 +245,8 @@ Its Compose file is `~/.local/share/strata-beta/compose.yaml`, its container is
 It uses both RTX 3090 GPUs, the existing IQ3_S pack and MTP subset, INT8 KV,
 262144 context, MTP4 and GPU vision. Existing model assets are mounted read-only;
 beta logs and runtime state stay in `~/.local/share/strata-beta/runtime`.
+The container runs as UID/GID 1000:1000, matching the owner of its private
+configuration and runtime directories. All Linux capabilities remain dropped.
 The beta is outside llama-swap and has no automatic startup or restart policy.
 
 The official CUDA 13 engine package is version 0.1.45.3, build
@@ -259,8 +261,10 @@ The Terminal packaging step completed locally with the pinned interpreter,
 hash-locked dependencies and runtime import checks. The user reports successful
 completion of the Docker build/create command. Independent image/container
 inspection still requires administrator authentication. Model loading, inference,
-GPU vision and comparative performance remain unverified. No model switch has
-been performed for this setup.
+GPU vision and comparative performance remain unverified. UID 1000 can read the
+private beta configuration and both GGUF shards, and write its runtime directory;
+the Compose user setting validates. Container startup with that setting remains
+unverified until the container is recreated and started.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
