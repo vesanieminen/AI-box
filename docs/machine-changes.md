@@ -126,12 +126,15 @@ one model at a time; GPU placement follows the selected backend profile.
   Full-context capacity, general vision quality and comparative performance remain
   unverified. Restoration and manual testing with a sleep inhibitor are in
   `system/local-ai/README.md`; provenance is in `models/strata-beta.json`.
-  The beta route `qwen3.8-flash-next-iq3-s-beta` is staged in the exclusive
+  The beta route `qwen3.8-flash-next-iq3-s-beta` is installed in the exclusive
   llama-swap group, with UI path `/upstream/qwen3.8-flash-next-iq3-s-beta/` on
-  existing LAN port 8000. Port 5815 is included in the staged suspend guard.
-  Configuration validation and temporary-proxy UI/assets/API checks passed;
-  root-owned system template installation, restart and actual model switching
-  remain pending administrator authentication. The stable boot default is retained.
+  existing LAN port 8000 on all interfaces. Port 5815 is in the installed suspend
+  guard. Both system templates match live files and both services are active.
+  Stable preload, beta loading through the selector, LAN health and remote beta
+  HTML access passed. Temporary-proxy UI/assets/API checks passed; installed LAN
+  asset/chat checks remain outstanding. Keep only one Strata model UI open so
+  stable monitoring requests do not switch away from beta. Stable remains the
+  boot default.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
   localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
   target, vision projector and NVIDIA's LiLiCorr draft. All three files are
@@ -163,7 +166,7 @@ one model at a time; GPU placement follows the selected backend profile.
 The retained llama-swap template declares 16 chat-model routes through vLLM,
 TabbyAPI, SGLang, Strata, llama.cpp and Maya. Runtime images are pinned in
 `system/local-ai/compose.yaml`; Maya source is pinned in `models/maya-s24.json`;
-the beta route is staged for installation; the prior service configuration has 15 routes. Model weights remain outside Git.
+the running selector advertises all 16 routes. Model weights remain outside Git.
 The shared DFlash2 draft is used with its Qwen INT8 target. The incomplete
 Gemma 26B 8bpw folder is excluded because it has no weights. The model table and restoration steps are in
 [AI services](../system/local-ai/README.md).

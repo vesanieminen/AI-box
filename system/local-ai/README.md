@@ -66,7 +66,7 @@ the UI and its API requests.
 The beta UI uses
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`.
 Its API model ID is `qwen3.8-flash-next-iq3-s-beta` at the same `/v1` base URL.
-Applying the beta integration below enables this route.
+The beta integration is installed and enabled.
 
 Select `qwen3.8-27b-int8` or `qwen3.8-27b-int4` in the client model dropdown,
 or send that ID in the request's `model` field. A request starts the selected
@@ -260,8 +260,8 @@ during the build. The image adjustment is retained in
 The beta is configured as an on-demand member of llama-swap's exclusive GPU
 group, with a 150-second unload deadline and a 120-second Docker stop grace.
 It has no container restart policy; stable remains the boot preload.
-The staged suspend guard includes backend port 5815. Applying these system
-changes requires administrator authentication.
+The installed suspend guard includes backend port 5815. Both root-owned
+system files match their retained templates, and both services are active.
 
 The official CUDA 13 engine package is version 0.1.45.3, build
 `f6d65cb58+cuda13.0`; its binary prints `strata 0.1.45`.
@@ -336,14 +336,19 @@ beta. Select `qwen3.8-flash-next-iq3-s` to switch back. Do not start containers
 manually while llama-swap manages them. Port 5815 stays localhost only; LAN
 access uses existing port 8000 with no firewall change.
 
-The 16-route configuration validates. A temporary localhost llama-swap proxy
-against the running beta verified model discovery, health, the UI HTML and all
-four linked JS/CSS assets, an API chat and a UI-path chat with the LAN browser
-Origin. Those checks reused the already loaded beta; they did not test Docker
-start/stop or GPU model switching. Installation of the system templates, restart,
-exclusive lifecycle switching and validation on the actual LAN endpoint remain
-outstanding until the administrator commands above complete. The stable boot
-preload, vLLM profiles and automatic suspend policy are retained.
+The installed 16-route configuration validates and advertises beta. Llama-swap
+listens on all interfaces at port 8000; its service restart successfully preloaded
+stable, and beta subsequently loaded through the selector with a healthy LAN
+endpoint. The beta HTML reached the remote browser at 192.168.0.76. A temporary
+localhost proxy also verified all four linked JS/CSS assets, API chat and a
+UI-path chat with the LAN browser Origin. Complete assets/chat validation on the
+installed LAN selector remains outstanding.
+
+Keep only the selected Strata model's UI open. An open stable UI can poll its
+`/metrics` endpoint and switch the GPUs back to stable while beta is loading;
+requests for beta assets during that switch return HTTP 409. Close the other
+model's UI before loading or reloading beta. The stable boot preload, vLLM
+profiles and automatic suspend policy are retained.
 
 ### OpenCode clients
 

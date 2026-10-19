@@ -12,11 +12,12 @@ Page/assets, status/settings and a chat request with the browser Origin passed
 through this LAN URL from the host. Remote-browser access from 192.168.0.75
 is confirmed by successful page/metrics requests.
 
-The staged beta route uses
+The installed beta route uses
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`,
-with localhost backend 5815. It needs no additional firewall rule. Temporary
-localhost proxy checks passed; validation through the actual LAN endpoint
-remains pending installation of the updated llama-swap configuration.
+with localhost backend 5815. It needs no additional firewall rule. The listener
+accepts all interfaces at port 8000; LAN beta health and beta HTML access from
+192.168.0.76 passed. Temporary localhost proxy asset/chat checks passed;
+complete assets/chat validation on the installed LAN selector remains pending.
 
 Omarchy's existing UFW firewall remains enabled. Add only this application
 profile and local-subnet rule; do not replace the existing firewall rules:
