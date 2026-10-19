@@ -63,6 +63,11 @@ Strata chat/monitor/settings UI:
 needed. Its backend remains on localhost; the existing LAN port 8000 serves
 the UI and its API requests.
 
+The beta UI uses
+`http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`.
+Its API model ID is `qwen3.8-flash-next-iq3-s-beta` at the same `/v1` base URL.
+Applying the beta integration below enables this route.
+
 Select `qwen3.8-27b-int8` or `qwen3.8-27b-int4` in the client model dropdown,
 or send that ID in the request's `model` field. A request starts the selected
 model and waits for it to become ready. The UI supports loading, unloading,
@@ -90,6 +95,7 @@ inference and stops the previous backend before starting another.
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
+| `qwen3.8-flash-next-iq3-s-beta` | Strata 0.2.0-beta, IQ3_S, MTP4, GPU vision; on demand | 262144 |
 | `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
 | `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
@@ -251,7 +257,11 @@ The image makes its public application payload readable by this user and checks
 the server's `--help` import and engine/vision executable access as UID 1000
 during the build. The image adjustment is retained in
 `images/strata-beta/runtime-permissions.patch`.
-The beta is outside llama-swap and has no automatic startup or restart policy.
+The beta is configured as an on-demand member of llama-swap's exclusive GPU
+group, with a 150-second unload deadline and a 120-second Docker stop grace.
+It has no container restart policy; stable remains the boot preload.
+The staged suspend guard includes backend port 5815. Applying these system
+changes requires administrator authentication.
 
 The official CUDA 13 engine package is version 0.1.45.3, build
 `f6d65cb58+cuda13.0`; its binary prints `strata 0.1.45`.
@@ -306,36 +316,39 @@ sudo docker compose -f ~/.local/share/strata-beta/compose.yaml create --build
 ```
 
 The last command builds the image and creates a stopped container; it does not
-load a model. No new host packages are needed. Do not run both model containers
-at once: the production model already fills both GPUs. To test the beta, finish
-active requests and stop llama-swap first. Hold a sleep inhibitor throughout the
-manual beta run because port 5815 is outside the production suspend guard:
+load a model. No new host packages are needed. Finish active requests, stop any
+manually started beta, then apply the selector and suspend guard:
 
 ```bash
-sudo systemctl stop llama-swap.service
-sudo systemd-inhibit --what=sleep --mode=block --who=Strata-beta \
-  --why='Manual beta model testing' docker start --attach strata-0.2.0-beta
-```
-
-In another terminal, poll `curl --fail http://127.0.0.1:5815/health`, then check
-`/v1/models` and test text, streaming and image requests. The UI and OpenAI API
-are local only (`http://127.0.0.1:5815/`, `http://127.0.0.1:5815/v1`).
-Keep LAN clients on the existing production endpoint until a separate integration
-is requested. When finished, stop the beta before restoring production:
-
-```bash
+cd ~/Projects/dotfiles
 sudo docker stop --time 120 strata-0.2.0-beta
-sudo systemctl start llama-swap.service
-curl --fail http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s/health
+sudo install -Dm644 system/local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo systemctl restart llama-swap.service ollama-idle-suspend.service
 ```
 
-Starting llama-swap restores the existing stable default. No beta service is
-enabled at boot, and the vLLM profiles and automatic suspend policy are retained.
+Restarting llama-swap preloads the existing stable model. Select
+`qwen3.8-flash-next-iq3-s-beta` in a client using
+`http://192.168.0.181:8000/v1`, or open the beta UI:
+`http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`.
+Keep the trailing slash. Llama-swap unloads the current model before starting
+beta. Select `qwen3.8-flash-next-iq3-s` to switch back. Do not start containers
+manually while llama-swap manages them. Port 5815 stays localhost only; LAN
+access uses existing port 8000 with no firewall change.
+
+The 16-route configuration validates. A temporary localhost llama-swap proxy
+against the running beta verified model discovery, health, the UI HTML and all
+four linked JS/CSS assets, an API chat and a UI-path chat with the LAN browser
+Origin. Those checks reused the already loaded beta; they did not test Docker
+start/stop or GPU model switching. Installation of the system templates, restart,
+exclusive lifecycle switching and validation on the actual LAN endpoint remain
+outstanding until the administrator commands above complete. The stable boot
+preload, vLLM profiles and automatic suspend policy are retained.
 
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
-into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It declares all 13 IDs
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It includes 14 model IDs
 and their configured context limits under the custom provider `llama-swap`.
 The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6

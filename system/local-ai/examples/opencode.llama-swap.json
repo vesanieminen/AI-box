@@ -121,6 +121,23 @@
               "text"
             ]
           }
+        },
+        "qwen3.8-flash-next-iq3-s-beta": {
+          "name": "Qwen3.8 Flash Next IQ3_S Beta (256K, Vision)",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         }
       }
     }
