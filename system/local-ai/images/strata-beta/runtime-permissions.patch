@@ -1,0 +1,17 @@
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -85,6 +85,14 @@
+ COPY docker/strata-wrapper.sh /usr/local/bin/strata
+ RUN chmod 0755 /opt/strata/entrypoint.sh /opt/strata/healthcheck.sh /usr/local/bin/strata
+ 
++# Public application payload must be readable by the configured unprivileged user.
++RUN chmod -R a+rX /opt/strata
++USER 1000:1000
++RUN cd /opt/strata/terminal && ./python/bin/python3 -m serve.server --help >/dev/null \
++ && test -x /opt/strata/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13/strata \
++ && test -x /opt/strata/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13/strata-vision
++USER root
++
+ # Does the dynamic linker find every library of the package inside this image? (the GPU driver's libcuda / libnvidia-* come from the host)
+ RUN set -e; \
+     for d in /opt/strata/components/engine/*/; do \

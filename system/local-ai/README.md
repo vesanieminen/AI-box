@@ -247,6 +247,10 @@ It uses both RTX 3090 GPUs, the existing IQ3_S pack and MTP subset, INT8 KV,
 beta logs and runtime state stay in `~/.local/share/strata-beta/runtime`.
 The container runs as UID/GID 1000:1000, matching the owner of its private
 configuration and runtime directories. All Linux capabilities remain dropped.
+The image makes its public application payload readable by this user and checks
+the server's `--help` import and engine/vision executable access as UID 1000
+during the build. The image adjustment is retained in
+`images/strata-beta/runtime-permissions.patch`.
 The beta is outside llama-swap and has no automatic startup or restart policy.
 
 The official CUDA 13 engine package is version 0.1.45.3, build
@@ -263,8 +267,8 @@ completion of the Docker build/create command. Independent image/container
 inspection still requires administrator authentication. Model loading, inference,
 GPU vision and comparative performance remain unverified. UID 1000 can read the
 private beta configuration and both GGUF shards, and write its runtime directory;
-the Compose user setting validates. Container startup with that setting remains
-unverified until the container is recreated and started.
+the Compose user setting validates. The image permission adjustment is prepared;
+the rebuild, its UID 1000 checks and container startup remain unverified.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
@@ -288,6 +292,8 @@ python ~/Projects/Strata-0.2.0-beta/packaging/package_engine.py --verify \
   --ctx ~/.cache/strata-beta-build --ctx-only
 cp ~/Projects/Strata-0.2.0-beta/docs/TERMINAL_LAUNCH.md \
   ~/.cache/strata-beta-build/terminal-src/docs/TERMINAL_LAUNCH.md
+patch -d ~/.cache/strata-beta-build -p1 \
+  < ~/Projects/dotfiles/system/local-ai/images/strata-beta/runtime-permissions.patch
 sudo docker compose -f ~/.local/share/strata-beta/compose.yaml create --build
 ```
 

@@ -119,7 +119,9 @@ one model at a time; GPU placement follows the selected backend profile.
   IQ3_S assets are reused read-only and beta runtime state is separate. The
   beta runs as UID/GID 1000:1000 to access its user-owned private configuration
   and runtime directory while retaining dropped capabilities. User access and
-  Compose validation pass; startup with this user setting remains unverified.
+  Compose validation pass. The image grants read/execute access to its public
+  application payload and checks server imports as UID 1000 during the build;
+  that image rebuild and startup remain unverified.
   The package archive, manifest files, binary dependencies, Compose configuration
   and local Terminal packaging are verified. The user reports successful Docker
   image build and container creation. Independent container inspection and
