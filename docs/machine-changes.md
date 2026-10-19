@@ -113,21 +113,20 @@ one model at a time; GPU placement follows the selected backend profile.
   Page/assets, status/settings and browser-Origin chat passed through the LAN
   address from this host. Browser access from 192.168.0.75 is confirmed by
   successful page/metrics requests. No new listener or firewall rule is needed.
-- Strata 0.2.0-beta is prepared alongside the stable installation with official
-  engine package 0.1.45.3 and a separate stopped-container Compose definition in
-  `~/.local/share/strata-beta/compose.yaml`. Port 5815 is localhost only; existing
-  IQ3_S assets are reused read-only and beta runtime state is separate. The
-  beta runs as UID/GID 1000:1000 to access its user-owned private configuration
-  and runtime directory while retaining dropped capabilities. User access and
-  Compose validation pass. The image grants read/execute access to its public
-  application payload and checks server imports as UID 1000 during the build;
-  that image rebuild and startup remain unverified.
-  The package archive, manifest files, binary dependencies, Compose configuration
-  and local Terminal packaging are verified. The user reports successful Docker
-  image build and container creation. Independent container inspection and
-  inference validation remain outstanding. Restoration and manual testing with a
-  sleep inhibitor are in `system/local-ai/README.md`; package provenance is in
-  `models/strata-beta.json`. The stable boot default is retained.
+- Strata 0.2.0-beta is installed alongside stable with official engine package
+  0.1.45.3 and separate Compose configuration in
+  `~/.local/share/strata-beta/compose.yaml`. Port 5815 is localhost only; IQ3_S
+  assets are reused read-only and beta runtime state is separate. The container
+  runs as UID/GID 1000:1000 with dropped capabilities and readable public image
+  payload. Package hashes, local Terminal packaging and Compose validation pass.
+  Model loading on both RTX 3090s, health/model discovery, text arithmetic,
+  streaming with final usage/timings and synthetic image-color identification
+  passed. The beta retains the stable inference arguments and expert profile;
+  its nine sm_86 optimizations and model-card sampling defaults are active.
+  Full-context capacity, general vision quality and comparative performance remain
+  unverified. Restoration and manual testing with a sleep inhibitor are in
+  `system/local-ai/README.md`; provenance is in `models/strata-beta.json`.
+  The stable boot default is retained; beta startup is manual.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
   localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
   target, vision projector and NVIDIA's LiLiCorr draft. All three files are

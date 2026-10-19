@@ -262,13 +262,21 @@ Archive SHA-256, all eight package manifest files, binary dependencies and the
 Compose configuration passed validation. The build context includes all 27
 required Terminal payload, installer and build inputs from the pinned source.
 The Terminal packaging step completed locally with the pinned interpreter,
-hash-locked dependencies and runtime import checks. The user reports successful
-completion of the Docker build/create command. Independent image/container
-inspection still requires administrator authentication. Model loading, inference,
-GPU vision and comparative performance remain unverified. UID 1000 can read the
-private beta configuration and both GGUF shards, and write its runtime directory;
-the Compose user setting validates. The image permission adjustment is prepared;
-the rebuild, its UID 1000 checks and container startup remain unverified.
+hash-locked dependencies and runtime import checks. The beta starts successfully
+as UID 1000 with GPU vision and the model split across both GPUs. Health and
+model discovery confirm 262144 configured context and text/image input. Greedy
+text arithmetic returned `323` for 17 times 19; streaming returned `STREAM_OK`
+with final usage/timings; a synthetic solid-red image was identified as `Red`.
+These short tests validate basic operation, not sustained performance or general
+vision quality. Full-context requests and comparative stable/beta performance
+remain unverified. Docker image inspection still requires administrator access.
+
+The inference arguments match stable apart from relocated runtime paths; the
+expert-profile files are byte-identical. Runtime logs confirm the nine default
+sm_86 optimizations are active. Requests without sampling settings can behave
+differently: the beta selects model-card defaults, whereas stable defaults to
+greedy sampling. Comparisons should explicitly set sampling and thinking on
+both versions. GPU limits remain 350 W each.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
