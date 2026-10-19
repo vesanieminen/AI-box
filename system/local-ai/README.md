@@ -281,47 +281,82 @@ These short tests validate basic operation, not sustained performance or general
 vision quality. Full-context requests and comparative stable/beta performance
 remain unverified. Docker image inspection still requires administrator access.
 
-The beta retains the same model, MTP4, INT8 KV and 262144-token context as
-stable, with these additional inference settings:
+The active beta profile uses the earlier inference settings: the pinned expert
+arena, KV fully resident in VRAM, serial decode windows and no parked-conversation
+cache. Model weights, MTP4, INT8 KV, 262144 context, automatic layer splitting,
+GPU vision and the expert-profile bytes match the stable profile apart from
+relocated runtime paths. The nine default sm_86 optimizations remain active.
+GPU power limits remain 350 W each. Requests without sampling settings can behave
+differently: beta selects model-card defaults, whereas stable defaults to greedy.
+Comparisons should explicitly set sampling and thinking on both versions.
 
-- `--pipeline-windows 2`: overlap two decode windows across the GPUs.
+Reloading the retained default through llama-swap passed. Live metrics confirm
+`arena_mib=47962`, `kv_resident=0`, `conversation_cache_mib=0` and 16187 GPU
+expert slots. Text arithmetic returned `323` after restoration. The active file
+matches the earlier beta configuration exactly; startup arguments have no
+pipeline, KV-streaming, conversation-cache or mmap overrides.
+
+The active file is `~/.local/share/strata-beta/config/strata-iq3_s-beta.json`.
+The optional tuning preset is retained alongside it as
+`strata-iq3_s-beta-mmap.json`, captured in this repository. It is a complete
+alternative config for the same route and container, not a second running model.
+It keeps the same model/precision/context and adds:
+
+- `--pipeline-windows 2`: overlap decode windows across the two GPUs.
 - `--kv-resident 32768`: keep 32768 KV cells per layer in VRAM and stream the rest
-  from RAM (startup reports a 1.55 GiB pinned host KV allocation).
-- `--conversation-cache-mib 8192`: an 8 GiB budget for parked conversations;
-  it is not all allocated immediately.
-- `--mmap-experts`: read the existing native GGUF shards through the OS page
-  cache, without a full pinned expert arena or a separate `experts.bin` copy.
+  from RAM (startup reports 1.55 GiB of pinned host KV).
+- `--conversation-cache-mib 8192`: up to 8 GiB for parked conversations, allocated
+  as needed, with four slots.
+- `--mmap-experts`: read the native GGUF shards through the OS file cache rather
+  than copying every expert into a pinned arena. No extra `experts.bin` is needed.
 
-These match the inference tuning in
-[geldeki's dual-3090 post](https://x.com/geldeki/status/2112253892121825579).
-The requested trial explicitly retains 350 W per GPU instead of the post's
-280 W; no power settings were changed. The expert-profile files are
-byte-identical to stable and all nine default sm_86 optimizations remain active.
-Requests without sampling settings can behave
-differently: the beta selects model-card defaults, whereas stable defaults to
-greedy sampling. Comparisons should explicitly set sampling and thinking on
-both versions. GPU limits remain 350 W each.
+The reference is
+[geldeki's dual-3090 post](https://x.com/geldeki/status/2112253892121825579),
+with the user explicitly retaining 350 W instead of its 280 W cap.
+The preset passed reload, text, streaming, synthetic vision, KV streaming and
+conversation-cache parking/restoring checks. Available RAM was about 43–45 GiB
+including reclaimable file cache. Its pipeline uses the serial path for requests
+with repetition penalties; default non-thinking sampling has a presence penalty.
+No profile-level penalty override or draft-layer relocation is applied.
 
-The tuned profile reloaded through llama-swap and passed text generation,
-streaming with final usage/timings, synthetic red-image identification and
-conversation-cache parking/restoring. Runtime logs confirm all four tuning flags,
-including streaming KV reads from RAM. A 37-token Python review prompt generated
-512 tokens: the untuned beta reference reported 140.7 tok/s; tuned first run
-103.7 tok/s and warm repeat 144.7 tok/s. A streamed request with penalties
-explicitly off reported 142.2 tok/s. These are single short probes, with cache and
-routing differences; they do not establish a sustained performance gain. After
-these checks, `/proc/meminfo` reported about 45 GiB available including reclaimable
-file cache, compared with about 1.7 GiB before the change. Swap allocation stayed
-about 4.1 GiB; it was not cleared. Full-context loading, full 8 GiB conversation
-cache use and long-context throughput remain unverified.
+Observed llama-swap/Strata timings provide a workload comparison, not a controlled
+benchmark. The earlier beta profile had 82 requests and 96201 generated tokens;
+the optional preset had 117 requests and 152742 generated tokens at the recorded
+snapshot. Generation throughput is total output tokens divided by decode time;
+prefill counts only newly processed tokens, excluding cached tokens:
 
-The pipeline uses the serial path for requests with repetition penalties. The
-non-thinking model-card defaults include a presence penalty; clients can opt out
-with `presence_penalty: 0`, `frequency_penalty: 0`, `repetition_penalty: 1`.
-The profile preserves the default sampling policy rather than disabling penalties
-for all clients. The draft layer retains its existing GPU placement.
+| Metric | Earlier beta (active) | Optional mmap/pipeline preset |
+| --- | ---: | ---: |
+| Overall generation | 136.3 tok/s | 140.8 tok/s |
+| Overall prefill | 1311.7 tok/s | 879.7 tok/s |
+| Prefill with at least 4K new tokens | 2378.3 tok/s | 1369.5 tok/s |
+| Two uncached approximately 8.4K prompts per profile | 1862.1 tok/s | 1071.2 tok/s |
 
-Restore the two beta configuration files with Chezmoi, restore the stable model
+The retained default favors prompt-processing speed; the optional preset offers
+reclaimable RAM with slightly higher generation throughput in those workloads.
+The measurements do not isolate the cause because all four settings changed
+together. Full-context capacity, full 8 GiB conversation-cache use and controlled
+performance comparisons remain unverified.
+
+To select the optional preset, finish active inference, copy it over the active
+file and reload through llama-swap:
+
+```bash
+cp ~/.local/share/strata-beta/config/strata-iq3_s-beta-mmap.json \
+  ~/.local/share/strata-beta/config/strata-iq3_s-beta.json
+curl --fail -X POST http://127.0.0.1:8000/api/models/unload/qwen3.8-flash-next-iq3-s-beta
+curl --fail --max-time 900 http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s-beta/health
+```
+
+To restore the retained default, copy its plain captured configuration from this
+repository, then use the same two reload commands:
+
+```bash
+cp ~/Projects/dotfiles/home/dot_local/share/strata-beta/config/private_strata-iq3_s-beta.json \
+  ~/.local/share/strata-beta/config/strata-iq3_s-beta.json
+```
+
+Restore the beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
 
 ```bash

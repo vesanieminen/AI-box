@@ -121,15 +121,19 @@ one model at a time; GPU placement follows the selected backend profile.
   payload. Package hashes, local Terminal packaging and Compose validation pass.
   Model loading on both RTX 3090s, health/model discovery, text arithmetic,
   streaming with final usage/timings and synthetic image-color identification
-  passed. The beta retains the stable model, context, INT8 KV, MTP4 and expert
-  profile, and uses two pipeline windows, 32768 resident KV cells, an 8192 MiB
-  conversation-cache budget and memory-mapped experts. Reload, streaming,
-  synthetic vision and cache parking/restoring passed. About 45 GiB RAM was
-  available after the short tests, including reclaimable expert-file cache.
-  First/warm generation probes were 103.7/144.7 tok/s; these do not establish
-  sustained speed. All nine sm_86 optimizations and model-card sampling remain
-  active; repetition penalties select serial decoding. Both GPUs remain at
-  350 W as requested. Full conversation-cache use remains unverified.
+  passed. The active beta uses the pinned expert arena, KV fully in VRAM,
+  serial decode windows and no parked-conversation cache; its model, context,
+  INT8 KV, MTP4 and expert profile match stable. All nine sm_86 optimizations and
+  model-card sampling remain active; both GPUs remain at 350 W. Reload and
+  text arithmetic passed; live metrics confirm a 47962 MiB expert arena,
+  kv_resident=0, conversation_cache_mib=0 and 16187 expert slots.
+  The optional `strata-iq3_s-beta-mmap.json` preset retains two pipeline windows,
+  32768 resident KV cells, an 8192 MiB conversation-cache budget and mapped
+  experts. It passed text/streaming/vision and cache checks. Recorded generation
+  was 136.3 tok/s for the default versus 140.8 for the optional preset, while
+  prefill was 1311.7 versus 879.7 tok/s across different observed workloads.
+  Preset selection, reload commands and the measurement limits are documented
+  in `system/local-ai/README.md`.
   Full-context capacity, general vision quality and comparative performance remain
   unverified. Restoration and manual testing with a sleep inhibitor are in
   `system/local-ai/README.md`; provenance is in `models/strata-beta.json`.

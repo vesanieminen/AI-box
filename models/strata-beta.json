@@ -15,14 +15,25 @@
   "shared_model_provenance": "strata.json",
   "shared_model_directory": "~/.local/share/strata (read-only container mount)",
   "beta_directory": "~/.local/share/strata-beta",
-  "verification": "Archive SHA-256, all eight manifest files and binary dependencies verified. Full Terminal packaging and Compose validation passed. UID 1000 container startup and loading across two RTX 3090s passed. Health/model discovery confirm loaded=true, 262144 configured context and image support. Text arithmetic returned 323, streaming returned STREAM_OK with final usage/timings, synthetic red image identified as Red. Nine sm_86 defaults active; expert-profile bytes match stable. Tuned configuration reloaded through llama-swap; text, streaming, vision, KV streaming and conversation-cache parking/restoring passed. Short 512-token probes: untuned reference 140.7 tok/s, tuned first/warm 103.7/144.7 tok/s, tuned streamed request with penalties off 142.2 tok/s. Available RAM about 45 GiB including reclaimable file cache; full 8 GiB conversation-cache usage unverified. Power limits verified unchanged at 350 W each. Full-context capacity, general vision quality and comparative performance remain unverified. Independent Docker image inspection requires administrator authentication.",
-  "inference_tuning": {
-    "pipeline_windows": 2,
-    "kv_resident_tokens": 32768,
-    "conversation_cache_mib": 8192,
-    "mmap_experts": true,
-    "reference": "https://x.com/geldeki/status/2112253892121825579",
-    "power_limit_w_per_gpu": 350,
-    "power_limit_changed": false
+  "verification": "Archive SHA-256, all eight manifest files, binary dependencies, Terminal packaging and Compose validation passed. Both default and optional mmap/pipeline profiles passed loading, text, streaming and synthetic vision. Optional profile additionally passed KV streaming and conversation-cache parking/restoring. Actual LAN UI/assets and browser-Origin chat passed. Observed workload snapshots: default 82 requests, 96201 generated tokens, 136.3 decode tok/s, 1311.7 fresh prefill tok/s; optional 117 requests, 152742 generated tokens, 140.8 decode tok/s, 879.7 fresh prefill tok/s. Different requests and cache state, not a controlled benchmark. Active configuration restored byte-equivalent to earlier beta. Reload through llama-swap passed; live metrics confirm arena_mib=47962, kv_resident=0, conversation_cache_mib=0 and 16187 expert slots. Text arithmetic returned 323 after restoration. Power limits unchanged at 350 W. Full-context capacity, general vision quality and full 8 GiB optional cache remain unverified.",
+  "active_inference": {
+    "config": "~/.local/share/strata-beta/config/strata-iq3_s-beta.json",
+    "pipeline_windows": 0,
+    "kv_resident_tokens": 0,
+    "conversation_cache_mib": 0,
+    "mmap_experts": false,
+    "power_limit_w_per_gpu": 350
+  },
+  "optional_inference_presets": {
+    "mmap_pipeline": {
+      "config": "~/.local/share/strata-beta/config/strata-iq3_s-beta-mmap.json",
+      "pipeline_windows": 2,
+      "kv_resident_tokens": 32768,
+      "conversation_cache_mib": 8192,
+      "mmap_experts": true,
+      "reference": "https://x.com/geldeki/status/2112253892121825579",
+      "power_limit_w_per_gpu": 350,
+      "power_limit_changed": false
+    }
   }
 }
