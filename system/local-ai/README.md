@@ -256,9 +256,11 @@ Archive SHA-256, all eight package manifest files, binary dependencies and the
 Compose configuration passed validation. The build context includes all 27
 required Terminal payload, installer and build inputs from the pinned source.
 The Terminal packaging step completed locally with the pinned interpreter,
-hash-locked dependencies and runtime import checks. Docker image creation,
-model loading, inference, GPU vision and comparative performance remain unverified pending
-administrator authentication. No model switch has been performed for this setup.
+hash-locked dependencies and runtime import checks. The user reports successful
+completion of the Docker build/create command. Independent image/container
+inspection still requires administrator authentication. Model loading, inference,
+GPU vision and comparative performance remain unverified. No model switch has
+been performed for this setup.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
