@@ -237,6 +237,76 @@ with the desktop running remain unverified. Startup loads about 46.84 GiB of
 experts into system RAM before filling the GPU expert cache; allow several
 minutes when switching to this model.
 
+### Strata 0.2.0-beta side installation
+
+The beta is prepared independently of the boot-default v0.1.44.1 container.
+Its Compose file is `~/.local/share/strata-beta/compose.yaml`, its container is
+`strata-0.2.0-beta`, and its API/UI address is `http://127.0.0.1:5815`.
+It uses both RTX 3090 GPUs, the existing IQ3_S pack and MTP subset, INT8 KV,
+262144 context, MTP4 and GPU vision. Existing model assets are mounted read-only;
+beta logs and runtime state stay in `~/.local/share/strata-beta/runtime`.
+The beta is outside llama-swap and has no automatic startup or restart policy.
+
+The official CUDA 13 engine package is version 0.1.45.3, build
+`f6d65cb58+cuda13.0`; its binary prints `strata 0.1.45`.
+The Terminal/server sources are pinned separately to the v0.2.0-beta release
+commit `3d1fb48090e8f2cefc22d7b5845fb7f5b71f33fa`.
+[Runtime provenance and hashes](../../models/strata-beta.json) record both.
+Archive SHA-256, all eight package manifest files, binary dependencies and the
+Compose configuration passed validation. Docker image creation, model loading,
+inference, GPU vision and comparative performance remain unverified pending
+administrator authentication. No model switch has been performed for this setup.
+
+Restore the two beta configuration files with Chezmoi, restore the stable model
+assets as above, then prepare the image build context:
+
+```bash
+git clone --depth 1 --branch v0.2.0-beta https://github.com/Niko1221/Strata.git ~/Projects/Strata-0.2.0-beta
+test "$(git -C ~/Projects/Strata-0.2.0-beta rev-parse HEAD)" = 3d1fb48090e8f2cefc22d7b5845fb7f5b71f33fa
+mkdir -p ~/.cache/strata-beta-downloads ~/.local/share/strata-beta/runtime
+curl -fL --retry 3 -o ~/.cache/strata-beta-downloads/strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz \
+  https://github.com/Niko1221/Strata/releases/download/v0.2.0-beta/strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz
+printf '%s  %s\n' 7af23df6ce1e1504554fdde43e7dbb13a68c40223825f6955a8ae5db938a0c18 \
+  "$HOME/.cache/strata-beta-downloads/strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz" | sha256sum -c -
+mkdir -p ~/.local/share/strata-beta/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13
+tar -xzf ~/.cache/strata-beta-downloads/strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz \
+  -C ~/.local/share/strata-beta/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13
+python ~/Projects/Strata-0.2.0-beta/packaging/package_engine.py --verify \
+  ~/.local/share/strata-beta/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13
+~/Projects/Strata-0.2.0-beta/docker/build.sh --flavor cuda \
+  --engine ~/.local/share/strata-beta/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13 \
+  --version 0.2.0-beta --tag local-ai/strata:0.2.0-beta \
+  --ctx ~/.cache/strata-beta-build --ctx-only
+sudo docker compose -f ~/.local/share/strata-beta/compose.yaml create --build
+```
+
+The last command builds the image and creates a stopped container; it does not
+load a model. No new host packages are needed. Do not run both model containers
+at once: the production model already fills both GPUs. To test the beta, finish
+active requests and stop llama-swap first. Hold a sleep inhibitor throughout the
+manual beta run because port 5815 is outside the production suspend guard:
+
+```bash
+sudo systemctl stop llama-swap.service
+sudo systemd-inhibit --what=sleep --mode=block --who=Strata-beta \
+  --why='Manual beta model testing' docker start --attach strata-0.2.0-beta
+```
+
+In another terminal, poll `curl --fail http://127.0.0.1:5815/health`, then check
+`/v1/models` and test text, streaming and image requests. The UI and OpenAI API
+are local only (`http://127.0.0.1:5815/`, `http://127.0.0.1:5815/v1`).
+Keep LAN clients on the existing production endpoint until a separate integration
+is requested. When finished, stop the beta before restoring production:
+
+```bash
+sudo docker stop --time 120 strata-0.2.0-beta
+sudo systemctl start llama-swap.service
+curl --fail http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s/health
+```
+
+Starting llama-swap restores the existing stable default. No beta service is
+enabled at boot, and the vLLM profiles and automatic suspend policy are retained.
+
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)

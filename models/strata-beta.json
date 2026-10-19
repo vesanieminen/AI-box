@@ -1,0 +1,19 @@
+{
+  "release": "0.2.0-beta",
+  "release_url": "https://github.com/Niko1221/Strata/releases/tag/v0.2.0-beta",
+  "terminal_source_repository": "https://github.com/Niko1221/Strata",
+  "terminal_source_revision": "3d1fb48090e8f2cefc22d7b5845fb7f5b71f33fa",
+  "source_checkout": "~/Projects/Strata-0.2.0-beta",
+  "engine_package_version": "0.1.45.3",
+  "engine_build_id": "f6d65cb58+cuda13.0",
+  "engine_archive": "strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_archive_url": "https://github.com/Niko1221/Strata/releases/download/v0.2.0-beta/strata-engine-0.1.45.3-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_archive_sha256": "7af23df6ce1e1504554fdde43e7dbb13a68c40223825f6955a8ae5db938a0c18",
+  "engine_manifest_sha256": "d042020b80880cf4cb2da6ec9dab79ea750d4f7d0247deb34d0a2373df1908bb",
+  "local_image": "local-ai/strata:0.2.0-beta",
+  "container_name": "strata-0.2.0-beta",
+  "shared_model_provenance": "strata.json",
+  "shared_model_directory": "~/.local/share/strata (read-only container mount)",
+  "beta_directory": "~/.local/share/strata-beta",
+  "verification": "Archive SHA-256, all eight manifest files and binary library dependencies verified. Engine starts and prints strata 0.1.45; package manifest and BUILD.json identify 0.1.45.3. Compose configuration validates. Docker image build/container creation requires administrator authentication; model loading, inference, GPU vision and performance remain unverified."
+}

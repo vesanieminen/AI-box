@@ -113,6 +113,15 @@ one model at a time; GPU placement follows the selected backend profile.
   Page/assets, status/settings and browser-Origin chat passed through the LAN
   address from this host. Browser access from 192.168.0.75 is confirmed by
   successful page/metrics requests. No new listener or firewall rule is needed.
+- Strata 0.2.0-beta is prepared alongside the stable installation with official
+  engine package 0.1.45.3 and a separate stopped-container Compose definition in
+  `~/.local/share/strata-beta/compose.yaml`. Port 5815 is localhost only; existing
+  IQ3_S assets are reused read-only and beta runtime state is separate. The
+  package archive, manifest files, binary dependencies and Compose configuration
+  are verified. Image build, container creation and inference validation remain
+  pending administrator authentication. Restoration and manual testing with a
+  sleep inhibitor are in `system/local-ai/README.md`; package provenance is in
+  `models/strata-beta.json`. The stable boot default is retained.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
   localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
   target, vision projector and NVIDIA's LiLiCorr draft. All three files are

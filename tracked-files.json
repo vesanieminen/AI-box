@@ -79,6 +79,14 @@
     "source": "dot_local/share/ollama/warm-start.py",
     "sha256": "9a4ad8c1ef581def4b6c2e5a0b3802d20e70e7762115b72ff1501b3a37754189"
   },
+  ".local/share/strata-beta/compose.yaml": {
+    "source": "dot_local/share/strata-beta/private_compose.yaml",
+    "sha256": "3924f433ee535062230ddd3baac773aad5d79ab1ddfc76772422743ea57bc90b"
+  },
+  ".local/share/strata-beta/config/strata-iq3_s-beta.json": {
+    "source": "dot_local/share/strata-beta/config/private_strata-iq3_s-beta.json",
+    "sha256": "d7b9fc63be1dd6e7072a40ee36b6d5649ba7345ea38b909806e344e725b7752d"
+  },
   ".local/share/vllm/launch.py": {
     "source": "dot_local/share/vllm/launch.py",
     "sha256": "c2b0da8a5f420058263e56fdf765b1175180413e219db583c31530308dcfb5b0"
