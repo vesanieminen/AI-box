@@ -117,8 +117,8 @@ one model at a time; GPU placement follows the selected backend profile.
   engine package 0.1.45.3 and a separate stopped-container Compose definition in
   `~/.local/share/strata-beta/compose.yaml`. Port 5815 is localhost only; existing
   IQ3_S assets are reused read-only and beta runtime state is separate. The
-  package archive, manifest files, binary dependencies and Compose configuration
-  are verified. Image build, container creation and inference validation remain
+  package archive, manifest files, binary dependencies, Compose configuration
+  and local Terminal packaging are verified. Image build, container creation and inference validation remain
   pending administrator authentication. Restoration and manual testing with a
   sleep inhibitor are in `system/local-ai/README.md`; package provenance is in
   `models/strata-beta.json`. The stable boot default is retained.

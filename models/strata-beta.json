@@ -15,5 +15,5 @@
   "shared_model_provenance": "strata.json",
   "shared_model_directory": "~/.local/share/strata (read-only container mount)",
   "beta_directory": "~/.local/share/strata-beta",
-  "verification": "Archive SHA-256, all eight manifest files and binary library dependencies verified. Engine starts and prints strata 0.1.45; package manifest and BUILD.json identify 0.1.45.3. Compose configuration validates. Docker image build/container creation requires administrator authentication; model loading, inference, GPU vision and performance remain unverified."
+  "verification": "Archive SHA-256, all eight manifest files and binary library dependencies verified. Engine starts and prints strata 0.1.45; package manifest and BUILD.json identify 0.1.45.3. Compose configuration validates. All 27 Terminal payload, installer and build inputs are present; full Terminal packaging completed locally with pinned CPython, hash-locked dependencies and successful runtime import checks. Docker image build/container creation requires administrator authentication; model loading, inference, GPU vision and performance remain unverified."
 }

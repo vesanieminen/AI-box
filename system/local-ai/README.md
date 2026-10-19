@@ -253,8 +253,11 @@ The Terminal/server sources are pinned separately to the v0.2.0-beta release
 commit `3d1fb48090e8f2cefc22d7b5845fb7f5b71f33fa`.
 [Runtime provenance and hashes](../../models/strata-beta.json) record both.
 Archive SHA-256, all eight package manifest files, binary dependencies and the
-Compose configuration passed validation. Docker image creation, model loading,
-inference, GPU vision and comparative performance remain unverified pending
+Compose configuration passed validation. The build context includes all 27
+required Terminal payload, installer and build inputs from the pinned source.
+The Terminal packaging step completed locally with the pinned interpreter,
+hash-locked dependencies and runtime import checks. Docker image creation,
+model loading, inference, GPU vision and comparative performance remain unverified pending
 administrator authentication. No model switch has been performed for this setup.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
@@ -277,6 +280,8 @@ python ~/Projects/Strata-0.2.0-beta/packaging/package_engine.py --verify \
   --engine ~/.local/share/strata-beta/components/engine/0.1.45.3-linux-x86_64-cuda-cuda13 \
   --version 0.2.0-beta --tag local-ai/strata:0.2.0-beta \
   --ctx ~/.cache/strata-beta-build --ctx-only
+cp ~/Projects/Strata-0.2.0-beta/docs/TERMINAL_LAUNCH.md \
+  ~/.cache/strata-beta-build/terminal-src/docs/TERMINAL_LAUNCH.md
 sudo docker compose -f ~/.local/share/strata-beta/compose.yaml create --build
 ```
 
