@@ -121,8 +121,15 @@ one model at a time; GPU placement follows the selected backend profile.
   payload. Package hashes, local Terminal packaging and Compose validation pass.
   Model loading on both RTX 3090s, health/model discovery, text arithmetic,
   streaming with final usage/timings and synthetic image-color identification
-  passed. The beta retains the stable inference arguments and expert profile;
-  its nine sm_86 optimizations and model-card sampling defaults are active.
+  passed. The beta retains the stable model, context, INT8 KV, MTP4 and expert
+  profile, and uses two pipeline windows, 32768 resident KV cells, an 8192 MiB
+  conversation-cache budget and memory-mapped experts. Reload, streaming,
+  synthetic vision and cache parking/restoring passed. About 45 GiB RAM was
+  available after the short tests, including reclaimable expert-file cache.
+  First/warm generation probes were 103.7/144.7 tok/s; these do not establish
+  sustained speed. All nine sm_86 optimizations and model-card sampling remain
+  active; repetition penalties select serial decoding. Both GPUs remain at
+  350 W as requested. Full conversation-cache use remains unverified.
   Full-context capacity, general vision quality and comparative performance remain
   unverified. Restoration and manual testing with a sleep inhibitor are in
   `system/local-ai/README.md`; provenance is in `models/strata-beta.json`.
@@ -131,8 +138,7 @@ one model at a time; GPU placement follows the selected backend profile.
   existing LAN port 8000 on all interfaces. Port 5815 is in the installed suspend
   guard. Both system templates match live files and both services are active.
   Stable preload, beta loading through the selector, LAN health and remote beta
-  HTML access passed. Temporary-proxy UI/assets/API checks passed; installed LAN
-  asset/chat checks remain outstanding. Keep only one Strata model UI open so
+  HTML access passed. Installed LAN HTML/assets and browser-Origin chat checks passed. Keep only one Strata model UI open so
   stable monitoring requests do not switch away from beta. Stable remains the
   boot default.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on

@@ -25,7 +25,14 @@
     "int8",
     "--vision",
     "--vram-reserve-mib",
-    "700"
+    "700",
+    "--pipeline-windows",
+    "2",
+    "--kv-resident",
+    "32768",
+    "--conversation-cache-mib",
+    "8192",
+    "--mmap-experts"
   ],
   "cwd": "/opt/strata/terminal",
   "tokenizer": "/data/packs/iq3_s/tokenizer",

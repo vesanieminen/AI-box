@@ -281,12 +281,45 @@ These short tests validate basic operation, not sustained performance or general
 vision quality. Full-context requests and comparative stable/beta performance
 remain unverified. Docker image inspection still requires administrator access.
 
-The inference arguments match stable apart from relocated runtime paths; the
-expert-profile files are byte-identical. Runtime logs confirm the nine default
-sm_86 optimizations are active. Requests without sampling settings can behave
+The beta retains the same model, MTP4, INT8 KV and 262144-token context as
+stable, with these additional inference settings:
+
+- `--pipeline-windows 2`: overlap two decode windows across the GPUs.
+- `--kv-resident 32768`: keep 32768 KV cells per layer in VRAM and stream the rest
+  from RAM (startup reports a 1.55 GiB pinned host KV allocation).
+- `--conversation-cache-mib 8192`: an 8 GiB budget for parked conversations;
+  it is not all allocated immediately.
+- `--mmap-experts`: read the existing native GGUF shards through the OS page
+  cache, without a full pinned expert arena or a separate `experts.bin` copy.
+
+These match the inference tuning in
+[geldeki's dual-3090 post](https://x.com/geldeki/status/2112253892121825579).
+The requested trial explicitly retains 350 W per GPU instead of the post's
+280 W; no power settings were changed. The expert-profile files are
+byte-identical to stable and all nine default sm_86 optimizations remain active.
+Requests without sampling settings can behave
 differently: the beta selects model-card defaults, whereas stable defaults to
 greedy sampling. Comparisons should explicitly set sampling and thinking on
 both versions. GPU limits remain 350 W each.
+
+The tuned profile reloaded through llama-swap and passed text generation,
+streaming with final usage/timings, synthetic red-image identification and
+conversation-cache parking/restoring. Runtime logs confirm all four tuning flags,
+including streaming KV reads from RAM. A 37-token Python review prompt generated
+512 tokens: the untuned beta reference reported 140.7 tok/s; tuned first run
+103.7 tok/s and warm repeat 144.7 tok/s. A streamed request with penalties
+explicitly off reported 142.2 tok/s. These are single short probes, with cache and
+routing differences; they do not establish a sustained performance gain. After
+these checks, `/proc/meminfo` reported about 45 GiB available including reclaimable
+file cache, compared with about 1.7 GiB before the change. Swap allocation stayed
+about 4.1 GiB; it was not cleared. Full-context loading, full 8 GiB conversation
+cache use and long-context throughput remain unverified.
+
+The pipeline uses the serial path for requests with repetition penalties. The
+non-thinking model-card defaults include a presence penalty; clients can opt out
+with `presence_penalty: 0`, `frequency_penalty: 0`, `repetition_penalty: 1`.
+The profile preserves the default sampling policy rather than disabling penalties
+for all clients. The draft layer retains its existing GPU placement.
 
 Restore the two beta configuration files with Chezmoi, restore the stable model
 assets as above, then prepare the image build context:
@@ -341,8 +374,8 @@ listens on all interfaces at port 8000; its service restart successfully preload
 stable, and beta subsequently loaded through the selector with a healthy LAN
 endpoint. The beta HTML reached the remote browser at 192.168.0.76. A temporary
 localhost proxy also verified all four linked JS/CSS assets, API chat and a
-UI-path chat with the LAN browser Origin. Complete assets/chat validation on the
-installed LAN selector remains outstanding.
+UI-path chat with the LAN browser Origin. The installed LAN selector also passed beta HTML, all four linked JS/CSS
+assets and UI-path chat with the LAN browser Origin on the tuned profile.
 
 Keep only the selected Strata model's UI open. An open stable UI can poll its
 `/metrics` endpoint and switch the GPUs back to stable while beta is loading;

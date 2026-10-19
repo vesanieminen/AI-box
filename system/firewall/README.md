@@ -16,8 +16,8 @@ The installed beta route uses
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`,
 with localhost backend 5815. It needs no additional firewall rule. The listener
 accepts all interfaces at port 8000; LAN beta health and beta HTML access from
-192.168.0.76 passed. Temporary localhost proxy asset/chat checks passed;
-complete assets/chat validation on the installed LAN selector remains pending.
+192.168.0.76 passed. HTML, all four linked JS/CSS assets and UI-path chat with the LAN browser
+Origin also passed through the installed LAN selector.
 
 Omarchy's existing UFW firewall remains enabled. Add only this application
 profile and local-subnet rule; do not replace the existing firewall rules:

@@ -15,5 +15,14 @@
   "shared_model_provenance": "strata.json",
   "shared_model_directory": "~/.local/share/strata (read-only container mount)",
   "beta_directory": "~/.local/share/strata-beta",
-  "verification": "Archive SHA-256, all eight manifest files and binary dependencies verified. Full Terminal packaging and Compose validation passed. UID 1000 container startup and loading across two RTX 3090s passed. Health/model discovery confirm loaded=true, 262144 configured context and image support. Text arithmetic returned 323, streaming returned STREAM_OK with final usage/timings, synthetic red image identified as Red. Nine sm_86 defaults active; inference arguments and expert-profile bytes match stable apart from relocated paths. Full-context capacity, general vision quality and comparative performance remain unverified. Independent Docker image inspection requires administrator authentication."
+  "verification": "Archive SHA-256, all eight manifest files and binary dependencies verified. Full Terminal packaging and Compose validation passed. UID 1000 container startup and loading across two RTX 3090s passed. Health/model discovery confirm loaded=true, 262144 configured context and image support. Text arithmetic returned 323, streaming returned STREAM_OK with final usage/timings, synthetic red image identified as Red. Nine sm_86 defaults active; expert-profile bytes match stable. Tuned configuration reloaded through llama-swap; text, streaming, vision, KV streaming and conversation-cache parking/restoring passed. Short 512-token probes: untuned reference 140.7 tok/s, tuned first/warm 103.7/144.7 tok/s, tuned streamed request with penalties off 142.2 tok/s. Available RAM about 45 GiB including reclaimable file cache; full 8 GiB conversation-cache usage unverified. Power limits verified unchanged at 350 W each. Full-context capacity, general vision quality and comparative performance remain unverified. Independent Docker image inspection requires administrator authentication.",
+  "inference_tuning": {
+    "pipeline_windows": 2,
+    "kv_resident_tokens": 32768,
+    "conversation_cache_mib": 8192,
+    "mmap_experts": true,
+    "reference": "https://x.com/geldeki/status/2112253892121825579",
+    "power_limit_w_per_gpu": 350,
+    "power_limit_changed": false
+  }
 }
