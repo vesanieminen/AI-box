@@ -250,16 +250,18 @@ Text, image and streaming requests through llama-swap and live suspend-guard
 activity detection passed. Maya → Nemotron Bolt → Maya switching passed; Maya
 was left loaded at 256K. The boot default remains Flash Next.
 
-## Strata release update preparation
+## Strata 0.2.4.2 separate installation
 
-Strata Terminal 0.2.4.2 and Qwen engine 0.1.48 are downloaded and verified.
-The separate `strata-0.2.4.2` container is prepared on localhost port 5816,
-sharing Qwen model files and keeping its own settings and runtime directory.
-The retained selector adds its route to the exclusive GPU group; the suspend
-proxy guard includes its port. Docker build/creation, installing these templates
-and inference checks are pending administrator authentication. The running beta
-and boot selection are unchanged. Restore commands, archive hashes and verified
-preparation are in
+Strata Terminal 0.2.4.2 and Qwen engine 0.1.48 are installed as the separate
+`strata-0.2.4.2` container on localhost port 5816, sharing Qwen model files and
+keeping its own settings and runtime directory. Its installed selector route is
+`qwen3.8-flash-next-iq3-s-0242` in the exclusive GPU group. The installed suspend
+guard includes port 5816; both installed files match the retained templates.
+Health, arithmetic (323), streaming (STREAM_OK) and synthetic red-image vision
+passed. The explicit conversation-cache setting of zero preserves the beta's
+disabled behavior despite the newer engine's automatic default. Older containers
+and boot selection remain unchanged. Full-context and comparative performance
+checks remain outstanding. Restore commands and verified provenance are in
 [the release instructions](../system/local-ai/images/strata-release/README.md).
 
 ## DeepSeek V4.1 Flash IQ2_XS model download

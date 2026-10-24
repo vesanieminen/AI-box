@@ -1,18 +1,20 @@
 # Strata 0.2.4.2 update
 
-Prepared separate container using Terminal Control 0.1.49.2 and Qwen engine
-0.1.48. **Not yet created:** Docker build, container creation and inference
-validation require administrator access. The running beta remains unchanged.
+Installed separate container using Terminal Control 0.1.49.2 and Qwen engine
+0.1.48. It loaded through llama-swap and passed text arithmetic, streaming and
+synthetic red-image vision checks. The older beta remains available on its route.
 
 The Compose file is `~/.local/share/strata-release/compose.yaml`, project/service
 `strata-release`, container `strata-0.2.4.2`, localhost port 5816. It shares the
 existing read-only Qwen assets at `~/.local/share/strata` and keeps separate
 configuration and runtime files in `~/.local/share/strata-release`. Inference
-arguments and expert-profile bytes match beta; the vision executable path, port
-and model name identify the new installation. The prepared llama-swap template
+arguments and expert-profile bytes match beta apart from explicit
+`--conversation-cache-mib 0`, which preserves the earlier disabled setting
+because engine 0.1.48 otherwise automatically enables an 8 GiB cache. The vision
+executable path, port and model name identify the new installation. The installed llama-swap template
 adds `qwen3.8-flash-next-iq3-s-0242` to the exclusive GPU group. The suspend-guard
-template includes port 5816. Existing boot selection and vLLM profiles are
-unchanged; installing these two templates remains pending.
+template includes port 5816. Both installed files match their retained templates.
+Existing boot selection and vLLM profiles are unchanged.
 
 ## Verified preparation
 
@@ -22,8 +24,11 @@ manifest matches the signed feed; its signature and every listed file hash
 passed. Terminal `--version` reports 0.2.4.2; server `--help` imports successfully
 on the host. NVIDIA driver 610.57.04 exceeds the engine minimum 580.65.
 Compose passes `docker compose config --quiet` without daemon access.
-Image build, GPU startup, text, streaming, vision and long-context tests remain
-outstanding. Placement estimates for DeepSeek do not constitute a benchmark.
+The image built and the new container loaded across both RTX 3090 GPUs. Health
+reports 262144 context and vision. Arithmetic returned 323, streaming returned
+STREAM_OK and a synthetic red image returned red. Full-context tests and
+comparative performance remain outstanding. Placement estimates for DeepSeek
+do not constitute a benchmark.
 
 ## Restore the build context
 
