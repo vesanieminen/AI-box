@@ -1,18 +1,18 @@
 # Strata 0.2.4.2 update
 
-Prepared upgrade for the existing Qwen route and container, using Terminal
-Control 0.1.49.2 and Qwen engine 0.1.48. **Not yet activated:** Docker build,
-container replacement and inference validation require administrator access.
-The running installation remains 0.2.0-beta. No DeepSeek weights or engine have
-been downloaded.
+Prepared separate container using Terminal Control 0.1.49.2 and Qwen engine
+0.1.48. **Not yet created:** Docker build, container creation and inference
+validation require administrator access. The running beta remains unchanged.
 
-The new Compose file is `~/.local/share/strata-release/compose.yaml`. Its project,
-service and container names intentionally match the existing deployment so
-llama-swap continues to manage the same container and port. It mounts the new
-configuration directory while retaining the existing model assets and runtime
-directory. Inference arguments and the expert-profile bytes are unchanged;
-only the vision executable's versioned path changes. The vLLM profiles, boot
-unit and suspend guard are untouched.
+The Compose file is `~/.local/share/strata-release/compose.yaml`, project/service
+`strata-release`, container `strata-0.2.4.2`, localhost port 5816. It shares the
+existing read-only Qwen assets at `~/.local/share/strata` and keeps separate
+configuration and runtime files in `~/.local/share/strata-release`. Inference
+arguments and expert-profile bytes match beta; the vision executable path, port
+and model name identify the new installation. The prepared llama-swap template
+adds `qwen3.8-flash-next-iq3-s-0242` to the exclusive GPU group. The suspend-guard
+template includes port 5816. Existing boot selection and vLLM profiles are
+unchanged; installing these two templates remains pending.
 
 ## Verified preparation
 
@@ -53,19 +53,40 @@ cp ~/Projects/dotfiles/system/local-ai/images/strata-release/Dockerfile \
 sudo docker compose -f ~/.local/share/strata-release/compose.yaml build
 ```
 
-## Activate after building
+## Create and integrate
 
-Finish requests and close model UI tabs first. Unload through llama-swap, replace
-the stopped container, and request its health through the same route to load it:
+After building, create a stopped container. This leaves the beta intact and
+allocates no GPU memory:
 
 ```bash
-curl -fsS -X POST http://127.0.0.1:8000/api/models/unload/qwen3.8-flash-next-iq3-s-beta
-sudo docker compose -f ~/.local/share/strata-release/compose.yaml create --force-recreate
-curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s-beta/health
+sudo docker compose -f ~/.local/share/strata-release/compose.yaml create
+```
+
+Install the retained llama-swap configuration and suspend guard after finishing
+active inference. Restarting llama-swap interrupts serving and retains the
+installed service's existing boot selection; no boot-unit installation is part
+of this task.
+
+```bash
+cd ~/Projects/dotfiles
+sudo install -Dm644 system/local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo systemctl restart llama-swap.service ollama-idle-suspend.service
+curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s-0242/health
 ```
 
 Validate model discovery, text, streaming and vision before considering the
-upgrade complete. The historical `beta` route/container names remain for
-compatibility. To restore the old runtime, unload the same route, recreate using
-`~/.local/share/strata-beta/compose.yaml`, then request the same health endpoint.
-Its image and original configuration have been retained.
+installation complete. To return to beta, select its existing route
+`qwen3.8-flash-next-iq3-s-beta`. Both remain managed by the exclusive GPU group;
+do not manually start either GPU container beside a running backend.
+
+To measure Docker usage (shared image layers are not duplicated per container):
+
+```bash
+sudo docker system df -v
+sudo docker inspect --size strata-0.2.0-beta
+```
+
+Host beta files currently occupy 944 MiB, mostly its 943 MiB extracted engine
+package. Shared Qwen assets occupy 87 GiB. Those numbers exclude Docker image
+layers and build caches, which could not be inspected without authentication.

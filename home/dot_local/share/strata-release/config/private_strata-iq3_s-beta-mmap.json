@@ -36,10 +36,10 @@
   ],
   "cwd": "/opt/strata/terminal",
   "tokenizer": "/data/packs/iq3_s/tokenizer",
-  "model_name": "qwen3.8-flash-next-iq3_s-beta",
+  "model_name": "qwen3.8-flash-next-iq3_s-0242",
   "log": "/beta/runtime/engine.log",
   "lib_dirs": [],
-  "port": 5815,
+  "port": 5816,
   "gpu": [
     0,
     1

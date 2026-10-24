@@ -1,9 +1,9 @@
 {
-  "name": "strata-beta",
+  "name": "strata-release",
   "services": {
-    "strata-beta": {
+    "strata-release": {
       "image": "local-ai/strata:0.2.4.2",
-      "container_name": "strata-0.2.0-beta",
+      "container_name": "strata-0.2.4.2",
       "network_mode": "host",
       "devices": [
         "nvidia.com/gpu=all"
@@ -46,19 +46,19 @@
         "--host",
         "127.0.0.1",
         "--port",
-        "5815"
+        "5816"
       ],
       "volumes": [
         "/home/vesanieminen/.local/share/strata:/data:ro",
         "/home/vesanieminen/.local/share/strata-release/config:/beta/config:ro",
-        "/home/vesanieminen/.local/share/strata-beta/runtime:/beta/runtime"
+        "/home/vesanieminen/.local/share/strata-release/runtime:/beta/runtime"
       ],
       "healthcheck": {
         "test": [
           "CMD",
           "/opt/strata/terminal/python/bin/python3",
           "-c",
-          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5815/health', timeout=5)"
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5816/health', timeout=5)"
         ],
         "interval": "30s",
         "timeout": "8s",

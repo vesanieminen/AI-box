@@ -253,9 +253,27 @@ was left loaded at 256K. The boot default remains Flash Next.
 ## Strata release update preparation
 
 Strata Terminal 0.2.4.2 and Qwen engine 0.1.48 are downloaded and verified.
-The replacement Compose/configuration files are retained separately; the running
-0.2.0-beta installation and its settings are unchanged. Docker build, activation
-and inference checks are pending administrator authentication. Restore commands,
-archive hashes and verified preparation are in
+The separate `strata-0.2.4.2` container is prepared on localhost port 5816,
+sharing Qwen model files and keeping its own settings and runtime directory.
+The retained selector adds its route to the exclusive GPU group; the suspend
+proxy guard includes its port. Docker build/creation, installing these templates
+and inference checks are pending administrator authentication. The running beta
+and boot selection are unchanged. Restore commands, archive hashes and verified
+preparation are in
 [the release instructions](../system/local-ai/images/strata-release/README.md).
-No DeepSeek model files have been downloaded.
+
+## DeepSeek V4.1 Flash IQ2_XS model download
+
+The recommended IST-DAS 2.25 bpw set is being downloaded to
+`~/.local/share/strata-deepseek/models`: four IQ2_XS shards plus the shared
+IQ4_NL Engram table, DSpark Q8_0 drafter and metadata shard (273.8 GB total).
+The transient user service `strata-deepseek-download` runs the pinned Strata
+downloader with resumable transfers and per-file size/SHA-256 verification.
+It restarts on failure; the job ends on reboot and can be resumed using the
+[model restore commands](../models/deepseek-v4.1-flash-iq2-xs.md).
+The existing stay-awake flag is preserved if already present; otherwise the job
+sets it while running and removes it when it exits. Model weights, partial files,
+logs and completion markers remain outside Git. Pinned sources and hashes are in
+[the provenance manifest](../models/deepseek-v4.1-flash-iq2-xs.json).
+Download completion, pack preparation and inference remain unverified. No
+DeepSeek server has been started and Qwen continues serving.
