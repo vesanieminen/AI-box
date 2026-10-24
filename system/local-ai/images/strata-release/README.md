@@ -7,14 +7,16 @@ synthetic red-image vision checks. The older beta remains available on its route
 The Compose file is `~/.local/share/strata-release/compose.yaml`, project/service
 `strata-release`, container `strata-0.2.4.2`, localhost port 5816. It shares the
 existing read-only Qwen assets at `~/.local/share/strata` and keeps separate
-configuration and runtime files in `~/.local/share/strata-release`. Inference
-arguments and expert-profile bytes match beta apart from explicit
-`--conversation-cache-mib 0`, which preserves the earlier disabled setting
-because engine 0.1.48 otherwise automatically enables an 8 GiB cache. The vision
-executable path, port and model name identify the new installation. The installed llama-swap template
-adds `qwen3.8-flash-next-iq3-s-0242` to the exclusive GPU group. The suspend-guard
-template includes port 5816. Both installed files match their retained templates.
-Existing boot selection and vLLM profiles are unchanged.
+configuration and runtime files in `~/.local/share/strata-release`. The active
+profile retains IQ3_S, MTP4, INT8 GPU-resident KV, 262144 context and GPU vision.
+Calibration sets PCIe share 0.35 and draft confidence 0.70. The explicit
+`--conversation-cache-mib 0` preserves the beta's disabled cache behavior;
+engine 0.1.48 otherwise automatically enables an 8 GiB parked-conversation cache.
+The expert-profile bytes match beta. The installed llama-swap route belongs to
+the exclusive GPU group, and the installed suspend guard includes port 5816.
+Both installed files match their retained templates. The vLLM profiles remain
+unchanged. The retained boot unit selects this new route; installing the unit
+and reloading systemd are pending administrator authentication.
 
 ## Verified preparation
 
@@ -27,8 +29,69 @@ Compose passes `docker compose config --quiet` without daemon access.
 The image built and the new container loaded across both RTX 3090 GPUs. Health
 reports 262144 context and vision. Arithmetic returned 323, streaming returned
 STREAM_OK and a synthetic red image returned red. Full-context tests and
-comparative performance remain outstanding. Placement estimates for DeepSeek
+long-workload performance remain outstanding. Placement estimates for DeepSeek
 do not constitute a benchmark.
+
+## Calibration and active validation
+
+Calibration on 2026-10-24 took 488 seconds on the Ryzen 7 5800X, 128 GB RAM and
+two RTX 3090s at 350 W each. It used the verified release binaries and the same
+Qwen weights with host paths substituted into a private baseline config. The
+same GPU vision encoder remained resident across engine restarts, preserving
+its VRAM use. The DeepSeek download continued in the background.
+
+The stock `tools/calibrate.py` sweep tested prompt chunks, PCIe share, draft
+confidence, CPU workers and adaptive expert-cache settings. Three paired
+confirmation rounds gave these generation-rate medians on its short prompts:
+
+| Setting | Baseline | Selected |
+| --- | ---: | ---: |
+| PCIe share | 0.37 (automatic probe) | 0.35 |
+| Draft confidence | 0.50 | 0.70 |
+| Median generation | 141.7 tok/s | 146.1 tok/s |
+
+The 3.1% improvement narrowly exceeded the stock 3% threshold. CPU worker count
+remains automatic (7), prompt chunks remain automatic/default, and adaptation
+remains at engine defaults. Context, quant, KV format and power were not tuned.
+The measurements are a small workload-specific gain, not evidence of a general
+speedup from the RAM upgrade. Full report and logs remain outside Git under
+`~/.local/share/strata-release/calibration/`; the report is
+`calibration-2026-10-24.json`. The tool's report-integrity/freshness review passed
+before translating the selected flags into the container profile.
+
+After reload, live metrics confirm engine 0.1.48, `pcie_frac=0.35`,
+`spec_min_p=0.70`, 7 workers, `prefill_pipe=0`, `kv_resident=0` and
+`conversation_cache_mib=0`. Arithmetic (323), streaming (STREAM_OK) and synthetic
+red-image vision passed again. LAN monitor HTML and all four CSS/JS assets
+returned HTTP 200. Llama-swap listens on all interfaces at port 8000.
+
+The committed working baseline is `4ba9578`; a live-file backup is also retained
+at `~/.local/share/strata-release/calibration/container-baseline-2026-10-24.json`.
+To restore the baseline, finish active requests, close monitors, then:
+
+```bash
+curl -fsS -X POST http://127.0.0.1:8000/api/models/unload/qwen3.8-flash-next-iq3-s-0242
+git -C ~/Projects/dotfiles show 4ba9578:home/dot_local/share/strata-release/config/private_strata-iq3_s-beta.json \
+  > ~/.local/share/strata-release/config/strata-iq3_s-beta.json
+curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s-0242/health
+```
+
+Capture and commit the deliberately restored configuration afterward.
+
+## Boot default
+
+The retained unit preloads `qwen3.8-flash-next-iq3-s-0242` and requires its
+configuration/runtime mount. Install it without interrupting the running model:
+
+```bash
+sudo install -Dm644 ~/Projects/dotfiles/system/local-ai/etc/systemd/system/llama-swap.service \
+  /etc/systemd/system/llama-swap.service
+sudo systemctl daemon-reload
+```
+
+Llama-swap is already enabled. The new preload takes effect at the next service
+start or boot. Unit syntax validation passed; installation and a fresh boot are
+not yet verified. Old stable and beta containers remain available on demand.
 
 ## Restore the build context
 
@@ -68,9 +131,8 @@ sudo docker compose -f ~/.local/share/strata-release/compose.yaml create
 ```
 
 Install the retained llama-swap configuration and suspend guard after finishing
-active inference. Restarting llama-swap interrupts serving and retains the
-installed service's existing boot selection; no boot-unit installation is part
-of this task.
+active inference. Restarting llama-swap interrupts serving. Install the boot unit above to
+select the new release at startup.
 
 ```bash
 cd ~/Projects/dotfiles

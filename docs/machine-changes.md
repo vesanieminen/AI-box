@@ -65,7 +65,7 @@ at the next prompt. The configuration is managed by Chezmoi.
 Follow [AI service restoration](../system/local-ai/README.md) to create the
 containers and install the system units. Docker, `llama-swap.service`,
 `ollama-idle-suspend.service` and `lactd.service` are enabled. The direct
-`vllm-boot.service` is disabled. Llama-swap preloads Flash Next IQ3_S on boot and manages
+`vllm-boot.service` is disabled. The retained llama-swap unit preloads calibrated Strata 0.2.4.2 Flash Next IQ3_S on boot and manages
 one model at a time; GPU placement follows the selected backend profile.
 
 - Qwen INT8 alternative: `vllm/vllm-openai:v0.29.0`, pinned by digest in
@@ -93,8 +93,8 @@ one model at a time; GPU placement follows the selected backend profile.
   stopped. A synthetic 262080-input-token request generated eight output tokens
   without error; general long-context quality and multimodal behavior remain
   unverified.
-  Flash Next IQ3_S is the boot default.
-- Strata v0.1.44.1 serves standard Qwen3.8 Flash Next IQ3_S as the boot-default
+  Strata 0.2.4.2 Flash Next IQ3_S is the retained boot default.
+- Strata v0.1.44.1 serves standard Qwen3.8 Flash Next IQ3_S as the on-demand
   `qwen3.8-flash-next-iq3-s` entry, with both RTX 3090 GPUs, MTP4, INT8 KV,
   262144 configured context and GPU vision. Its official Dockerfile is built
   for CUDA architecture 86 from a pinned source revision. The model assets,
@@ -105,8 +105,8 @@ one model at a time; GPU placement follows the selected backend profile.
   streaming with final usage and synthetic image-color identification passed
   on v0.1.44.1. Sustained performance remains unbenchmarked on this version.
   Resident-expert mode and asynchronous updates remain off. Runtime updates
-  are manual. The system service waits for
-  the Flash Next health endpoint on startup; a fresh boot remains unverified.
+  are manual. The retained system service waits for
+  the Strata 0.2.4.2 Flash Next health endpoint on startup; a fresh boot remains unverified.
   The suspend guard watches port 5808 as well as the DFlash backend on 5807.
   Strata's web UI is served to the LAN through llama-swap at
   `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s/`.
@@ -141,10 +141,10 @@ one model at a time; GPU placement follows the selected backend profile.
   llama-swap group, with UI path `/upstream/qwen3.8-flash-next-iq3-s-beta/` on
   existing LAN port 8000 on all interfaces. Port 5815 is in the installed suspend
   guard. Both system templates match live files and both services are active.
-  Stable preload, beta loading through the selector, LAN health and remote beta
+  Beta loading through the selector, LAN health and remote beta
   HTML access passed. Installed LAN HTML/assets and browser-Origin chat checks passed. Keep only one Strata model UI open so
-  stable monitoring requests do not switch away from beta. Stable remains the
-  boot default.
+  model-specific monitoring requests do not switch to an unwanted backend. Beta
+  remains available on demand; the retained boot unit selects Strata 0.2.4.2.
 - Nemotron 3.5 Bolt is installed as the on-demand `nemotron-bolt` entry on
   localhost port 5809, using a dedicated llama.cpp v0.7.0 CUDA image, native IQ2
   target, vision projector and NVIDIA's LiLiCorr draft. All three files are
@@ -156,8 +156,8 @@ one model at a time; GPU placement follows the selected backend profile.
   final arithmetic question. General long-context quality, maximum-context
   multimodal capacity and tool use remain unverified. Two 512-token greedy
   runs measured 109.0 and 113.2 decode tokens/second; the detailed benchmark
-  and prefill tradeoff are in the service record. Flash Next IQ3_S remains the
-  boot default; its preload passed after the service restart.
+  and prefill tradeoff are in the service record. Strata 0.2.4.2 Flash Next IQ3_S is the retained
+  boot default; fresh-boot verification remains outstanding.
 - Ollama uses `/usr/bin/ollama` and `~/.local/share/ollama/models`. It is a manual
   alternative to llama-swap; its services remain disabled while llama-swap
   manages the GPUs.
@@ -258,10 +258,18 @@ keeping its own settings and runtime directory. Its installed selector route is
 `qwen3.8-flash-next-iq3-s-0242` in the exclusive GPU group. The installed suspend
 guard includes port 5816; both installed files match the retained templates.
 Health, arithmetic (323), streaming (STREAM_OK) and synthetic red-image vision
-passed. The explicit conversation-cache setting of zero preserves the beta's
-disabled behavior despite the newer engine's automatic default. Older containers
-and boot selection remain unchanged. Full-context and comparative performance
-checks remain outstanding. Restore commands and verified provenance are in
+passed, including after calibration. Calibration took 488 seconds and selected
+PCIe share 0.35 and draft confidence 0.70; paired short-prompt generation medians
+rose from 141.7 to 146.1 tok/s (+3.1%). Workers (7), prompt chunks and adaptation
+retain defaults. The explicit conversation-cache setting of zero preserves the
+beta's disabled behavior despite the newer engine's automatic default. Context,
+quant, KV and 350 W GPU power limits are retained. LAN HTML and all four CSS/JS
+assets passed. The previous baseline is committed as `4ba9578`; the full report
+and a live-file backup remain outside Git under the release calibration directory.
+Older containers remain available. The retained boot unit now selects the new
+route and passed systemd syntax validation; installation requires administrator
+authentication. Full-context, sustained-workload and fresh-boot checks remain
+outstanding. Restore commands and verified provenance are in
 [the release instructions](../system/local-ai/images/strata-release/README.md).
 
 ## DeepSeek V4.1 Flash IQ2_XS model download

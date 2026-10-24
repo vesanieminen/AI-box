@@ -92,7 +92,7 @@ Start with a fresh Omarchy installation, install `packages/official.txt`, apply
 the user configs, then follow [AI service restoration](system/local-ai/README.md).
 [Model provenance and download commands](models/README.md) record the copied
 weights; weights themselves require a separate backup or download. The selected
-boot service is llama-swap, preloading Strata Qwen3.8 Flash Next IQ3_S on both RTX 3090 GPUs.
+boot service is llama-swap, with a retained unit preloading calibrated Strata 0.2.4.2 Qwen3.8 Flash Next IQ3_S on both RTX 3090 GPUs.
 
 One-off SSD copying and installation helpers are not retained. App additions
 are package names, overrides are configuration files, and model downloads are

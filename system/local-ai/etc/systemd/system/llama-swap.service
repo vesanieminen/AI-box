@@ -5,14 +5,14 @@ Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 Conflicts=vllm-boot.service ollama.service
-RequiresMountsFor=/home/vesanieminen/.local/share/vllm/models /home/vesanieminen/.local/share/vllm/cache /home/vesanieminen/.local/share/strata
+RequiresMountsFor=/home/vesanieminen/.local/share/vllm/models /home/vesanieminen/.local/share/vllm/cache /home/vesanieminen/.local/share/strata /home/vesanieminen/.local/share/strata-release
 
 [Service]
 Type=simple
 ExecStartPre=/usr/bin/nvidia-ctk cdi generate --output=/etc/cdi/nvidia.yaml
 ExecStartPre=/usr/bin/llama-swap -config /etc/llama-swap/config.yaml -validate
 ExecStart=/usr/bin/llama-swap -config /etc/llama-swap/config.yaml -listen 0.0.0.0:8000
-ExecStartPost=/usr/bin/curl --fail --silent --show-error --retry 5 --retry-delay 1 --retry-connrefused --max-time 900 http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s/health
+ExecStartPost=/usr/bin/curl --fail --silent --show-error --retry 5 --retry-delay 1 --retry-connrefused --max-time 900 http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s-0242/health
 TimeoutStartSec=930
 Restart=on-failure
 RestartSec=5

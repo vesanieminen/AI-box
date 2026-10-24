@@ -15,8 +15,6 @@
     "auto",
     "--spec",
     "4",
-    "--spec-min-p",
-    "0.5",
     "--mtp",
     "/data/mtp/rt",
     "--max-context",
@@ -27,7 +25,11 @@
     "--vram-reserve-mib",
     "700",
     "--conversation-cache-mib",
-    "0"
+    "0",
+    "--pcie-frac",
+    "0.35",
+    "--spec-min-p",
+    "0.70"
   ],
   "cwd": "/opt/strata/terminal",
   "tokenizer": "/data/packs/iq3_s/tokenizer",

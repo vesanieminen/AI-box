@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "llama-swap/qwen3.8-27b-int8",
+  "model": "llama-swap/qwen3.8-flash-next-iq3-s-0242",
   "providers": {
     "llama-swap": {
       "name": "AI box / llama-swap",
@@ -124,6 +124,23 @@
         },
         "qwen3.8-flash-next-iq3-s-beta": {
           "name": "Qwen3.8 Flash Next IQ3_S Beta (256K, Vision)",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "qwen3.8-flash-next-iq3-s-0242": {
+          "name": "Qwen3.8 Flash Next IQ3_S Strata 0.2.4.2 (256K, Vision)",
           "limit": {
             "context": 262144,
             "output": 32768

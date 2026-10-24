@@ -1,7 +1,7 @@
 # AI box services
 
 Llama-swap serves the LAN API on port 8000 and manages one model at a time
-using the available GPUs. Qwen3.8 Flash Next IQ3_S with GPU vision is preloaded on startup.
+using the available GPUs. The retained boot unit selects calibrated Strata 0.2.4.2 Qwen3.8 Flash Next IQ3_S with GPU vision.
 Other models are available on demand through vLLM, TabbyAPI, SGLang or Strata, using
 pinned runtime images and existing local weights. Model switching stops the old container before loading
 another model.
@@ -15,7 +15,8 @@ another model.
    Adjust them for another machine.
 2. Restore model weights from a separate backup or follow `models/README.md`.
    Runtime caches can be recreated.
-3. Build Strata and prepare its model using the Strata instructions below, then
+3. Build stable Strata, prepare its model assets, build the beta base image, then
+   build/create Strata 0.2.4.2 using [the release instructions](images/strata-release/README.md). The boot preload requires the release container. Then
    create the containers using the declarative Compose file:
 
 ```bash
@@ -47,7 +48,7 @@ sudo systemctl enable --now llama-swap.service ollama-idle-suspend.service lactd
 The root system service needs Docker access to start and stop the containers;
 no user Docker group membership is needed. It regenerates NVIDIA CDI discovery
 and validates llama-swap configuration before starting. Its `ExecStartPost`
-loads Flash Next IQ3_S through llama-swap and waits for the model health endpoint before
+loads Strata 0.2.4.2 Flash Next IQ3_S through llama-swap and waits for the model health endpoint before
 the system service reports startup complete. Container restart is
 disabled because llama-swap owns the model lifecycle. The former direct vLLM
 boot unit is retained as a disabled alternative; do not start it alongside
@@ -66,7 +67,7 @@ the UI and its API requests.
 The beta UI uses
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`.
 Its API model ID is `qwen3.8-flash-next-iq3-s-beta` at the same `/v1` base URL.
-The beta integration is installed and enabled.
+The beta integration is installed and enabled. The retained system unit selects Strata 0.2.4.2 at boot.
 
 Select `qwen3.8-27b-int8` or `qwen3.8-27b-int4` in the client model dropdown,
 or send that ID in the request's `model` field. A request starts the selected
@@ -83,7 +84,7 @@ curl http://127.0.0.1:8000/running
 Loading can take several minutes. The readiness timeout is 900 seconds and the
 container stop deadline is 60 seconds. Models stay loaded until a switch,
 manual unload or service stop; there is no automatic model-unload TTL.
-Restarting llama-swap preloads Flash Next IQ3_S again. No weights are redownloaded during
+Restarting llama-swap with the retained system unit preloads Strata 0.2.4.2 Flash Next IQ3_S. No weights are redownloaded during
 normal switching. Configuration is in `etc/llama-swap/config.yaml`; container
 definitions are in `compose.yaml`.
 
@@ -94,8 +95,9 @@ inference and stops the previous backend before starting another.
 
 | Model ID | Backend | Context limit |
 | --- | --- | --- |
-| `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; boot default | 262144 |
+| `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; on demand | 262144 |
 | `qwen3.8-flash-next-iq3-s-beta` | Strata 0.2.0-beta, IQ3_S, MTP4, GPU vision; on demand | 262144 |
+| `qwen3.8-flash-next-iq3-s-0242` | Strata 0.2.4.2, calibrated IQ3_S, MTP4, GPU vision; retained boot default | 262144 |
 | `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
 | `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
@@ -149,7 +151,7 @@ model-card recipe: the runtime, 0.975 memory budget and disabled prefix caching.
 The bundled backport supports both W4 and W8 packed draft projection weights.
 
 Select either DFlash2 ID in the llama-swap UI or the client model selector.
-Flash Next IQ3_S is the boot default. Qwen INT8 MTP remains available on its existing vLLM 0.29.0 runtime.
+Strata 0.2.4.2 Flash Next IQ3_S is the retained boot default. Qwen INT8 MTP remains available on its existing vLLM 0.29.0 runtime.
 The W8 entry returned the expected short response through llama-swap on this
 machine with the desktop stopped. Its KV pool contains 268290 tokens. A
 near-maximum-context capacity test completed: 262080 input tokens plus eight
@@ -190,8 +192,8 @@ Model discovery advertises text and image input, text output and `vision: true`.
 Backend port 5808 is localhost only. The container explicitly passes the host
 and port to `serve.server` and uses the installer's retained config in
 `etc/strata/strata-iq3_s.json`. It runs directly without invoking setup during
-model switches. The system service preloads this profile on startup and waits
-for its health endpoint. A fresh boot with this default remains unverified.
+model switches. Stable is available on demand; the retained system service
+preloads Strata 0.2.4.2 and waits for its health endpoint.
 The Strata UI is proxied through the LAN URL above. Its page, JavaScript, CSS,
 status/settings endpoints and a chat request with the LAN browser Origin were
 verified through the machine's LAN address from this host. Remote-browser
@@ -243,9 +245,9 @@ with the desktop running remain unverified. Startup loads about 46.84 GiB of
 experts into system RAM before filling the GPU expert cache; allow several
 minutes when switching to this model.
 
-### Strata 0.2.0-beta side installation
+### Strata 0.2.0-beta alternative
 
-The beta is prepared independently of the boot-default v0.1.44.1 container.
+The beta is prepared independently of the on-demand v0.1.44.1 container.
 Its Compose file is `~/.local/share/strata-beta/compose.yaml`, its container is
 `strata-0.2.0-beta`, and its API/UI address is `http://127.0.0.1:5815`.
 It uses both RTX 3090 GPUs, the existing IQ3_S pack and MTP subset, INT8 KV,
@@ -257,11 +259,11 @@ The image makes its public application payload readable by this user and checks
 the server's `--help` import and engine/vision executable access as UID 1000
 during the build. The image adjustment is retained in
 `images/strata-beta/runtime-permissions.patch`.
-The beta is configured as an on-demand member of llama-swap's exclusive GPU
+The beta remains available on demand in llama-swap's exclusive GPU
 group, with a 150-second unload deadline and a 120-second Docker stop grace.
-It has no container restart policy; stable remains the boot preload.
-The installed suspend guard includes backend port 5815. Both root-owned
-system files match their retained templates, and both services are active.
+It has no container restart policy; the enabled llama-swap service owns startup.
+The installed suspend guard includes backend port 5815. The selector and suspend guard match their retained templates, and both services
+are active. The retained boot unit selects the newer 0.2.4.2 container.
 
 The official CUDA 13 engine package is version 0.1.45.3, build
 `f6d65cb58+cuda13.0`; its binary prints `strata 0.1.45`.
@@ -392,10 +394,13 @@ cd ~/Projects/dotfiles
 sudo docker stop --time 120 strata-0.2.0-beta
 sudo install -Dm644 system/local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
 sudo install -Dm755 system/local-ai/usr/local/libexec/ollama-idle-suspend.py /usr/local/libexec/ollama-idle-suspend.py
+sudo install -Dm644 system/local-ai/etc/systemd/system/llama-swap.service /etc/systemd/system/llama-swap.service
+sudo systemctl daemon-reload
+sudo systemctl enable llama-swap.service
 sudo systemctl restart llama-swap.service ollama-idle-suspend.service
 ```
 
-Restarting llama-swap preloads the existing stable model. Select
+Restarting llama-swap with this unit preloads Strata 0.2.4.2. Select
 `qwen3.8-flash-next-iq3-s-beta` in a client using
 `http://192.168.0.181:8000/v1`, or open the beta UI:
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-beta/`.
@@ -404,10 +409,8 @@ beta. Select `qwen3.8-flash-next-iq3-s` to switch back. Do not start containers
 manually while llama-swap manages them. Port 5815 stays localhost only; LAN
 access uses existing port 8000 with no firewall change.
 
-The installed 16-route configuration validates and advertises beta. Llama-swap
-listens on all interfaces at port 8000; its service restart successfully preloaded
-stable, and beta subsequently loaded through the selector with a healthy LAN
-endpoint. The beta HTML reached the remote browser at 192.168.0.76. A temporary
+The installed 17-route configuration validates and advertises beta and the new release. Llama-swap
+listens on all interfaces at port 8000; beta loaded through the selector with a healthy LAN endpoint. The beta HTML reached the remote browser at 192.168.0.76. A temporary
 localhost proxy also verified all four linked JS/CSS assets, API chat and a
 UI-path chat with the LAN browser Origin. The installed LAN selector also passed beta HTML, all four linked JS/CSS
 assets and UI-path chat with the LAN browser Origin on the tuned profile.
@@ -415,13 +418,31 @@ assets and UI-path chat with the LAN browser Origin on the tuned profile.
 Keep only the selected Strata model's UI open. An open stable UI can poll its
 `/metrics` endpoint and switch the GPUs back to stable while beta is loading;
 requests for beta assets during that switch return HTTP 409. Close the other
-model's UI before loading or reloading beta. The stable boot preload, vLLM
-profiles and automatic suspend policy are retained.
+model's UI before loading or reloading beta. The vLLM profiles and automatic
+suspend policy are retained.
+
+The retained boot unit now selects Strata 0.2.4.2. Beta remains an on-demand
+alternative; do not keep its model monitor open while using another backend.
+
+### Strata 0.2.4.2 calibrated profile
+
+The separate `strata-0.2.4.2` container uses localhost port 5816 and the
+`qwen3.8-flash-next-iq3-s-0242` route. Its monitor is available on all interfaces
+through llama-swap port 8000 at
+`http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-0242/`.
+Calibration selected PCIe share 0.35 and draft confidence 0.70; the paired
+confirmation medians were 141.7 versus 146.1 generation tokens/second (+3.1%).
+The retained boot unit selects this route. Installing that unit and reloading
+systemd still require administrator authentication; the currently running
+container already uses the calibrated profile. Full-context and fresh-boot
+verification remain outstanding.
+
+[Runtime provenance, calibration and restore instructions](images/strata-release/README.md).
 
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
-into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It includes 14 model IDs
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It includes 15 model IDs
 and their configured context limits under the custom provider `llama-swap`.
 The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6
@@ -807,6 +828,5 @@ the completed-request timestamp; dashboard polling preserved that timestamp.
 All 18 suspend-guard regression tests passed. Graceful server shutdown released
 its engine and GPU allocation. Maya → Nemotron Bolt → Maya switching passed
 through the exclusive group, with the old Maya engine confirmed stopped and
-Maya ready at 256K afterward. The enabled llama-swap unit still preloads Flash
-Next on boot. Long-context comprehension, maximum-context multimodal capacity,
+Maya ready at 256K afterward. The retained llama-swap unit selects Strata 0.2.4.2 Flash Next on boot. Long-context comprehension, maximum-context multimodal capacity,
 tool use and general model/vision quality remain unverified.
