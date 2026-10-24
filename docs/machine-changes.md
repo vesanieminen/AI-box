@@ -249,3 +249,13 @@ and produced the expected short answer at 256K.
 Text, image and streaming requests through llama-swap and live suspend-guard
 activity detection passed. Maya → Nemotron Bolt → Maya switching passed; Maya
 was left loaded at 256K. The boot default remains Flash Next.
+
+## Strata release update preparation
+
+Strata Terminal 0.2.4.2 and Qwen engine 0.1.48 are downloaded and verified.
+The replacement Compose/configuration files are retained separately; the running
+0.2.0-beta installation and its settings are unchanged. Docker build, activation
+and inference checks are pending administrator authentication. Restore commands,
+archive hashes and verified preparation are in
+[the release instructions](../system/local-ai/images/strata-release/README.md).
+No DeepSeek model files have been downloaded.

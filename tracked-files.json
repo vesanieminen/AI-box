@@ -91,6 +91,18 @@
     "source": "dot_local/share/strata-beta/config/private_strata-iq3_s-beta.json",
     "sha256": "d7b9fc63be1dd6e7072a40ee36b6d5649ba7345ea38b909806e344e725b7752d"
   },
+  ".local/share/strata-release/compose.yaml": {
+    "source": "dot_local/share/strata-release/private_compose.yaml",
+    "sha256": "c692265bf3965d3c6b857d9c28cfc2f268e720d896d520ce501aa125f2d9c537"
+  },
+  ".local/share/strata-release/config/strata-iq3_s-beta-mmap.json": {
+    "source": "dot_local/share/strata-release/config/private_strata-iq3_s-beta-mmap.json",
+    "sha256": "734784f72bdfab8dfa474bbfb12ad011820d04fe42a57c6b067cad504c580cd4"
+  },
+  ".local/share/strata-release/config/strata-iq3_s-beta.json": {
+    "source": "dot_local/share/strata-release/config/private_strata-iq3_s-beta.json",
+    "sha256": "5cf72362ae2fcdbe61f95f3a7f9be2e7ae4176dd3e3a03e64a1d21e7a3f07779"
+  },
   ".local/share/vllm/launch.py": {
     "source": "dot_local/share/vllm/launch.py",
     "sha256": "c2b0da8a5f420058263e56fdf765b1175180413e219db583c31530308dcfb5b0"

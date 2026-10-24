@@ -1,0 +1,74 @@
+{
+  "name": "strata-beta",
+  "services": {
+    "strata-beta": {
+      "image": "local-ai/strata:0.2.4.2",
+      "container_name": "strata-0.2.0-beta",
+      "network_mode": "host",
+      "devices": [
+        "nvidia.com/gpu=all"
+      ],
+      "shm_size": "8g",
+      "ulimits": {
+        "memlock": {
+          "soft": -1,
+          "hard": -1
+        }
+      },
+      "cap_drop": [
+        "ALL"
+      ],
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "restart": "no",
+      "stop_grace_period": "120s",
+      "environment": {
+        "PYTHONUNBUFFERED": "1",
+        "HOME": "/beta/runtime",
+        "XDG_STATE_HOME": "/beta/runtime/state",
+        "XDG_CONFIG_HOME": "/beta/runtime/config",
+        "STRATA_INSTALL_DIR": "/beta/runtime/install"
+      },
+      "entrypoint": [
+        "/usr/bin/tini",
+        "--",
+        "/opt/strata/terminal/python/bin/python3"
+      ],
+      "working_dir": "/opt/strata/terminal",
+      "command": [
+        "-m",
+        "serve.server",
+        "--engine",
+        "strata",
+        "--config",
+        "/beta/config/strata-iq3_s-beta.json",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "5815"
+      ],
+      "volumes": [
+        "/home/vesanieminen/.local/share/strata:/data:ro",
+        "/home/vesanieminen/.local/share/strata-release/config:/beta/config:ro",
+        "/home/vesanieminen/.local/share/strata-beta/runtime:/beta/runtime"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "/opt/strata/terminal/python/bin/python3",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5815/health', timeout=5)"
+        ],
+        "interval": "30s",
+        "timeout": "8s",
+        "start_period": "10m",
+        "retries": 3
+      },
+      "build": {
+        "context": "/home/vesanieminen/.cache/strata-0.2.4-build"
+      },
+      "user": "1000:1000"
+    }
+  }
+}
