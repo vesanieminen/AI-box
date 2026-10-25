@@ -14,7 +14,7 @@
     "--tp",
     "1",
     "--ssd-cache",
-    "104"
+    "120"
   ],
   "cwd": "/home/vesanieminen/.local/share/strata-deepseek/terminal",
   "tokenizer": "/home/vesanieminen/.local/share/strata-deepseek/packs/iq2_xs/tokenizer",

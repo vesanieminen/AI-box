@@ -6,13 +6,15 @@ This deployment uses the official bundled Terminal natively, independently of
 the Qwen Docker containers. No host Python packages were installed. The
 configuration is captured at `~/.local/share/strata-deepseek/config/deepseek-iq2-xs.json`.
 It selects both GPUs, a layer split (`--tp 1`), 262144 context and
-`--ssd-cache 104` (104 decimal GB, approximately 97 GiB). The automatic cache
-caps itself at 48 GB; the explicit budget leaves room for the OS and runtime.
+`--ssd-cache 120` (120 decimal GB, approximately 111.8 GiB). The automatic cache
+caps itself at 48 GB. This saved budget takes effect on the next full server
+start; the current engine was left running at 104 GB. Performance, memory
+headroom and full-context stability at 120 GB remain unverified.
 DSpark stays automatic and the engine leaves it unloaded on this hardware.
 Text and tools are supported; vision is disabled.
 
 Local text (Paris and 323), streaming and a parsed echo function call passed.
-With the retained cache, a 160-token coding stream ran at 14.3 decode tok/s;
+With the validated 104 GB cache, a 160-token coding stream ran at 14.3 decode tok/s;
 about 103 GiB total RAM was used with 22 GiB available, and each GPU used about
 23 GiB. The engine reports 40.16 GB of GPU experts, 109.7 GB of CPU-lane experts,
 and 0.25 GB of GPU context caches. Its 104 GB store preloaded 81.3 GB of hot
@@ -87,6 +89,14 @@ sudo install -Dm644 system/local-ai/etc/systemd/system/llama-swap.service /etc/s
 sudo systemctl daemon-reload
 sudo systemctl restart llama-swap.service ollama-idle-suspend.service
 curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/deepseek-v4.1-flash-iq2-xs/health
+```
+
+To apply the saved budget, finish active requests and close the DeepSeek monitor,
+then unload and reload the whole backend through llama-swap:
+
+```bash
+curl --fail -X POST http://127.0.0.1:8000/api/models/unload/deepseek-v4.1-flash-iq2-xs
+curl --max-time 900 --fail http://127.0.0.1:8000/upstream/deepseek-v4.1-flash-iq2-xs/health
 ```
 
 Do not start the temporary validation server beside llama-swap-managed models.

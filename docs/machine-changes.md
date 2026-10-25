@@ -284,11 +284,12 @@ model pack references the weights rather than copying them; pack-info confirms
 all files and kernels are present.
 
 The retained profile uses 262144 context, both RTX 3090s in a layer split,
-`--tp 1`, 8 automatic CPU threads and a 104 GB (decimal) expert RAM-store ceiling.
-The automatic store is capped at 48 GB, so the larger explicit budget uses the
-upgraded RAM while leaving OS/runtime headroom. DSpark remains automatic and the
+`--tp 1`, 8 automatic CPU threads and a saved 120 GB (decimal) expert RAM-store
+ceiling. This applies on the next full backend start; the current engine was
+left running with 104 GB. Memory headroom, performance and full-context stability
+at 120 GB remain unverified. The automatic store is capped at 48 GB. DSpark remains automatic and the
 engine chooses not to load it on this rig. Local Paris, arithmetic (323), streamed
-code and parsed echo tool-call checks passed. The retained profile's 160-token
+code and parsed echo tool-call checks passed. The validated 104 GB profile's 160-token
 coding stream measured 14.3 decode tok/s; total RAM used was about 103 GiB with
 22 GiB available, and each GPU used about 23 GiB. These are short checks, not a
 full-context or sustained performance benchmark.

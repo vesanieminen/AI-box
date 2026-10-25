@@ -93,7 +93,7 @@
   },
   ".local/share/strata-deepseek/config/deepseek-iq2-xs.json": {
     "source": "dot_local/share/strata-deepseek/config/private_deepseek-iq2-xs.json",
-    "sha256": "46d1c76f3e602c6b60a5b2a4a6e22ddc0aea2d002dd56cf0c84532d1d5370649"
+    "sha256": "e16a2eb72d4ec46f05f47d547f46efe4d3b1a91b20e94a0316b83a2e53a24fac"
   },
   ".local/share/strata-release/compose.yaml": {
     "source": "dot_local/share/strata-release/private_compose.yaml",
