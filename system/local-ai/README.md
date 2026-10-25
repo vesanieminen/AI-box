@@ -98,6 +98,7 @@ inference and stops the previous backend before starting another.
 | `qwen3.8-flash-next-iq3-s` | Strata, IQ3_S, MTP4, GPU vision; on demand | 262144 |
 | `qwen3.8-flash-next-iq3-s-beta` | Strata 0.2.0-beta, IQ3_S, MTP4, GPU vision; on demand | 262144 |
 | `qwen3.8-flash-next-iq3-s-0242` | Strata 0.2.4.2, calibrated IQ3_S, MTP4, GPU vision; retained boot default | 262144 |
+| `deepseek-v4.1-flash-iq2-xs` | Native Strata DeepSeek engine 0.1.49.2, IST-DAS 2.25 bpw, text/tools; on demand | 262144 |
 | `nemotron-bolt` | llama.cpp CUDA, native IQ2, GPU vision, LiLiCorr DFlash7 | 262144 |
 | `glm-5.3-flash-maya-s24` | Project Maya 1.1.13, IQ2_XXS_S, MTP, GPU vision | 262144 |
 | `qwen3.8-27b-int8` | vLLM, MTP3, TP2 | 262144 |
@@ -409,7 +410,7 @@ beta. Select `qwen3.8-flash-next-iq3-s` to switch back. Do not start containers
 manually while llama-swap manages them. Port 5815 stays localhost only; LAN
 access uses existing port 8000 with no firewall change.
 
-The installed 17-route configuration validates and advertises beta and the new release. Llama-swap
+The retained 18-route configuration validates and advertises beta and the new release. Llama-swap
 listens on all interfaces at port 8000; beta loaded through the selector with a healthy LAN endpoint. The beta HTML reached the remote browser at 192.168.0.76. A temporary
 localhost proxy also verified all four linked JS/CSS assets, API chat and a
 UI-path chat with the LAN browser Origin. The installed LAN selector also passed beta HTML, all four linked JS/CSS
@@ -439,10 +440,25 @@ verification remain outstanding.
 
 [Runtime provenance, calibration and restore instructions](images/strata-release/README.md).
 
+### DeepSeek V4.1 Flash IQ2_XS
+
+The native official bundled Terminal and signed DeepSeek engine run independently
+of the Qwen containers. The 273.8 GB model download is verified and its 8.6 MiB
+pack references existing weights. The profile uses both GPUs in a layer split,
+262144 context and a fixed 104 GB expert RAM store (decimal GB), leaving room
+for the OS and runtime. DSpark remains automatic and does not load on this rig.
+The dedicated llama-swap route is `deepseek-v4.1-flash-iq2-xs`, localhost port
+5818, in the exclusive GPU group. Qwen remains the retained boot default.
+Local text, streaming and tool-call validation passed. Installing the updated
+selector and suspend guard, LAN access and model switching remain pending
+administrator authentication.
+
+[Model sources, preparation and integration](../../models/deepseek-v4.1-flash-iq2-xs.md).
+
 ### OpenCode clients
 
 On an OpenCode 2.x client, merge [the complete example](examples/opencode.llama-swap.json)
-into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It includes 15 model IDs
+into `~/.config/opencode/opencode.json` or `opencode.jsonc`. It includes 16 model IDs
 and their configured context limits under the custom provider `llama-swap`.
 The saved example's output budgets use the model catalog's separate output field, bounded by the
 configured local context. Qwen3.8 profiles use 32768 output tokens; Qwen3.6

@@ -52,5 +52,27 @@
       "sha256": "6ba6ac1b331c540691a209e7fc97dec2a24e295acb1e755c84c7d24a4373927a"
     }
   ],
-  "verification": "Download started using the pinned Strata downloader; resumable transfers verify each completed file against its pinned size and SHA-256. Completion, packing and inference remain outstanding. No DeepSeek serving configuration is active."
+  "verification": "All seven model completion markers record the pinned SHA-256 and sizes match. Engine archive matches signed feed sequence 112; package signature and every engine file hash passed. Pack-info reports all required files present and every tensor has a device kernel. Native Paris, arithmetic 323, streaming and parsed echo tool-call checks passed with context configured to 262144. The retained 104 GB RAM-store/TP1 profile passed arithmetic and a 160-token coding stream at 14.3 decode tok/s; about 22 GiB RAM remained available and each GPU used approximately 23 GiB. Full-context requests, general quality, sustained load, LAN proxy and exclusive switching remain unverified until integration.",
+  "runtime": {
+    "deployment": "native official bundled Terminal and signed DeepSeek engine; no host Python dependencies installed",
+    "terminal_directory": "~/.local/share/strata-deepseek/terminal",
+    "engine_package_version": "0.1.49.2",
+    "engine_build_id": "d2d198a49+dsv41+cuda13.0",
+    "engine_archive_url": "https://github.com/Niko1221/Strata/releases/download/v0.2.4/strata-dsv41-0.1.49.2-linux-x86_64-cuda-cuda13.tar.gz",
+    "engine_archive_sha256": "918a2155ad6bad0ef6d54e57280dfc7cf6fe713838ca9303300bccaebf275283",
+    "engine_directory": "~/.local/share/strata-deepseek/engine-dsv41/0.1.49.2-linux-x86_64-cuda-cuda13",
+    "pack_directory": "~/.local/share/strata-deepseek/packs/iq2_xs",
+    "config": "~/.local/share/strata-deepseek/config/deepseek-iq2-xs.json",
+    "route": "deepseek-v4.1-flash-iq2-xs",
+    "port": 5818,
+    "context": 262144,
+    "ram_store_budget_decimal_gb": 104,
+    "tp": 1,
+    "gpus": [
+      0,
+      1
+    ],
+    "dspark": "auto (engine leaves it unloaded on this hardware)",
+    "engine_manifest_sha256": "0deff95c76501427a7f2756f876fd67ddb2fe9a0d11f978342108e052a8f510e"
+  }
 }

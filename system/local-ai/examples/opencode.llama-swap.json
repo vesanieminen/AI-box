@@ -155,6 +155,25 @@
               "text"
             ]
           }
+        },
+        "deepseek-v4.1-flash-iq2-xs": {
+          "name": "DeepSeek V4.1 Flash IQ2_XS (256K)",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "compatibility": {
+            "reasoningField": "reasoning_content"
+          }
         }
       }
     }

@@ -53,7 +53,7 @@ def ollama_connected():
     # Conservatively count any established client connection, even if it is
     # idle keep-alive. This protects long streaming and queued requests.
     return bool(command('ss', '-Htn', 'state', 'established',
-                        '( sport = :11434 or sport = :5800 or sport = :5801 or sport = :5802 or sport = :5803 or sport = :5804 or sport = :5805 or sport = :5806 or sport = :5807 or sport = :5808 or sport = :5809 or sport = :5810 or sport = :5811 or sport = :5812 or sport = :5813 or sport = :5815 or sport = :5816 )').strip())
+                        '( sport = :11434 or sport = :5800 or sport = :5801 or sport = :5802 or sport = :5803 or sport = :5804 or sport = :5805 or sport = :5806 or sport = :5807 or sport = :5808 or sport = :5809 or sport = :5810 or sport = :5811 or sport = :5812 or sport = :5813 or sport = :5815 or sport = :5816 or sport = :5818 )').strip())
 
 
 def recent_maya_request():

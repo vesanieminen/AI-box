@@ -272,18 +272,32 @@ authentication. Full-context, sustained-workload and fresh-boot checks remain
 outstanding. Restore commands and verified provenance are in
 [the release instructions](../system/local-ai/images/strata-release/README.md).
 
-## DeepSeek V4.1 Flash IQ2_XS model download
+## DeepSeek V4.1 Flash IQ2_XS
 
-The recommended IST-DAS 2.25 bpw set is being downloaded to
-`~/.local/share/strata-deepseek/models`: four IQ2_XS shards plus the shared
-IQ4_NL Engram table, DSpark Q8_0 drafter and metadata shard (273.8 GB total).
-The transient user service `strata-deepseek-download` runs the pinned Strata
-downloader with resumable transfers and per-file size/SHA-256 verification.
-It restarts on failure; the job ends on reboot and can be resumed using the
-[model restore commands](../models/deepseek-v4.1-flash-iq2-xs.md).
-The existing stay-awake flag is preserved if already present; otherwise the job
-sets it while running and removes it when it exits. Model weights, partial files,
-logs and completion markers remain outside Git. Pinned sources and hashes are in
-[the provenance manifest](../models/deepseek-v4.1-flash-iq2-xs.json).
-Download completion, pack preparation and inference remain unverified. No
-DeepSeek server has been started and Qwen continues serving.
+The IST-DAS 2.25 bpw model and shared files (273.8 GB) are downloaded under
+`~/.local/share/strata-deepseek/models`. The downloader verified pinned sizes and
+SHA-256; all seven completion markers record the expected hashes. Strata Control
+0.1.49.2 (Terminal 0.2.4.2) and the signed DeepSeek CUDA 13 engine 0.1.49.2 are
+installed independently of the Qwen containers under the same DeepSeek base
+directory. No host packages or Python dependencies were installed. The 8.6 MiB
+model pack references the weights rather than copying them; pack-info confirms
+all files and kernels are present.
+
+The retained profile uses 262144 context, both RTX 3090s in a layer split,
+`--tp 1`, 8 automatic CPU threads and a 104 GB (decimal) expert RAM-store ceiling.
+The automatic store is capped at 48 GB, so the larger explicit budget uses the
+upgraded RAM while leaving OS/runtime headroom. DSpark remains automatic and the
+engine chooses not to load it on this rig. Local Paris, arithmetic (323), streamed
+code and parsed echo tool-call checks passed. The retained profile's 160-token
+coding stream measured 14.3 decode tok/s; total RAM used was about 103 GiB with
+22 GiB available, and each GPU used about 23 GiB. These are short checks, not a
+full-context or sustained performance benchmark.
+
+The `deepseek-v4.1-flash-iq2-xs` selector entry uses localhost port 5818 and joins
+the exclusive GPU group; the suspend-guard template includes that port. Their
+installation, LAN access and model-switching checks remain pending administrator
+authentication. Calibrated Qwen remains the retained boot default. The temporary
+test server was stopped after validation; do not start it beside a managed GPU
+backend. Weights, generated packs, logs and test backups remain outside Git.
+[Sources and restore instructions](../models/deepseek-v4.1-flash-iq2-xs.md) and
+[the pinned manifest](../models/deepseek-v4.1-flash-iq2-xs.json) record the runtime.
