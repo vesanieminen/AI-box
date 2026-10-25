@@ -30,5 +30,5 @@
       "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q4_K_XL/Qwen3.8-Flash-Next-UD-Q4_K_XL-00004-of-00004.gguf"
     }
   ],
-  "verification": "Download in progress; pinned SHA-256 verification on completion, serving unverified."
+  "verification": "All four files have expected sizes and downloader SHA-256 completion markers; model preparation and serving unverified."
 }

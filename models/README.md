@@ -178,16 +178,17 @@ RAM-store limit; startup and a short request passed at that limit.
 
 ## Qwen Flash Next UD-Q4_K_XL acquisition
 
-The four Unsloth GGUF shards are being downloaded to
+The four checksum-verified Unsloth GGUF shards are installed at
 `~/.local/share/strata-unsloth/models/UD-Q4_K_XL`, separately from the existing
 Docker-owned IQ3_S model directory. [Pinned files](strata-qwen-ud-q4-k-xl.json)
 record revision `38bb39ee97821de2c9009abb7e93950eec396e66`, exact sizes and SHA-256.
 The set totals **111,334,654,784 bytes** (111.335 GB / 103.688 GiB).
 The existing Qwen projector and MTP assets are retained for reuse.
-Completion/hash validation, model preparation and serving validation are outstanding;
+All four local sizes and downloader SHA-256 completion markers match the pins.
+Model preparation and serving validation are outstanding;
 the current DeepSeek backend and llama-swap entries are unchanged.
 
-The resumable, checksum-verifying download runs in the transient user unit
+The completed resumable, checksum-verifying download used the transient user unit
 `strata-q4-download.service`. Its runtime-only log is
 `~/.cache/strata-q4-download/download.log`. The downloader creates the Omarchy
 stay-awake indicator only if absent, then removes its own indicator on exit;
@@ -207,3 +208,20 @@ for name in setup.UNSLOTH_SHARDS:
     setup.download(setup.hf(repo) + 'UD-Q4_K_XL/' + name, base / name)
 PYTHON
 ```
+
+## Swift IQ3_S and Qwen UD-Q5_K_XL acquisition plans
+
+[Swift IQ3_S pins](strata-swift-iq3-s.json) record the two model shards and its
+vision projector (84,651,280,640 bytes total), with destination
+`~/.local/share/strata-swift/models/IQ3_S`. A partial first shard is retained for
+resumption; it is not a complete or verified model.
+[Qwen UD-Q5_K_XL pins](strata-qwen-ud-q5-k-xl.json) record its six shards
+(158,286,406,650 bytes total), with planned destination
+`~/.local/share/strata-unsloth/models/UD-Q5_K_XL`; acquisition has not started.
+The transient `strata-next-downloads.service` is stopped and has no automatic
+restart or future download scheduled. Its owned stay-awake indicator was removed.
+The current model server and llama-swap configuration are unchanged.
+
+To acquire later after an explicit decision, use the installed official
+Terminal's `setup.download(url, destination)` with each manifest's pinned URLs;
+it resumes partial files and verifies each pinned size and SHA-256 as above.

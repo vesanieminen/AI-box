@@ -1,0 +1,46 @@
+{
+  "model": "Qwen3.8 Flash Next UD-Q5_K_XL",
+  "repository": "unsloth/Qwen3.8-Flash-Next-GGUF",
+  "revision": "38bb39ee97821de2c9009abb7e93950eec396e66",
+  "directory": "~/.local/share/strata-unsloth/models/UD-Q5_K_XL",
+  "total_bytes": 158286406650,
+  "files": [
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00001-of-00006.gguf",
+      "bytes": 10946618,
+      "sha256": "610922cdb1afe1094e95d7a3e86b12ee33317ebbf7320ac9344e21b6ae4bb69f",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00001-of-00006.gguf"
+    },
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00002-of-00006.gguf",
+      "bytes": 682434912,
+      "sha256": "494ca4ed3dbf97bc28da88af3890b8877b9032f909812d00c0526a9ca5e91d2e",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00002-of-00006.gguf"
+    },
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00003-of-00006.gguf",
+      "bytes": 54400261312,
+      "sha256": "34efd79a80a1ce540a517a5d56171924b66ce1c38b04c904f17ad6d8ef17cf20",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00003-of-00006.gguf"
+    },
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00004-of-00006.gguf",
+      "bytes": 49990245824,
+      "sha256": "9ee6bbe462e6830864382d629101490625b1c95afa15492b7ad550c7bed2dd13",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00004-of-00006.gguf"
+    },
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00005-of-00006.gguf",
+      "bytes": 49882416192,
+      "sha256": "0b2437f661f584030cb5aeb8fb1bb70f6422518a6746bfcc0304167c7b6b8beb",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00005-of-00006.gguf"
+    },
+    {
+      "name": "Qwen3.8-Flash-Next-UD-Q5_K_XL-00006-of-00006.gguf",
+      "bytes": 3320101792,
+      "sha256": "55dd96c5ad0863b06b6393151b9ad0ac727b8d58a62e02a296ca5d5ddbfee4a3",
+      "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00006-of-00006.gguf"
+    }
+  ],
+  "verification": "Download not started. No automatic download scheduled; checksum and serving verification outstanding."
+}
