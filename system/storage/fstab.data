@@ -1,0 +1,2 @@
+# Additional Samsung 970 EVO Plus 2TB, serial S4J4NX0RA13684E
+UUID=efc1934f-e063-455a-97ce-298270e8867f /mnt/data btrfs defaults,nofail,x-systemd.device-timeout=10s 0 0

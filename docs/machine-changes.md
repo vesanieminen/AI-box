@@ -306,3 +306,13 @@ test server beside a managed GPU backend. Weights, generated packs, logs and
 test backups remain outside Git.
 [Sources and restore instructions](../models/deepseek-v4.1-flash-iq2-xs.md) and
 [the pinned manifest](../models/deepseek-v4.1-flash-iq2-xs.json) record the runtime.
+
+## Additional NVMe storage
+
+The additional Samsung 970 EVO Plus 2TB, serial `S4J4NX0RA13684E`, has a
+single Btrfs partition labeled `data`; the filesystem and layout were verified
+on 2026-10-25. The OS remains on serial `S4J4NX0R861213X`.
+[Storage configuration](../system/storage/README.md) retains the UUID-based
+`/mnt/data` boot-mount fragment and user-ownership restore commands. Applying
+the fragment requires administrator authentication; live mounting, write access
+and boot-time behavior remain unverified.
