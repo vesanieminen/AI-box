@@ -213,15 +213,23 @@ PYTHON
 
 [Swift IQ3_S pins](strata-swift-iq3-s.json) record the two model shards and its
 vision projector (84,651,280,640 bytes total), with destination
-`~/.local/share/strata-swift/models/IQ3_S`. A partial first shard is retained for
-resumption; it is not a complete or verified model.
+`~/.local/share/strata-swift/models/IQ3_S`. The resumable Swift download is active; it is not yet a complete or verified
+model.
 [Qwen UD-Q5_K_XL pins](strata-qwen-ud-q5-k-xl.json) record its six shards
 (158,286,406,650 bytes total), with planned destination
-`~/.local/share/strata-unsloth/models/UD-Q5_K_XL`; acquisition has not started.
-The transient `strata-next-downloads.service` is stopped and has no automatic
-restart or future download scheduled. Its owned stay-awake indicator was removed.
+`~/.local/share/strata-unsloth/models/UD-Q5_K_XL`; it is queued after Swift
+finishes and verifies. The transient user unit `strata-next-downloads.service`
+runs both downloads sequentially and prevents automatic suspend using an owned
+stay-awake indicator, which is removed on exit. There is no automatic restart.
 The current model server and llama-swap configuration are unchanged.
 
-To acquire later after an explicit decision, use the installed official
+To resume or reacquire, use the installed official
 Terminal's `setup.download(url, destination)` with each manifest's pinned URLs;
 it resumes partial files and verifies each pinned size and SHA-256 as above.
+
+Pause the download queue with `systemctl --user stop strata-next-downloads.service`.
+Partial files and chunk metadata are retained. While the transient unit remains
+loaded, `systemctl --user start strata-next-downloads.service` resumes it; after
+a reboot the transient unit must be recreated. The runtime-only queue and script
+live in `~/.cache/strata-next-downloads/`, and can be reconstructed from the pinned
+manifests. Each completed file is checksum-verified before moving on.
