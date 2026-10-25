@@ -175,3 +175,35 @@ The seven IQ2_XS / IST-DAS 2.25 bpw files occupy 273,803,809,901 bytes
 [the pinned manifest](deepseek-v4.1-flash-iq2-xs.json) record sources and hashes.
 The native Strata engine uses both GPUs, 262144 context and a 112 GB expert
 RAM-store limit; startup and a short request passed at that limit.
+
+## Qwen Flash Next UD-Q4_K_XL acquisition
+
+The four Unsloth GGUF shards are being downloaded to
+`~/.local/share/strata-unsloth/models/UD-Q4_K_XL`, separately from the existing
+Docker-owned IQ3_S model directory. [Pinned files](strata-qwen-ud-q4-k-xl.json)
+record revision `38bb39ee97821de2c9009abb7e93950eec396e66`, exact sizes and SHA-256.
+The set totals **111,334,654,784 bytes** (111.335 GB / 103.688 GiB).
+The existing Qwen projector and MTP assets are retained for reuse.
+Completion/hash validation, model preparation and serving validation are outstanding;
+the current DeepSeek backend and llama-swap entries are unchanged.
+
+The resumable, checksum-verifying download runs in the transient user unit
+`strata-q4-download.service`. Its runtime-only log is
+`~/.cache/strata-q4-download/download.log`. The downloader creates the Omarchy
+stay-awake indicator only if absent, then removes its own indicator on exit;
+it does not remove an existing user indicator. No permanent suspend settings change.
+
+To resume/reacquire with the installed official Terminal's downloader:
+
+```bash
+cd ~/.local/share/strata-deepseek/terminal
+./python/bin/python3 - <<'PYTHON'
+from pathlib import Path
+import setup
+base = Path.home() / '.local/share/strata-unsloth/models/UD-Q4_K_XL'
+repo = 'unsloth/Qwen3.8-Flash-Next-GGUF'
+assert setup.HF_REVISIONS[repo] == '38bb39ee97821de2c9009abb7e93950eec396e66'
+for name in setup.UNSLOTH_SHARDS:
+    setup.download(setup.hf(repo) + 'UD-Q4_K_XL/' + name, base / name)
+PYTHON
+```
