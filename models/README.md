@@ -213,7 +213,7 @@ PYTHON
 
 [Swift IQ3_S pins](strata-swift-iq3-s.json) record the two model shards and its
 vision projector (84,651,280,640 bytes total), with destination
-`~/.local/share/strata-swift/models/IQ3_S`. The Swift download is active at unrestricted speed, resuming its partial files;
+`~/.local/share/strata-swift/models/IQ3_S`. The Swift download is active with a 7 MB/s aggregate cap, resuming partial files;
 it is not yet a complete or verified model.
 [Qwen UD-Q5_K_XL pins](strata-qwen-ud-q5-k-xl.json) record its six shards
 (158,286,406,650 bytes total), with planned destination
@@ -234,10 +234,10 @@ a reboot the transient unit must be recreated. The runtime-only queue and script
 live in `~/.cache/strata-next-downloads/`, and can be reconstructed from the pinned
 manifests. Each completed file is checksum-verified before moving on.
 
-The queue is **unrestricted**, with `limit-mbps` set to zero. An optional
-runtime-only response-read limiter remains in its cached script. All download connections share one
+The queue has a **7 decimal MB/s aggregate cap**, with `limit-mbps` set to 7.
+A runtime-only response-read limiter in its cached script enforces the cap. All download connections share one
 schedule; the model files, official downloader and checksum logic are unchanged.
 `~/.cache/strata-next-downloads/limit-mbps` contains the MB/s limit; zero removes
 the limit without restarting. When enabled, the cap applies to Swift and then Q5 and does not
 limit inference traffic. A cap may permit brief network-buffer bursts. The user
-requested full speed, so no bandwidth cap is currently applied.
+requested a 7 MB/s maximum; that cap is currently applied.
