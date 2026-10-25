@@ -29,7 +29,9 @@
     "--pcie-frac",
     "0.35",
     "--spec-min-p",
-    "0.70"
+    "0.70",
+    "--ple-io",
+    "ram"
   ],
   "cwd": "/opt/strata/terminal",
   "tokenizer": "/data/packs/iq3_s/tokenizer",

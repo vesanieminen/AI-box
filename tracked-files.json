@@ -105,7 +105,7 @@
   },
   ".local/share/strata-release/config/strata-iq3_s-beta.json": {
     "source": "dot_local/share/strata-release/config/private_strata-iq3_s-beta.json",
-    "sha256": "5b1ae788713d50bce836b243b71a4ea186dd8fbf5cdbabc11314a8aeb29282c5"
+    "sha256": "8658a0d508152e36ea9dd6261c8d531b904bd57e1d1eb871bfa63778bc58936e"
   },
   ".local/share/vllm/launch.py": {
     "source": "dot_local/share/vllm/launch.py",

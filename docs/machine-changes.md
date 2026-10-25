@@ -264,7 +264,13 @@ PCIe share 0.35 and draft confidence 0.70; paired short-prompt generation median
 rose from 141.7 to 146.1 tok/s (+3.1%). Workers (7), prompt chunks and adaptation
 retain defaults. The explicit conversation-cache setting of zero preserves the
 beta's disabled behavior despite the newer engine's automatic default. Context,
-quant, KV and 350 W GPU power limits are retained. LAN HTML and all four CSS/JS
+quant, KV and 350 W GPU power limits are retained. The active profile adds
+`--ple-io ram`, locking the 26.82 GiB PLE table in system RAM; startup confirmed
+the lock in 11.1 seconds. About 39 GiB remained available, with no engine swap.
+Health, arithmetic, streaming and monitor metrics passed. A single 256-token
+coding comparison measured 117.1 versus 121.3 tok/s, with only 4 KiB of physical
+engine reads in RAM mode; repeatable speedup and full-context RAM headroom remain
+unverified. Conversation caching remains disabled. LAN HTML and all four CSS/JS
 assets passed. The previous baseline is committed as `4ba9578`; the full report
 and a live-file backup remain outside Git under the release calibration directory.
 Older containers remain available. The installed, enabled boot unit selects the

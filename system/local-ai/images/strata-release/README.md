@@ -79,6 +79,24 @@ curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/qwen3.8-flash-next-iq3-s
 
 Capture and commit the deliberately restored configuration afterward.
 
+## PLE table in RAM
+
+The active release profile adds `--ple-io ram`. It loads the IQ4_NL
+`per_layer_token_embd.weight` table (28,800,138,240 bytes, 26.82 GiB) into
+system RAM and locks its pages instead of reading table rows directly from SSD.
+The retained config restores this setting; conversation caching remains disabled.
+
+On 2026-10-25 the engine confirmed `PLE table locked in RAM` in 11.1 seconds.
+Health retained 262144 context and vision; arithmetic (323), streaming
+(STREAM_OK) and the LAN monitor metrics passed. After loading, about 39 GiB of
+system RAM remained available; engine VmSwap was zero and VmLck was 26.82 GiB.
+One identical 73-token coding prompt with 256 output tokens measured 117.1 tok/s
+before reload and 121.3 tok/s afterward; this single pair does not establish a
+repeatable speedup. The RAM-mode request incurred only 4096 bytes of physical
+engine reads. Full-context memory headroom and sustained performance with this
+setting remain unverified. Runtime test results and the pre-change config remain
+outside Git in `~/.cache/strata-ple-ram-test/`.
+
 ## Boot default
 
 The retained unit preloads `qwen3.8-flash-next-iq3-s-0242` and requires its
