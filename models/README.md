@@ -233,3 +233,11 @@ loaded, `systemctl --user start strata-next-downloads.service` resumes it; after
 a reboot the transient unit must be recreated. The runtime-only queue and script
 live in `~/.cache/strata-next-downloads/`, and can be reconstructed from the pinned
 manifests. Each completed file is checksum-verified before moving on.
+
+The active queue is capped at **5 decimal MB/s aggregate** by a runtime-only
+response-read limiter in its cached script. All download connections share one
+schedule; the model files, official downloader and checksum logic are unchanged.
+`~/.cache/strata-next-downloads/limit-mbps` contains the MB/s limit; zero removes
+the limit without restarting. The cap applies to Swift and then Q5 and does not
+limit inference traffic. The cap may permit brief network-buffer bursts. The
+user requested throttling until asking for full speed again.
