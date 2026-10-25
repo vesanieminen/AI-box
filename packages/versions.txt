@@ -10,3 +10,4 @@ ttf-cascadia-mono-nerd 3.5.1-2
 geekbench 7.1.0-1
 github-cli 2.100.0-1
 llama-swap-bin 263-1
+smartmontools 7.5-1

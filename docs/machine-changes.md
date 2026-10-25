@@ -18,6 +18,7 @@ Install the additions in [official packages](../packages/official.txt) with
 | nvidia-container-toolkit | Expose NVIDIA GPUs to the vLLM container through CDI |
 | ollama-cuda | Package-managed Ollama with NVIDIA acceleration |
 | openrgb | Turn off ASUS RTX 3090 lighting at desktop login |
+| smartmontools | Read SSD SMART health, wear, temperatures and self-test history |
 | stress-ng | Manual system stress testing |
 | ttf-cascadia-mono-nerd | Configured terminal font |
 

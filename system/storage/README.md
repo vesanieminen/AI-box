@@ -48,3 +48,17 @@ and the desktop user can create, read and delete a file. The generated
 `mnt-data.mount` unit is active and references the correct UUID with `nofail`;
 fstab validation reports no parse errors or errors. Fresh-boot verification
 remains outstanding.
+
+## SSD health diagnostics
+
+Install the deliberate Arch addition with `sudo pacman -S --needed smartmontools`.
+Read each drive without changing its contents:
+
+```bash
+sudo smartctl -x /dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NX0R861213X
+sudo smartctl -x /dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_2TB_S4J4NX0RA13684E
+```
+
+Both SMART reports were read successfully on 2026-10-25. A new self-test was
+not started as part of that check. Health reports and diagnostic logs remain
+outside Git; `smartd` monitoring was not configured by this task.
