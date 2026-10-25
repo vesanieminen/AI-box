@@ -285,9 +285,9 @@ all files and kernels are present.
 
 The retained profile uses 262144 context, both RTX 3090s in a layer split,
 `--tp 1`, 8 automatic CPU threads and a saved 112 GB (decimal) expert RAM-store
-ceiling. This applies on the next full backend start; the current engine was
-left running with 104 GB. Memory headroom, performance and full-context stability
-at 112 GB remain unverified. The automatic store is capped at 48 GB. DSpark remains automatic and the
+ceiling. The restarted engine loaded 112 GB, preloaded 87.7 GB of hot expert
+payloads and completed a short request. Long-session memory headroom, sustained
+performance and full-context stability at 112 GB remain unverified. The automatic store is capped at 48 GB. DSpark remains automatic and the
 engine chooses not to load it on this rig. Local Paris, arithmetic (323), streamed
 code and parsed echo tool-call checks passed. The validated 104 GB profile's 160-token
 coding stream measured 14.3 decode tok/s; total RAM used was about 103 GiB with

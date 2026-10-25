@@ -445,9 +445,9 @@ The native official bundled Terminal and signed DeepSeek engine run independentl
 of the Qwen containers. The 273.8 GB model download is verified and its 8.6 MiB
 pack references existing weights. The profile uses both GPUs in a layer split,
 262144 context and a saved 112 GB expert RAM-store limit (decimal GB). The
-current engine was left running at the validated 104 GB limit; 112 GB applies
-after a full backend unload/reload and its memory headroom and performance
-remain unverified. DSpark remains automatic and does not load on this rig.
+running engine has loaded 112 GB, preloaded 87.7 GB of hot expert payloads and
+completed a short request. Long-session memory headroom, sustained performance
+and full-context operation at this limit remain unverified. DSpark remains automatic and does not load on this rig.
 The dedicated llama-swap route is `deepseek-v4.1-flash-iq2-xs`, localhost port
 5818, in the exclusive GPU group. Qwen remains the retained boot default.
 Local text, streaming and tool-call validation passed. The updated selector,

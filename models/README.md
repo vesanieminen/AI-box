@@ -1,5 +1,9 @@
 # Model assets
 
+[Current catalog: exact sizes, locations and shared assets](catalog.md) records
+the installed inventory measured on 2026-10-25, including DeepSeek and all
+companion models.
+
 Weights are stored outside Git. The original 13 model directories and four Ollama tags were copied from the SSD on 2026-10-10, avoiding another download. vLLM model files total approximately 248 GB (231 GiB), plus approximately 39 GiB of Ollama data. Cache files are optional and excluded from the inventory.
 
 The additional W8 DFlash2 companion draft is stored in
@@ -25,7 +29,7 @@ reuse existing assets when present. No host Hugging Face CLI is needed.
 
 ## Default boot model
 
-`qwen3.8-flash-next-iq3-s`: Qwen3.8 Flash Next IQ3_S with MTP4 and GPU vision, served by Strata through llama-swap on port 8000 across two RTX 3090 GPUs.
+`qwen3.8-flash-next-iq3-s-0242`: calibrated Strata 0.2.4.2 Qwen3.8 Flash Next IQ3_S with MTP4 and GPU vision, served by Strata through llama-swap on port 8000 across two RTX 3090 GPUs.
 The complete chat models are configured for on-demand switching through vLLM,
 TabbyAPI, SGLang or Strata. The Gemma 26B 8bpw folder contains configuration but no
 weights; the DFlash2 draft is a companion, not a standalone chat model. See [service restoration](../system/local-ai/README.md).
@@ -162,3 +166,12 @@ profile uses the built-in MTP block after the speed comparison.
 the source build and model preparation. All five downloaded files passed size
 and SHA-256 verification against the pinned inventory. Serving validation is
 recorded separately in the service instructions.
+
+## DeepSeek V4.1 Flash assets
+
+The seven IQ2_XS / IST-DAS 2.25 bpw files occupy 273,803,809,901 bytes
+(255.000 GiB) under `~/.local/share/strata-deepseek/models`.
+[Runtime and restoration](deepseek-v4.1-flash-iq2-xs.md) and
+[the pinned manifest](deepseek-v4.1-flash-iq2-xs.json) record sources and hashes.
+The native Strata engine uses both GPUs, 262144 context and a 112 GB expert
+RAM-store limit; startup and a short request passed at that limit.

@@ -7,9 +7,10 @@ the Qwen Docker containers. No host Python packages were installed. The
 configuration is captured at `~/.local/share/strata-deepseek/config/deepseek-iq2-xs.json`.
 It selects both GPUs, a layer split (`--tp 1`), 262144 context and
 `--ssd-cache 112` (112 decimal GB, approximately 104.3 GiB). The automatic cache
-caps itself at 48 GB. This saved budget takes effect on the next full server
-start; the current engine was left running at 104 GB. Performance, memory
-headroom and full-context stability at 112 GB remain unverified.
+caps itself at 48 GB. The running engine has loaded the 112 GB budget, preloaded
+87.7 GB of hot expert payloads and completed a short request. Sustained
+performance, long-session memory headroom and full-context stability at 112 GB
+remain unverified.
 DSpark stays automatic and the engine leaves it unloaded on this hardware.
 Text and tools are supported; vision is disabled.
 
