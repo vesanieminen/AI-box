@@ -213,14 +213,15 @@ PYTHON
 
 [Swift IQ3_S pins](strata-swift-iq3-s.json) record the two model shards and its
 vision projector (84,651,280,640 bytes total), with destination
-`~/.local/share/strata-swift/models/IQ3_S`. The resumable Swift download is active; it is not yet a complete or verified
-model.
+`~/.local/share/strata-swift/models/IQ3_S`. The Swift download is paused with its partial first shard retained; it is not
+yet a complete or verified model.
 [Qwen UD-Q5_K_XL pins](strata-qwen-ud-q5-k-xl.json) record its six shards
 (158,286,406,650 bytes total), with planned destination
 `~/.local/share/strata-unsloth/models/UD-Q5_K_XL`; it is queued after Swift
-finishes and verifies. The transient user unit `strata-next-downloads.service`
-runs both downloads sequentially and prevents automatic suspend using an owned
-stay-awake indicator, which is removed on exit. There is no automatic restart.
+finishes and verifies, once the user requests resumption. The transient user
+unit `strata-next-downloads.service` is stopped with no process running and no
+automatic restart. Its owned stay-awake indicator was removed. When resumed,
+the queue downloads both models sequentially and holds the indicator until exit.
 The current model server and llama-swap configuration are unchanged.
 
 To resume or reacquire, use the installed official
@@ -234,7 +235,7 @@ a reboot the transient unit must be recreated. The runtime-only queue and script
 live in `~/.cache/strata-next-downloads/`, and can be reconstructed from the pinned
 manifests. Each completed file is checksum-verified before moving on.
 
-The active queue is capped at **5 decimal MB/s aggregate** by a runtime-only
+The paused queue retains a **5 decimal MB/s aggregate** cap by a runtime-only
 response-read limiter in its cached script. All download connections share one
 schedule; the model files, official downloader and checksum logic are unchanged.
 `~/.cache/strata-next-downloads/limit-mbps` contains the MB/s limit; zero removes

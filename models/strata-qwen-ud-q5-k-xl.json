@@ -42,5 +42,5 @@
       "url": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/resolve/38bb39ee97821de2c9009abb7e93950eec396e66/UD-Q5_K_XL/Qwen3.8-Flash-Next-UD-Q5_K_XL-00006-of-00006.gguf"
     }
   ],
-  "verification": "Queued after Swift checksum verification; acquisition, checksum and serving verification outstanding."
+  "verification": "Not started; paused queue retains Q5 after Swift. No automatic resume; acquisition, checksum and serving verification outstanding."
 }
