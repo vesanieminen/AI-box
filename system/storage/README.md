@@ -42,6 +42,9 @@ Verify user write access with `touch /mnt/data/.write-test && rm /mnt/data/.writ
 `systemctl cat mnt-data.mount` should show the generated unit referencing the
 UUID and mount options. A reboot is the final check of boot-time mounting.
 
-Installation is pending administrator authentication: the fstab fragment has
-not been applied. Mounting, user write access, generated-unit validation and
-fresh-boot verification remain outstanding.
+The fstab fragment is installed. Verified on 2026-10-25: the correct UUID is
+mounted read/write at `/mnt/data`, ownership is 1000:1000 with mode 0755,
+and the desktop user can create, read and delete a file. The generated
+`mnt-data.mount` unit is active and references the correct UUID with `nofail`;
+fstab validation reports no parse errors or errors. Fresh-boot verification
+remains outstanding.

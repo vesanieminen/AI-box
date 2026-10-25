@@ -313,6 +313,8 @@ The additional Samsung 970 EVO Plus 2TB, serial `S4J4NX0RA13684E`, has a
 single Btrfs partition labeled `data`; the filesystem and layout were verified
 on 2026-10-25. The OS remains on serial `S4J4NX0R861213X`.
 [Storage configuration](../system/storage/README.md) retains the UUID-based
-`/mnt/data` boot-mount fragment and user-ownership restore commands. Applying
-the fragment requires administrator authentication; live mounting, write access
-and boot-time behavior remain unverified.
+`/mnt/data` boot-mount fragment and user-ownership restore commands. The
+fragment is installed, the generated mount unit is active, and the correct
+filesystem is mounted read/write with desktop-user ownership (1000:1000, 0755).
+User file creation, reading and deletion passed; fstab validation has no errors.
+Fresh-boot verification remains outstanding.
