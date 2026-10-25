@@ -433,9 +433,8 @@ through llama-swap port 8000 at
 `http://192.168.0.181:8000/upstream/qwen3.8-flash-next-iq3-s-0242/`.
 Calibration selected PCIe share 0.35 and draft confidence 0.70; the paired
 confirmation medians were 141.7 versus 146.1 generation tokens/second (+3.1%).
-The retained boot unit selects this route. Installing that unit and reloading
-systemd still require administrator authentication; the currently running
-container already uses the calibrated profile. Full-context and fresh-boot
+The installed, enabled boot unit selects this route. Systemd was reloaded and
+the Qwen preload passed after a service restart. Full-context and fresh-boot
 verification remain outstanding.
 
 [Runtime provenance, calibration and restore instructions](images/strata-release/README.md).
@@ -449,9 +448,11 @@ pack references existing weights. The profile uses both GPUs in a layer split,
 for the OS and runtime. DSpark remains automatic and does not load on this rig.
 The dedicated llama-swap route is `deepseek-v4.1-flash-iq2-xs`, localhost port
 5818, in the exclusive GPU group. Qwen remains the retained boot default.
-Local text, streaming and tool-call validation passed. Installing the updated
-selector and suspend guard, LAN access and model switching remain pending
-administrator authentication.
+Local text, streaming and tool-call validation passed. The updated selector,
+suspend guard and boot unit are installed. Qwen-to-DeepSeek switching, loaded
+health and monitor HTML plus all four CSS/JS assets passed through the LAN
+listener. DeepSeek is available on demand; fresh-boot verification remains
+outstanding.
 
 [Model sources, preparation and integration](../../models/deepseek-v4.1-flash-iq2-xs.md).
 

@@ -15,8 +15,9 @@ engine 0.1.48 otherwise automatically enables an 8 GiB parked-conversation cache
 The expert-profile bytes match beta. The installed llama-swap route belongs to
 the exclusive GPU group, and the installed suspend guard includes port 5816.
 Both installed files match their retained templates. The vLLM profiles remain
-unchanged. The retained boot unit selects this new route; installing the unit
-and reloading systemd are pending administrator authentication.
+unchanged. The installed boot unit selects this new route and systemd has been
+reloaded. The service is enabled and its startup preload passed after restart;
+a fresh boot remains unverified.
 
 ## Verified preparation
 

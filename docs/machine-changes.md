@@ -266,9 +266,9 @@ beta's disabled behavior despite the newer engine's automatic default. Context,
 quant, KV and 350 W GPU power limits are retained. LAN HTML and all four CSS/JS
 assets passed. The previous baseline is committed as `4ba9578`; the full report
 and a live-file backup remain outside Git under the release calibration directory.
-Older containers remain available. The retained boot unit now selects the new
-route and passed systemd syntax validation; installation requires administrator
-authentication. Full-context, sustained-workload and fresh-boot checks remain
+Older containers remain available. The installed, enabled boot unit selects the
+new route; systemd was reloaded and the Qwen preload passed after a service
+restart. Full-context, sustained-workload and fresh-boot checks remain
 outstanding. Restore commands and verified provenance are in
 [the release instructions](../system/local-ai/images/strata-release/README.md).
 
@@ -294,10 +294,14 @@ coding stream measured 14.3 decode tok/s; total RAM used was about 103 GiB with
 full-context or sustained performance benchmark.
 
 The `deepseek-v4.1-flash-iq2-xs` selector entry uses localhost port 5818 and joins
-the exclusive GPU group; the suspend-guard template includes that port. Their
-installation, LAN access and model-switching checks remain pending administrator
-authentication. Calibrated Qwen remains the retained boot default. The temporary
-test server was stopped after validation; do not start it beside a managed GPU
-backend. Weights, generated packs, logs and test backups remain outside Git.
+the exclusive GPU group; the installed suspend guard includes that port. Both
+installed files and the installed boot unit match their retained templates.
+Qwen-to-DeepSeek switching, loaded health and LAN monitor HTML plus all four
+CSS/JS assets passed, as did arithmetic (323) through the LAN API.
+Calibrated Qwen remains the installed boot default; the
+service is enabled and its preload passed after restart, with fresh boot still
+unverified. DeepSeek was left loaded through llama-swap. Do not start a standalone
+test server beside a managed GPU backend. Weights, generated packs, logs and
+test backups remain outside Git.
 [Sources and restore instructions](../models/deepseek-v4.1-flash-iq2-xs.md) and
 [the pinned manifest](../models/deepseek-v4.1-flash-iq2-xs.json) record the runtime.

@@ -74,8 +74,10 @@ listener on all interfaces at port 8000:
 
 `http://192.168.0.181:8000/upstream/deepseek-v4.1-flash-iq2-xs/`
 
-Installation and LAN/model-switching validation are pending administrator
-authentication. After closing model monitors and finishing active requests:
+The selector, suspend guard and boot unit are installed and match the retained
+templates. Switching from Qwen to DeepSeek through llama-swap passed; LAN health,
+monitor HTML and all four CSS/JS assets returned HTTP 200. Restore after closing
+model monitors and finishing active requests:
 
 ```bash
 cd ~/Projects/dotfiles
@@ -89,8 +91,8 @@ curl --max-time 900 -fsS http://127.0.0.1:8000/upstream/deepseek-v4.1-flash-iq2-
 
 Do not start the temporary validation server beside llama-swap-managed models.
 Only keep the selected model's monitor open: model-specific polling can switch
-the active backend. The suspend guard includes backend port 5818 in its retained
-template; serving and switching stay under llama-swap once installed.
+the active backend. The installed suspend guard includes backend port 5818;
+serving and switching stay under llama-swap.
 
 ## Download provenance
 
@@ -98,9 +100,9 @@ The Strata variant is `IST-DAS-2.25bpw`. Weights and shared files total
 273,803,809,901 bytes and live in `~/.local/share/strata-deepseek/models`.
 [The manifest](deepseek-v4.1-flash-iq2-xs.json) records every pinned URL, size and
 SHA-256. The download passed pinned integrity checks, the pack passed the engine's
-file/kernel checks, and local text, streaming and tool calls passed. The retained
-llama-swap route is prepared; installing the selector and suspend guard still
-requires administrator authentication.
+file/kernel checks, and local text, streaming and tool calls passed. The
+llama-swap route and suspend guard are installed; managed loading, LAN monitor
+access and an arithmetic response (323) through the LAN API are verified.
 
 ## Download and resume
 
