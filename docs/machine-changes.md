@@ -337,6 +337,8 @@ explicit tuning. Both join the selector's exclusive GPU group and suspend
 activity detection. The selected boot service, Qwen 0.2.4.2 preload and default
 vLLM profile are preserved. Signed-feed, archive, manifest and full engine-file
 verification passed, as did runtime imports, shared-library resolution and
-selector configuration validation. System integration and live inference
-verification are pending authentication.
+selector configuration validation. Both entries are visible in the running
+selector, both services are active, and installed system files match the retained
+templates. Qwen loaded with 256K, vision and PLE locked in RAM. Its second GPU
+reserves 1136 MiB for generation workspace. Live generation verification is pending.
 [Restore commands, pinned provenance and validation](../system/local-ai/strata-0.2.7.md).

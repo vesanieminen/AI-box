@@ -16,7 +16,8 @@ record upstream sources, sizes, hashes and build IDs.
 The profiles retain the existing explicit tuning values; those values have not
 been recalibrated against 0.1.52. New engine defaults apply to settings that are
 not explicitly pinned. Qwen uses `prlimit --memlock=unlimited` before dropping
-to the user's identity so its 26.82 GiB PLE table can be locked in RAM. DeepSeek
+to the user's identity so its 26.82 GiB PLE table can be locked in RAM. The second GPU has an explicit
+1136 MiB reserve (`--vram-reserve-later-mib`) for generation workspace. DeepSeek
 retains text/tools support; this profile does not provision the new vision tower.
 The two routes join the existing exclusive GPU group. The suspend guard includes
 both ports. The selected boot service, Qwen 0.2.4.2 preload and default vLLM
@@ -69,7 +70,9 @@ feed and upstream SHA256SUMS. Both engine manifests match the feed; their
 signatures and every listed file hash passed using the prior Control's verifier.
 Terminal reports 0.2.7/build 0.1.52; server imports and both engine help commands
 pass. Configured model paths are readable and all native shared libraries resolve.
-The selector configuration validates with 20 models. Installation of the system
-configuration and live inference checks are pending user authentication.
+The selector configuration validates with 20 models. Both new entries are visible
+in the running selector; installed selector and suspend-guard files match the
+retained templates, and both services are active. Qwen loaded with 262144 context,
+vision and a locked PLE table. Generation checks are pending.
 Full-context stability, long-running performance and new-version calibration
 remain unverified.

@@ -85,7 +85,7 @@
   },
   ".local/share/strata-0.2.7/config/qwen-iq3-s.json": {
     "source": "dot_local/share/strata-0.2.7/config/private_qwen-iq3-s.json",
-    "sha256": "61b42f90386ce60b4ac10b70118c7df6dcd079d4fa9782e36dd32f1cd4bdbf3f"
+    "sha256": "462fe6654cb7d91407e65a8b7c4787552c5e42f9665bae236e6ba156add2b0ae"
   },
   ".local/share/strata-beta/compose.yaml": {
     "source": "dot_local/share/strata-beta/private_compose.yaml",

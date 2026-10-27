@@ -31,7 +31,9 @@
     "--spec-min-p",
     "0.70",
     "--ple-io",
-    "ram"
+    "ram",
+    "--vram-reserve-later-mib",
+    "1136"
   ],
   "cwd": "/home/vesanieminen/.local/share/strata-0.2.7/terminal",
   "tokenizer": "/home/vesanieminen/.local/share/strata/packs/iq3_s/tokenizer",
