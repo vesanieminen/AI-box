@@ -340,5 +340,11 @@ verification passed, as did runtime imports, shared-library resolution and
 selector configuration validation. Both entries are visible in the running
 selector, both services are active, and installed system files match the retained
 templates. Qwen loaded with 256K, vision and PLE locked in RAM. Its second GPU
-reserves 1136 MiB for generation workspace. Live generation verification is pending.
+reserves 1136 MiB for generation workspace. Qwen arithmetic, streaming, red-image
+vision and browser-Origin LAN chat passed. DeepSeek loaded at 256K with the
+112 GB expert store and passed arithmetic, streaming and parsed echo tool calls.
+Both served LAN HTML and all 11 local assets; active connections on both ports
+prevented suspend. Qwen-to-DeepSeek switching passed; the original 0.2.4.2
+Qwen route was restored and passed loaded health. Full-context stability,
+sustained performance and new-version calibration remain unverified.
 [Restore commands, pinned provenance and validation](../system/local-ai/strata-0.2.7.md).

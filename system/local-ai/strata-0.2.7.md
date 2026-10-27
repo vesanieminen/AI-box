@@ -73,6 +73,22 @@ pass. Configured model paths are readable and all native shared libraries resolv
 The selector configuration validates with 20 models. Both new entries are visible
 in the running selector; installed selector and suspend-guard files match the
 retained templates, and both services are active. Qwen loaded with 262144 context,
-vision and a locked PLE table. Generation checks are pending.
+vision and a locked PLE table. With the retained second-GPU reserve, arithmetic
+(323), streaming (STREAM_OK), synthetic red-image vision and browser-Origin LAN
+chat passed. Live metrics confirm engine 0.1.52, INT8 KV, PCIe share 0.35,
+draft confidence 0.70, 7 workers and disabled conversation caching.
+
+DeepSeek loaded at 262144 context with the retained 112 GB expert store; arithmetic
+(323), streaming (STREAM_OK) and an echo tool call with parsed JSON arguments
+passed. DSpark remains automatic and was not loaded on this rig. Short responses
+measured about 20–22 decode tokens/second; these tiny checks are not a benchmark.
+About 10 GiB RAM remained available after the checks, with roughly 200 MiB of
+system swap in use; full-context memory headroom has not been established.
+Both backends served LAN HTML and all 11 local CSS/JS assets, and an established
+connection on each port prevented automatic suspend. Qwen-to-DeepSeek switching
+passed, and the original 0.2.4.2 Qwen route was restored and passed loaded
+health afterward. The installed boot unit still selects that route. Runtime
+verification outputs remain outside Git under
+`~/.cache/strata-0.2.7-validation/`.
 Full-context stability, long-running performance and new-version calibration
 remain unverified.

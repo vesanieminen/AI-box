@@ -855,4 +855,6 @@ tool use and general model/vision quality remain unverified.
 [Strata 0.2.7](strata-0.2.7.md) adds isolated Qwen and DeepSeek 0.1.52
 runtimes sharing the existing weights and packs. The `-027` selector entries
 use localhost ports 5820 and 5821 and preserve the 0.2.4.2 boot default.
-See the linked instructions for restoration and outstanding live checks.
+Both entries passed live text and streaming checks; Qwen vision and DeepSeek
+tool calls also passed. See the linked instructions for restoration, validation
+and remaining full-context/performance checks.
