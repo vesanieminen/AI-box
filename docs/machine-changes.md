@@ -325,3 +325,18 @@ fragment is installed, the generated mount unit is active, and the correct
 filesystem is mounted read/write with desktop-user ownership (1000:1000, 0755).
 User file creation, reading and deletion passed; fstab validation has no errors.
 Fresh-boot verification remains outstanding.
+
+## Strata 0.2.7 additional backends
+
+Terminal 0.2.7 and the Qwen/DeepSeek CUDA 13 engines 0.1.52 are installed
+separately under `~/.local/share/strata-0.2.7`, reusing existing model weights
+and packs. This adds about 2.1 GB without new host packages. Profiles for
+`qwen3.8-flash-next-iq3-s-027` (5820) and
+`deepseek-v4.1-flash-iq2-xs-027` (5821) retain the existing 256K settings and
+explicit tuning. Both join the selector's exclusive GPU group and suspend
+activity detection. The selected boot service, Qwen 0.2.4.2 preload and default
+vLLM profile are preserved. Signed-feed, archive, manifest and full engine-file
+verification passed, as did runtime imports, shared-library resolution and
+selector configuration validation. System integration and live inference
+verification are pending authentication.
+[Restore commands, pinned provenance and validation](../system/local-ai/strata-0.2.7.md).

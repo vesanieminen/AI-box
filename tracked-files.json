@@ -79,6 +79,14 @@
     "source": "dot_local/share/ollama/warm-start.py",
     "sha256": "9a4ad8c1ef581def4b6c2e5a0b3802d20e70e7762115b72ff1501b3a37754189"
   },
+  ".local/share/strata-0.2.7/config/deepseek-iq2-xs.json": {
+    "source": "dot_local/share/strata-0.2.7/config/private_deepseek-iq2-xs.json",
+    "sha256": "3b2a547f281b6b7341d301902de368bd0491d4169ae0aa2f3094bf900cc1c7b6"
+  },
+  ".local/share/strata-0.2.7/config/qwen-iq3-s.json": {
+    "source": "dot_local/share/strata-0.2.7/config/private_qwen-iq3-s.json",
+    "sha256": "61b42f90386ce60b4ac10b70118c7df6dcd079d4fa9782e36dd32f1cd4bdbf3f"
+  },
   ".local/share/strata-beta/compose.yaml": {
     "source": "dot_local/share/strata-beta/private_compose.yaml",
     "sha256": "f2429cd973c4e6d7b313ba20f3eb5693c9a041f19c054dcdb6c283afded62f0f"

@@ -1,0 +1,37 @@
+{
+  "release": "v0.2.7",
+  "terminal_version": "0.2.7",
+  "component_version": "0.1.52",
+  "release_url": "https://github.com/Niko1221/Strata/releases/tag/v0.2.7",
+  "download_base": "https://github.com/Niko1221/Strata/releases/download/v0.2.7/",
+  "feed_sequence": 115,
+  "signing_key": "5d1bc23abbeffd0d",
+  "directory": "~/.local/share/strata-0.2.7",
+  "packages": [
+    {
+      "component": "control",
+      "archive": "strata-control-0.1.52-linux-x86_64.tar.gz",
+      "sha256": "399fcc8f2d232b2f7ab7df82d863874a4b815019ced877a24f68a47ffc8110a0",
+      "size": 99431158,
+      "installed_bytes": 333832202
+    },
+    {
+      "component": "engine",
+      "archive": "strata-engine-0.1.52-linux-x86_64-cuda-cuda13.tar.gz",
+      "sha256": "4177c1a8ffc59bf66074093b22ac55ed477bcbe84f8bd12e378b0f1236da55c7",
+      "size": 645979691,
+      "installed_bytes": 1039550681,
+      "manifest_sha256": "52f57c1943e982cccc75426a050ab3961d0fd5791b0b9e66dacc3a764be1b4a7",
+      "build_id": "a42cc3d7df70+cuda13.0"
+    },
+    {
+      "component": "dsv41",
+      "archive": "strata-dsv41-0.1.52-linux-x86_64-cuda-cuda13.tar.gz",
+      "sha256": "c1b3d0ca2a575655a395ab4a2d0afc5cd731d0e5d26fbcdb955f2359dbbc1a57",
+      "size": 444709965,
+      "installed_bytes": 696306181,
+      "manifest_sha256": "dda8e2470c8cb96bd93b2f19fd0d23d24f7e328fea820c692e5ab7829a55db1a",
+      "build_id": "a42cc3d7df70+dsv41+cuda13.0"
+    }
+  ]
+}

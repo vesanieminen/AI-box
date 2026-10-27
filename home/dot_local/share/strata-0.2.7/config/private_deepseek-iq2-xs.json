@@ -1,0 +1,35 @@
+{
+  "exe": "/home/vesanieminen/.local/share/strata-0.2.7/engine-dsv41/0.1.52-linux-x86_64-cuda-cuda13/strata-dsv41",
+  "args": [
+    "--pack",
+    "/home/vesanieminen/.local/share/strata-deepseek/packs/iq2_xs",
+    "--max-context",
+    "262144",
+    "--eos",
+    "1",
+    "--dspark",
+    "auto",
+    "--dspark-conf",
+    "0.65",
+    "--tp",
+    "1",
+    "--ssd-cache",
+    "112"
+  ],
+  "cwd": "/home/vesanieminen/.local/share/strata-0.2.7/terminal",
+  "tokenizer": "/home/vesanieminen/.local/share/strata-deepseek/packs/iq2_xs/tokenizer",
+  "model_name": "deepseek-v4.1-flash-iq2-xs-027",
+  "arch": "deepseek41",
+  "log": "/home/vesanieminen/.local/share/strata-0.2.7/runtime/deepseek-engine.log",
+  "lib_dirs": [
+    "/home/vesanieminen/.local/share/strata-0.2.7/engine-dsv41/0.1.52-linux-x86_64-cuda-cuda13"
+  ],
+  "port": 5821,
+  "host": "127.0.0.1",
+  "gpu": [
+    0,
+    1
+  ],
+  "gpus_asked": true,
+  "engine_ready_s": 3600
+}

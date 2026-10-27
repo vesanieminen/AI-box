@@ -316,6 +316,45 @@
           "text"
         ]
       }
+    },
+    "qwen3.8-flash-next-iq3-s-027": {
+      "name": "Qwen3.8 Flash Next IQ3_S Strata 0.2.7 (256K, Vision)",
+      "description": "Strata Terminal 0.2.7 / engine 0.1.52, two RTX 3090 GPUs, MTP4, 262144-token context, GPU vision",
+      "cmd": "/usr/bin/prlimit --memlock=unlimited -- /usr/bin/setpriv --reuid=vesanieminen --regid=vesanieminen --init-groups --reset-env /home/vesanieminen/.local/share/strata-0.2.7/terminal/python/bin/python3 -u /home/vesanieminen/.local/share/strata-0.2.7/terminal/serve/server.py --engine strata --config /home/vesanieminen/.local/share/strata-0.2.7/config/qwen-iq3-s.json --host 127.0.0.1 --port 5820",
+      "proxy": "http://127.0.0.1:5820",
+      "checkEndpoint": "/health",
+      "useModelName": "qwen3.8-flash-next-iq3-s-027",
+      "ttl": 0,
+      "unloadTimeout": 150,
+      "capabilities": {
+        "context": 262144,
+        "in": [
+          "text",
+          "image"
+        ],
+        "out": [
+          "text"
+        ]
+      }
+    },
+    "deepseek-v4.1-flash-iq2-xs-027": {
+      "name": "DeepSeek V4.1 Flash IQ2_XS Strata 0.2.7 (256K)",
+      "description": "Strata DeepSeek engine 0.1.52, IST-DAS 2.25 bpw, two RTX 3090 GPUs, 262144-token context, text and tools",
+      "cmd": "/usr/bin/setpriv --reuid=vesanieminen --regid=vesanieminen --init-groups --reset-env /home/vesanieminen/.local/share/strata-0.2.7/terminal/python/bin/python3 -u /home/vesanieminen/.local/share/strata-0.2.7/terminal/serve/server.py --engine strata --config /home/vesanieminen/.local/share/strata-0.2.7/config/deepseek-iq2-xs.json --host 127.0.0.1 --port 5821",
+      "proxy": "http://127.0.0.1:5821",
+      "checkEndpoint": "/health",
+      "useModelName": "deepseek-v4.1-flash-iq2-xs-027",
+      "ttl": 0,
+      "unloadTimeout": 150,
+      "capabilities": {
+        "context": 262144,
+        "in": [
+          "text"
+        ],
+        "out": [
+          "text"
+        ]
+      }
     }
   },
   "routing": {
@@ -344,7 +383,9 @@
               "glm-5.3-flash-maya-s24",
               "qwen3.8-flash-next-iq3-s-beta",
               "qwen3.8-flash-next-iq3-s-0242",
-              "deepseek-v4.1-flash-iq2-xs"
+              "deepseek-v4.1-flash-iq2-xs",
+              "qwen3.8-flash-next-iq3-s-027",
+              "deepseek-v4.1-flash-iq2-xs-027"
             ]
           }
         }

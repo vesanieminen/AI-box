@@ -849,3 +849,10 @@ its engine and GPU allocation. Maya → Nemotron Bolt → Maya switching passed
 through the exclusive group, with the old Maya engine confirmed stopped and
 Maya ready at 256K afterward. The retained llama-swap unit selects Strata 0.2.4.2 Flash Next on boot. Long-context comprehension, maximum-context multimodal capacity,
 tool use and general model/vision quality remain unverified.
+
+## Additional Strata 0.2.7 backends
+
+[Strata 0.2.7](strata-0.2.7.md) adds isolated Qwen and DeepSeek 0.1.52
+runtimes sharing the existing weights and packs. The `-027` selector entries
+use localhost ports 5820 and 5821 and preserve the 0.2.4.2 boot default.
+See the linked instructions for restoration and outstanding live checks.
