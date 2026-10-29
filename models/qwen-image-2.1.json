@@ -1,0 +1,33 @@
+{
+  "model": "Qwen-Image-2.1",
+  "upstream": "https://huggingface.co/Qwen/Qwen-Image-2.1",
+  "source": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1",
+  "revision": "0217efd1d9c9452e84f6448903d6e21bfa171ffd",
+  "license": "Qwen Research License (noncommercial)",
+  "local_directory": "~/.local/share/comfyui/models",
+  "precision": "BF16",
+  "files": [
+    {
+      "path": "diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "bytes": 14230280616,
+      "sha256": "89f4158d066cc33906a199fca85634f766892dd78f49b6698dabf187ac86c4bc"
+    },
+    {
+      "path": "text_encoders/qwen3vl_8b_bf16.safetensors",
+      "bytes": 17534334616,
+      "sha256": "68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9"
+    },
+    {
+      "path": "vae/qwen_image_2.1_vae_bf16.safetensors",
+      "bytes": 675509688,
+      "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
+    }
+  ],
+  "verification": "All three installed file sizes and SHA-256 hashes match the pinned Hugging Face LFS inventory. ComfyUI 0.43.0 with PyTorch 2.13.0+cu130 generated a visually inspected 1024x1024 BF16 cabin still life at seed 42, 25 Euler/simple steps and CFG 1 in 29.257 seconds on one RTX 3090. Editing, larger resolutions, multi-GPU operation and sustained performance remain unverified.",
+  "download_command": "HF_HUB_DISABLE_TELEMETRY=1 HF_XET_HIGH_PERFORMANCE=1 HF_XET_CACHE=\"$HOME/.local/share/comfyui/cache/xet\" \"$comfy_download_tools/bin/hf\" download Comfy-Org/Qwen-Image-2.1 diffusion_models/qwen_image_2.1_bf16.safetensors text_encoders/qwen3vl_8b_bf16.safetensors vae/qwen_image_2.1_vae_bf16.safetensors --revision 0217efd1d9c9452e84f6448903d6e21bfa171ffd --local-dir \"$HOME/.local/share/comfyui/models\"",
+  "download_tools": {
+    "huggingface_hub": "2.4.0",
+    "hf_xet": "1.7.1",
+    "installation": "Temporary venv; see system/comfyui/README.md. Removed after download."
+  }
+}

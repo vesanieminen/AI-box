@@ -88,6 +88,9 @@ GitHub CLI installation and separate PAT provisioning are documented in
 
 ## AI box restoration
 
+The optional [ComfyUI image-generation container](system/comfyui/README.md)
+runs Qwen-Image-2.1 on demand, with models and outputs outside this repository.
+
 Start with a fresh Omarchy installation, install `packages/official.txt`, apply
 the user configs, then follow [AI service restoration](system/local-ai/README.md).
 [Model provenance and download commands](models/README.md) record the copied

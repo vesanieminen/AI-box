@@ -1,5 +1,9 @@
 # Model assets
 
+[Qwen-Image-2.1](qwen-image-2.1.json) records the three BF16 image-generation
+components and pinned download command. Its on-demand Docker runtime and
+restoration are documented in [ComfyUI](../system/comfyui/README.md).
+
 [Current catalog: exact sizes, locations and shared assets](catalog.md) records
 the installed inventory measured on 2026-10-25, including DeepSeek and all
 companion models.

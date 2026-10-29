@@ -71,6 +71,23 @@ def recent_maya_request():
     return float(activity['last_request_at'] or 0)
 
 
+def recent_comfy_request():
+    try:
+        with urlopen('http://127.0.0.1:8188/queue', timeout=5) as response:
+            queue = json.load(response)
+    except URLError as error:
+        if isinstance(error.reason, ConnectionRefusedError):
+            return 0.0
+        raise
+    if queue['queue_running'] or queue['queue_pending']:
+        return time.time()
+    with urlopen('http://127.0.0.1:8188/history?max_items=1', timeout=5) as response:
+        history = json.load(response)
+    return max((message[1]['timestamp'] / 1000
+                for job in history.values() for message in job['status']['messages']),
+               default=0.0)
+
+
 def swap_busy():
     state = command('systemctl', 'show', 'llama-swap.service',
                     '--property=ActiveState', '--value').strip()
@@ -157,7 +174,7 @@ def inspect(last_activity):
     now = time.time()
     connected = ollama_connected() or swap_busy() or downloads_active()
     last_activity = max(last_activity, recent_ollama_request(), recent_swap_request(),
-                        recent_maya_request())
+                        recent_maya_request(), recent_comfy_request())
     if connected:
         last_activity = now
     desktop = desktop_idle()
@@ -186,7 +203,8 @@ def main():
             if status['would_suspend']:
                 # Repeat the connection check immediately before requesting sleep.
                 if (not ollama_connected() and not swap_busy() and not downloads_active()
-                        and time.time() - recent_maya_request() >= IDLE_SECONDS and desktop_idle()):
+                        and time.time() - recent_maya_request() >= IDLE_SECONDS
+                        and time.time() - recent_comfy_request() >= IDLE_SECONDS and desktop_idle()):
                     print('Desktop and AI server idle for 15 minutes; requesting suspend', flush=True)
                     subprocess.run(['systemctl', 'suspend'], check=True, timeout=30)
                 last_activity = time.time()

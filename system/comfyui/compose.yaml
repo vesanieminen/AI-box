@@ -1,0 +1,33 @@
+name: local-image
+services:
+  comfyui:
+    image: local-ai/comfyui:0.43.0-cu130
+    build:
+      context: .
+    container_name: qwen-image-comfyui
+    user: "1000:1000"
+    init: true
+    restart: "no"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    devices: ["nvidia.com/gpu=0"]
+    environment:
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    ports: ["127.0.0.1:8188:8188"]
+    volumes:
+      - /home/vesanieminen/.local/share/comfyui:/data
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=2g
+    shm_size: 2g
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8188/system_stats', timeout=5).read()"]
+      interval: 15s
+      timeout: 10s
+      start_period: 90s
+      retries: 4
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "2"

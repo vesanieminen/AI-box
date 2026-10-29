@@ -56,6 +56,9 @@ class ActivityTests(unittest.TestCase):
         maya = patch.object(guard, 'recent_maya_request', return_value=0)
         maya.start()
         self.addCleanup(maya.stop)
+        comfy = patch.object(guard, 'recent_comfy_request', return_value=0)
+        comfy.start()
+        self.addCleanup(comfy.stop)
 
     def test_stopped_swap_allows_manual_ollama_idle_policy(self):
         with patch.object(guard, 'command', return_value='inactive\n'), \
@@ -181,6 +184,7 @@ class MayaActivityTests(unittest.TestCase):
                  patch.object(guard, 'desktop_idle', return_value=True), \
                  patch.object(guard, 'recent_ollama_request', return_value=0), \
                  patch.object(guard, 'recent_swap_request', return_value=0), \
+                 patch.object(guard, 'recent_comfy_request', return_value=0), \
                  patch.object(guard, 'urlopen', return_value=response({'activity': activity})):
                 _, status = guard.inspect(1000)
                 self.assertEqual(status['would_suspend'], expected)
@@ -193,6 +197,56 @@ class MayaActivityTests(unittest.TestCase):
         with patch.object(guard, 'urlopen', return_value=response({})):
             with self.assertRaises(KeyError):
                 guard.recent_maya_request()
+
+
+class ComfyActivityTests(unittest.TestCase):
+    def test_stopped_container_does_not_prevent_suspend(self):
+        with patch.object(guard, 'urlopen', side_effect=URLError(ConnectionRefusedError())):
+            self.assertEqual(guard.recent_comfy_request(), 0)
+
+    def test_open_idle_ui_does_not_count_as_generation(self):
+        with patch.object(guard, 'urlopen', side_effect=[
+                response({'queue_running': [], 'queue_pending': []}), response({})]):
+            self.assertEqual(guard.recent_comfy_request(), 0)
+
+    def test_queued_or_running_image_keeps_machine_active(self):
+        for key in ('queue_running', 'queue_pending'):
+            queue = {'queue_running': [], 'queue_pending': []}
+            queue[key] = [[1, 'prompt-id']]
+            with self.subTest(key=key), patch.object(guard.time, 'time', return_value=2000), \
+                 patch.object(guard, 'urlopen', return_value=response(queue)):
+                self.assertEqual(guard.recent_comfy_request(), 2000)
+
+    def test_completed_image_preserves_idle_grace(self):
+        with patch.object(guard, 'urlopen', side_effect=[
+                response({'queue_running': [], 'queue_pending': []}),
+                response({'prompt-id': {'status': {'messages': [
+                    ['execution_start', {'timestamp': 1980000}],
+                    ['execution_success', {'timestamp': 1990000}]]}}})]):
+            self.assertEqual(guard.recent_comfy_request(), 1990)
+
+    def test_suspend_decision_uses_comfy_activity(self):
+        for activity, expected in ((0, True), (1990, False), (2000, False)):
+            with self.subTest(activity=activity), \
+                 patch.object(guard.time, 'time', return_value=2000), \
+                 patch.object(guard, 'ollama_connected', return_value=False), \
+                 patch.object(guard, 'swap_busy', return_value=False), \
+                 patch.object(guard, 'downloads_active', return_value=False), \
+                 patch.object(guard, 'desktop_idle', return_value=True), \
+                 patch.object(guard, 'recent_ollama_request', return_value=0), \
+                 patch.object(guard, 'recent_swap_request', return_value=0), \
+                 patch.object(guard, 'recent_maya_request', return_value=0), \
+                 patch.object(guard, 'recent_comfy_request', return_value=activity):
+                _, status = guard.inspect(1000)
+                self.assertEqual(status['would_suspend'], expected)
+
+    def test_unverifiable_activity_prevents_suspend(self):
+        with patch.object(guard, 'urlopen', side_effect=URLError(TimeoutError())):
+            with self.assertRaises(URLError):
+                guard.recent_comfy_request()
+        with patch.object(guard, 'urlopen', return_value=response({})):
+            with self.assertRaises(KeyError):
+                guard.recent_comfy_request()
 
 
 if __name__ == '__main__':

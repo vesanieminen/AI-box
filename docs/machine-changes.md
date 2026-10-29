@@ -370,3 +370,27 @@ prevented suspend. Qwen-to-DeepSeek switching passed; the original 0.2.4.2
 Qwen route was restored and passed loaded health. Full-context stability,
 sustained performance and new-version calibration remain unverified.
 [Restore commands, pinned provenance and validation](../system/local-ai/strata-0.2.7.md).
+
+## Local image generation
+
+Qwen-Image-2.1 uses an on-demand ComfyUI 0.43.0 Docker container built from a
+digest-pinned PyTorch 2.13.0 / CUDA 13.0 base. It binds localhost port 8188 and
+uses GPU 0, UID/GID 1000, a read-only container root and automatic VRAM
+offloading. All model files, workflows, caches and generated images live under
+`~/.local/share/comfyui`; no ComfyUI host package or system account is required.
+The three core BF16 files total 32,440,124,920 bytes. The selected llama-swap
+boot service and default vLLM profile are retained. Chat models are unloaded
+through llama-swap while images use the GPU; close chat interfaces and avoid
+upstream health polling until the image models have been released.
+
+The installed suspend guard checks queued/running image jobs and recent
+completion timestamps. An idle ComfyUI browser does not prevent suspend.
+Compose validation and all 28 guard regression tests pass. Container build,
+CUDA access, browser workflow loading and all three model hashes passed.
+A 1024 by 1024 BF16 image at seed 42 and 25 steps completed in 29.257 seconds
+and was visually inspected. Live image activity detection and model release
+passed; the existing Strata chat backend was restored afterwards. Editing,
+higher resolutions, multi-GPU use and sustained performance remain unverified.
+[Working setup and restore commands](../system/comfyui/README.md) and
+[pinned model provenance](../models/qwen-image-2.1.json) are retained; weights
+and generated images stay outside Git.
