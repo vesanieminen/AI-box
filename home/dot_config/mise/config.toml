@@ -4,6 +4,7 @@ codex = "latest"
 "github:can1357/oh-my-pi" = "latest"
 node = "26.8.2"
 "npm:@xai-official/grok" = "latest"
+opencode = "latest"
 pi = "latest"
 
 [settings.upgrade]

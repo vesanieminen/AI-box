@@ -22,32 +22,25 @@ Install the additions in [official packages](../packages/official.txt) with
 | stress-ng | Manual system stress testing |
 | ttf-cascadia-mono-nerd | Configured terminal font |
 
-Install AUR additions with `yay -S --needed geekbench llama-swap-bin opencode-beta`.
+Install AUR additions with `yay -S --needed geekbench llama-swap-bin`.
 Geekbench 7 provides manual benchmarking; llama-swap provides LAN model switching. Package sources and
 restoration commands are in [packages](../packages/README.md); installed versions
 are recorded in [versions.txt](../packages/versions.txt).
 
-### OpenCode 2
+### OpenCode
 
-OpenCode 2.2.1 is installed through AUR `opencode-beta` (2.2.1-1).
-Both `opencode` and `opencode2` resolve to package-managed executables in
-`/usr/bin`. Restore or update with `yay -S --needed opencode-beta`
-(omit `--needed` when explicitly reinstalling). The AUR recipe verifies the
-upstream native binary archive with SHA-256.
+OpenCode uses Omarchy's default mise installation. Restore its standard launcher
+with `omarchy mise install opencode`, then run `~/.local/bin/opencode --version`
+to install and select the latest release. The tracked mise configuration retains
+`opencode = "latest"`; the stock generated launcher stays outside Git.
+Existing OpenCode settings, credentials and session data remain local and
+outside this repository.
 
-OpenCode 1 is removed from mise, and its `~/.local/bin/opencode` launcher
-is removed so it cannot reinstall version 1. The retained mise configuration
-contains the other tools. On a machine with the old mise installation, run
-`mise unuse -g opencode`, `mise uninstall opencode --all`, and remove the old
-`~/.local/bin/opencode` mise launcher before using the AUR package.
-Existing OpenCode configuration, credentials and session data remain local
-and outside this repository. Restart existing OpenCode clients to use the new
-binary.
-
-Verified on 2026-10-29: package source checksums, both commands reporting
-`opencode v2.2.1`, version 1 absent from mise, and
-`opencode models --standalone` successfully listing models. Interactive model
-inference has not been tested as part of this update.
+Verified on 2026-10-29: the standard launcher and shell command report 1.19.5,
+mise selects that version, and `opencode models --pure` lists models.
+Interactive model inference has not been tested. Removal of the previous AUR
+`opencode-beta` package still requires `sudo pacman -R opencode-beta` in an
+authenticated terminal; it currently remains installed alongside the default.
 
 ## User configuration
 

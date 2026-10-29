@@ -25,7 +25,7 @@
   },
   ".config/mise/config.toml": {
     "source": "dot_config/mise/config.toml",
-    "sha256": "db636f03e1cb7eb8cf86e715e3b14b676d6666929471f1ee69f4052a5963d1b0"
+    "sha256": "eb4776832c1d19da750b709519d83bd2d7117d091b8476cf473664d8c9e74b45"
   },
   ".config/omarchy/plugins/vesanieminen.idle/IdleModel.js": {
     "source": "dot_config/omarchy/plugins/vesanieminen.idle/IdleModel.js",

@@ -42,8 +42,7 @@ archive checksum. Configuration and service restoration are in
 GitHub CLI uses Arch `github-cli`: `sudo pacman -S --needed github-cli`.
 PAT provisioning and HTTPS Git authentication are documented in `docs/github.md`.
 
-OpenCode 2 uses AUR `opencode-beta` (2.2.1-1 verified). Restore with
-`yay -S --needed opencode-beta`; it provides both `opencode` and `opencode2`.
-The recipe verifies the upstream npm native binary with SHA-256. Update with
-`yay -S opencode-beta`. [AUR package](https://aur.archlinux.org/packages/opencode-beta),
-[upstream installation](https://opencode.ai/v2/docs).
+OpenCode uses Omarchy's default mise launcher; restoration and validation are
+in [machine configuration](../docs/machine-changes.md#opencode). The previous
+`opencode-beta` AUR package is pending removal with `sudo pacman -R opencode-beta`;
+it remains in `foreign.txt` until removal is verified.
