@@ -1,2 +1,3 @@
 geekbench
 llama-swap-bin
+opencode-beta

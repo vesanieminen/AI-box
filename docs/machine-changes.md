@@ -22,10 +22,32 @@ Install the additions in [official packages](../packages/official.txt) with
 | stress-ng | Manual system stress testing |
 | ttf-cascadia-mono-nerd | Configured terminal font |
 
-Install AUR additions with `yay -S --needed geekbench llama-swap-bin`.
+Install AUR additions with `yay -S --needed geekbench llama-swap-bin opencode-beta`.
 Geekbench 7 provides manual benchmarking; llama-swap provides LAN model switching. Package sources and
 restoration commands are in [packages](../packages/README.md); installed versions
 are recorded in [versions.txt](../packages/versions.txt).
+
+### OpenCode 2
+
+OpenCode 2.2.1 is installed through AUR `opencode-beta` (2.2.1-1).
+Both `opencode` and `opencode2` resolve to package-managed executables in
+`/usr/bin`. Restore or update with `yay -S --needed opencode-beta`
+(omit `--needed` when explicitly reinstalling). The AUR recipe verifies the
+upstream native binary archive with SHA-256.
+
+OpenCode 1 is removed from mise, and its `~/.local/bin/opencode` launcher
+is removed so it cannot reinstall version 1. The retained mise configuration
+contains the other tools. On a machine with the old mise installation, run
+`mise unuse -g opencode`, `mise uninstall opencode --all`, and remove the old
+`~/.local/bin/opencode` mise launcher before using the AUR package.
+Existing OpenCode configuration, credentials and session data remain local
+and outside this repository. Restart existing OpenCode clients to use the new
+binary.
+
+Verified on 2026-10-29: package source checksums, both commands reporting
+`opencode v2.2.1`, version 1 absent from mise, and
+`opencode models --standalone` successfully listing models. Interactive model
+inference has not been tested as part of this update.
 
 ## User configuration
 

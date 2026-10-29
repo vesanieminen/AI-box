@@ -23,6 +23,10 @@
     "source": "dot_config/kitty/kitty.conf",
     "sha256": "e36b3fd6b9f67280aa3718fcf64306e2c52942cf5180b54f9bdc56772dc70548"
   },
+  ".config/mise/config.toml": {
+    "source": "dot_config/mise/config.toml",
+    "sha256": "db636f03e1cb7eb8cf86e715e3b14b676d6666929471f1ee69f4052a5963d1b0"
+  },
   ".config/omarchy/plugins/vesanieminen.idle/IdleModel.js": {
     "source": "dot_config/omarchy/plugins/vesanieminen.idle/IdleModel.js",
     "sha256": "58226a67d5fc2f33b1a23b55cb32764a8b2091cc94c4d02af1b67f369440b9b8"
