@@ -150,7 +150,8 @@
         "A photorealistic still life in a quiet Finnish lakeside cabin. A pale blue ceramic mug sits on a weathered pine table beside a small glass vase holding three wildflowers. A folded cream linen cloth lies to the right of the mug. Through a large window behind the table, a calm lake reflects a forest of birch and pine trees in early autumn. Soft warm morning sunlight enters from the left, illuminating the ceramic glaze and the grain of the wood. The background is gently out of focus, with natural colors and subtle film grain. The composition feels peaceful and balanced, with no text or logos.",
         "",
         1024
-      ]
+      ],
+      "title": "Prompt"
     },
     {
       "id": 5,
@@ -279,7 +280,8 @@
         "euler",
         "simple",
         1.0
-      ]
+      ],
+      "title": "Seed"
     },
     {
       "id": 8,
@@ -348,7 +350,8 @@
       },
       "widgets_values": [
         "Qwen_Image_2.1_2GPU"
-      ]
+      ],
+      "title": "Generated image"
     }
   ],
   "links": [
@@ -433,6 +436,29 @@
       "offset": [
         40,
         40
+      ]
+    },
+    "linearMode": true,
+    "linearData": {
+      "inputs": [
+        [
+          4,
+          "prompt",
+          {
+            "height": 240,
+            "description": "Describe the image you want to create."
+          }
+        ],
+        [
+          7,
+          "seed",
+          {
+            "description": "Keep the same seed and prompt to reproduce an image."
+          }
+        ]
+      ],
+      "outputs": [
+        "9"
       ]
     }
   },

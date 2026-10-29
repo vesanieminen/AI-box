@@ -410,6 +410,11 @@ benchmark JSON and generated images stay under `~/.local/share/comfyui`.
 A fresh two-GPU rerender at fixed seed 424200, after container restart and with
 no cached nodes, produced pixel-identical decoded output. Both saved workflows
 use fixed seed control; equivalence across GPU counts or versions is not assumed.
+The two-GPU browser workflow opens in App Mode with prompt and seed controls
+and the generated image output. Its backend inputs match the retained API
+workflow. Loading the saved layout and generating/displaying a 1024-square
+image through the App Mode Run button passed verification. The layout is
+retained in the workflow template and restored by copying that file.
 [Working setup and restore commands](../system/comfyui/README.md) and
 [pinned model provenance](../models/qwen-image-2.1.json) are retained; weights
 and generated images stay outside Git.

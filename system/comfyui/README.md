@@ -150,6 +150,27 @@ new submissions received HTTP 503 during draining, the accepted image finished,
 the container and distributed worker stopped, chat returned `4` for `2+2`,
 and restarting ComfyUI restored successful history and served the resulting PNG.
 
+## App Mode interface
+
+The saved `qwen-image-2.1-2gpu.json` browser workflow opens directly in App Mode
+at <http://192.168.0.181:8000/comfyui/>. Open it from the workflow browser;
+reload/reopen an older tab to load the saved layout. The interface exposes the
+scene prompt (node 4), seed (node 7), standard Run controls and generated image
+output (node 9). The default seed is fixed at 42. Resolution remains 1024 square
+with 25 Euler/simple steps, CFG 1 and both GPUs. Select Graph when advanced
+workflow editing is needed. ComfyUI may show its first-use App Mode tour.
+
+The layout is stored in the workflow's `extra.linearMode` and
+`extra.linearData` metadata. Restore it with the workflow copy command above;
+no image rebuild or service change is required. The API workflow used by
+Open WebUI remains the same.
+
+Verified on 2026-10-29: the saved workflow loaded through the LAN proxy in App
+Mode with exactly the prompt/seed selections and SaveImage output. Its nine
+backend node types and inputs matched the retained two-GPU API workflow. A real
+Run-button submission at seed 20261029 completed successfully and displayed its
+1024-square result in the app. The saved default remains fixed seed 42.
+
 ## Repeatable images
 
 Both saved browser workflows set KSampler's seed control to `fixed` (seed 42
