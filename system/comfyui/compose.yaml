@@ -11,15 +11,16 @@ services:
     read_only: true
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
-    devices: ["nvidia.com/gpu=0"]
+    devices: ["nvidia.com/gpu=0", "nvidia.com/gpu=1"]
     environment:
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
       COMFYUI_LIFECYCLE_DIR: /data/runtime
-    command: ["--base-directory", "/data", "--listen", "0.0.0.0", "--port", "8188", "--cuda-device", "0", "--reserve-vram", "1.0", "--offline", "--disable-all-custom-nodes", "--whitelist-custom-nodes", "local_ai_queue_guard"]
+    command: ["--base-directory", "/data", "--listen", "0.0.0.0", "--port", "8188", "--cuda-device", "all", "--reserve-vram", "1.0", "--offline", "--disable-all-custom-nodes", "--whitelist-custom-nodes", "local_ai_queue_guard", "qwen_image21_sp"]
     ports: ["0.0.0.0:8188:8188"]
     volumes:
       - /home/vesanieminen/.local/share/comfyui:/data
       - /home/vesanieminen/Projects/dotfiles/system/comfyui/queue_guard:/data/custom_nodes/local_ai_queue_guard:ro
+      - /home/vesanieminen/.local/share/comfyui/extensions/qwen-image21-sp:/data/custom_nodes/qwen_image21_sp:ro
     tmpfs:
       - /tmp:rw,nosuid,nodev,size=2g
     shm_size: 2g

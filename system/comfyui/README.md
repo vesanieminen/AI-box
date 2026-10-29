@@ -18,10 +18,13 @@ use the port 8000 route for automatic startup and GPU switching. Direct port
 8188 does not start the container. Docker's published port is reachable on
 all host IPv4 interfaces; it is not restricted by the existing UFW port 8000 rule.
 
-The container uses GPU 0 as UID/GID 1000, automatic memory offloading and a
-1 GB VRAM reserve. Its root filesystem is read-only. Partner nodes and custom
-nodes are disabled except for the retained local queue guard. The Pi can keep
-hosting LiteLLM/Open WebUI while GPU execution stays on this AI box.
+The container configuration exposes both RTX 3090 GPUs as UID/GID 1000, with
+automatic memory offloading and a 1 GB VRAM reserve. The ordinary workflow uses
+GPU 0; the separate two-GPU workflow uses sequence parallelism. Its root
+filesystem is read-only. Partner nodes and other custom nodes are disabled;
+only the retained queue guard and pinned Qwen sequence-parallel loader are
+whitelisted. The Pi can keep hosting LiteLLM/Open WebUI while GPU execution
+stays on this AI box.
 
 ## Restore
 
@@ -50,11 +53,6 @@ HF_HUB_DISABLE_TELEMETRY=1 HF_XET_HIGH_PERFORMANCE=1 HF_XET_CACHE="$HOME/.local/
 rm -rf -- "$comfy_download_tools"
 unset comfy_download_tools
 cp workflows/qwen-image-2.1.json "$HOME/.local/share/comfyui/user/default/workflows/"
-mkdir -p "$HOME/.local/share/comfyui/runtime"
-sudo install -Dm755 usr/local/libexec/comfyui-lifecycle.py /usr/local/libexec/comfyui-lifecycle.py
-sudo docker compose create
-sudo install -Dm644 ../local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
-sudo systemctl restart llama-swap.service
 ```
 
 Pinned model sizes and SHA-256 values are in
@@ -62,6 +60,110 @@ Pinned model sizes and SHA-256 values are in
 the standard model, 1024 by 1024 pixels, 25 Euler/simple steps and CFG 1.
 It accepts a detailed English scene description directly; no separate prompt
 enhancer model is installed. Start with this size before trying larger images.
+
+## Two-GPU extension and benchmark
+
+The separate `qwen-image-2.1-2gpu.json` browser workflow and
+`qwen-image-2.1-2gpu-api.json` API workflow replace only the diffusion loader
+with `QwenImage21SPUNETLoader`, `world_size=2`, `devices=0,1`. It distributes
+attention and token computation using NCCL/Ulysses sequence parallelism. Each
+GPU keeps a copy of the BF16 diffusion model; this does not combine the cards
+into a single 48 GB memory pool. The standard workflow remains available for
+one-GPU operation. Both use the same model files, 25 steps and CFG 1.
+
+The extension is a third-party community project, not an official Qwen or
+ComfyUI extension. Its source is
+[buqi-qwen-image-2.1-multigpu](https://github.com/buqi-code/buqi-qwen-image-2.1-multigpu/tree/081b20eedf57cbaa6cb1dd3cab0434914f625a00),
+pinned at `081b20eedf57cbaa6cb1dd3cab0434914f625a00`. Its archive SHA-256 is
+`2d3b6972c93e46fb296c49983f282653da7f1a9dff596aa492bdfd69ad8564b6`.
+A retained [compatibility patch](patches/attention-container.patch) consumes
+ComfyUI 0.43's attention tensor containers before the distributed collectives.
+Source stays under the ComfyUI data directory and is mounted read-only;
+no host Python packages or additional model weights are installed.
+
+Restore the source before creating/recreating the container:
+
+```bash
+comfy_sp_archive="$(mktemp)"
+curl --fail --location https://github.com/buqi-code/buqi-qwen-image-2.1-multigpu/archive/081b20eedf57cbaa6cb1dd3cab0434914f625a00.tar.gz --output "$comfy_sp_archive"
+printf '%s  %s\n' 2d3b6972c93e46fb296c49983f282653da7f1a9dff596aa492bdfd69ad8564b6 "$comfy_sp_archive" | sha256sum --check
+mkdir -p "$HOME/.local/share/comfyui/extensions/qwen-image21-sp"
+tar -xzf "$comfy_sp_archive" --strip-components=1 -C "$HOME/.local/share/comfyui/extensions/qwen-image21-sp"
+patch --directory="$HOME/.local/share/comfyui/extensions/qwen-image21-sp" -p1 < patches/attention-container.patch
+rm -- "$comfy_sp_archive"
+unset comfy_sp_archive
+cp workflows/qwen-image-2.1-2gpu.json "$HOME/.local/share/comfyui/user/default/workflows/"
+```
+
+After restoring the extension and workflows, create the container and install
+the lifecycle helper and selector:
+
+```bash
+mkdir -p "$HOME/.local/share/comfyui/runtime"
+sudo install -Dm755 usr/local/libexec/comfyui-lifecycle.py /usr/local/libexec/comfyui-lifecycle.py
+sudo docker compose create
+sudo install -Dm644 ../local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo systemctl restart llama-swap.service
+```
+
+Benchmark from this directory with no other GPU work or dashboards polling
+upstream chat model endpoints:
+
+```bash
+python benchmark.py workflows/qwen-image-2.1-api.json --label single-gpu-bf16 --output "$HOME/.local/share/comfyui/runtime/benchmark-single-gpu.json"
+python benchmark.py workflows/qwen-image-2.1-2gpu-api.json --label two-gpu-bf16 --output "$HOME/.local/share/comfyui/runtime/benchmark-two-gpu.json"
+```
+
+Each command restarts ComfyUI through llama-swap, runs one cold job and three
+warm jobs with seeds 424200–424203, and records ComfyUI execution timestamps,
+request elapsed time and sampled GPU memory/utilization. Changing the seed
+forces actual sampling on every run. Model loading is included in the cold
+execution time; container startup is measured separately. Raw results and
+benchmark images stay outside Git. BF16 kernel layouts can produce small pixel
+differences between GPU counts, so bit-identical images are not assumed.
+
+Verified on 2026-10-29 with two RTX 3090 24 GB cards over PCIe/PHB, without
+NVLink. Times include 1024-square BF16 sampling, VAE decode and PNG save:
+
+| Configuration | Cold job | Warm jobs | Warm mean |
+| --- | ---: | --- | ---: |
+| One GPU | 30.285 s | 15.938 / 15.977 / 16.022 s | 15.979 s |
+| Two GPUs, sequence parallel | 30.896 s | 12.004 / 12.068 / 12.100 s | 12.057 s |
+
+Two GPUs reduced warm execution time by 24.54% (1.325 times the throughput);
+cold generation time was similar. Warm runs reuse the same prompt conditioning
+and vary the seed; changed-prompt performance was not separately benchmarked.
+Sampled memory peaks were 23,670 MiB on GPU 0 with one GPU, and 23,922 /
+14,781 MiB on GPUs 0 / 1 with two GPUs. Both cards reached 100% utilization
+in the two-GPU runs. These are sampled observations, not guaranteed peak bounds.
+
+The paired seed-424201 outputs were visually inspected and looked consistent.
+Across all four identical-seed pairs, mean absolute RGB channel differences
+were 0.485–0.796 on the 0–255 scale; these outputs are not pixel-identical.
+The two-GPU workflow is the preferred option for repeated image generation;
+load `qwen-image-2.1-2gpu.json` from ComfyUI's workflow browser. Keep
+`qwen-image-2.1.json` for single-GPU use. The alternative of placing the text
+encoder/VAE on one card and diffusion on the other is not installed or tested.
+
+A real distributed image job also passed the queue-safe chat handover test:
+new submissions received HTTP 503 during draining, the accepted image finished,
+the container and distributed worker stopped, chat returned `4` for `2+2`,
+and restarting ComfyUI restored successful history and served the resulting PNG.
+
+## Repeatable images
+
+Both saved browser workflows set KSampler's seed control to `fixed` (seed 42
+by default). Keep the seed, prompt, negative prompt, workflow, resolution,
+sampler, scheduler, steps, CFG, model files, GPU count and software versions
+unchanged to reproduce a render. Save the workflow JSON with the seed.
+
+Verified on 2026-10-29: the two-GPU BF16 workflow at seed 424200 was generated
+again after a container restart. ComfyUI reported no cached nodes, and the
+result had pixel-identical decoded output to the original cold benchmark
+image. PNG file bytes need not match because metadata can differ. This is a
+verified repeat on this pinned setup, not a guarantee across versions, hardware,
+GPU counts or all possible workflows. The one-versus-two-GPU comparison above
+showed small pixel differences even with identical seeds.
 
 ## GPU use and suspend
 
@@ -126,8 +228,7 @@ in use; this is a sampled observation, not a guaranteed peak bound.
 
 Live image activity was detected by the installed suspend guard; all 28 guard
 regression tests pass. Image models were released afterwards and the existing
-Strata chat backend restored. Higher resolutions, editing, multi-GPU operation
-and sustained performance remain unverified. The container has no independent boot restart policy.
+Strata chat backend restored. Higher resolutions, editing and sustained performance remain unverified. The container has no independent boot restart policy.
 
 The installed llama-swap integration and LAN port publication were verified on
 2026-10-29. The browser loaded all nine workflow nodes through the LAN proxy;

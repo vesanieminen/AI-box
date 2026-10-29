@@ -396,7 +396,20 @@ CUDA access, browser workflow loading and all three model hashes passed.
 A 1024 by 1024 BF16 image at seed 42 and 25 steps completed in 29.257 seconds
 and was visually inspected. Live image activity detection and model release
 passed; the existing Strata chat backend was restored afterwards. Editing,
-higher resolutions, multi-GPU use and sustained performance remain unverified.
+higher resolutions and sustained performance remain unverified.
+
+The container exposes both RTX 3090s. A third-party Qwen sequence-parallel
+extension is pinned at `081b20eedf57cbaa6cb1dd3cab0434914f625a00`, with the
+retained attention-container compatibility patch and a separate two-GPU
+workflow. Three warm 1024-square, 25-step BF16 jobs averaged 12.057 seconds,
+versus 15.979 seconds on one GPU (24.54% less time); cold jobs took 30.896 and
+30.285 seconds respectively. Warm runs reuse prompt conditioning. Both GPUs
+were active, the paired outputs looked consistent, and distributed job draining,
+chat inference and result retrieval after restart passed. Source, weights,
+benchmark JSON and generated images stay under `~/.local/share/comfyui`.
+A fresh two-GPU rerender at fixed seed 424200, after container restart and with
+no cached nodes, produced pixel-identical decoded output. Both saved workflows
+use fixed seed control; equivalence across GPU counts or versions is not assumed.
 [Working setup and restore commands](../system/comfyui/README.md) and
 [pinned model provenance](../models/qwen-image-2.1.json) are retained; weights
 and generated images stay outside Git.

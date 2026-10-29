@@ -1,0 +1,21 @@
+--- a/qwen_image21_sp/sp_forward.py
++++ b/qwen_image21_sp/sp_forward.py
+@@ -2,7 +2,7 @@
+ import torch.distributed as dist
+ 
+ import comfy.model_prefetch
+-from comfy.ldm.modules.attention import optimized_attention
++from comfy.ldm.modules.attention import AttentionTensorContainer, optimized_attention
+ from comfy.ldm.qwen_image21.model import _split_rows, prefix_cache_key
+ 
+ 
+@@ -123,6 +123,9 @@
+ def ulysses_block_causal_attention(segments, ctx, transformer_options, prefix_len=0,
+                                    cache=None, cached=False, block_index=0):
+     def attention(q, k, v, heads, preferred_attention=None):
++        # ComfyUI 0.43 passes single-owner containers; collectives need tensors.
++        q, k, v = (value.take() if isinstance(value, AttentionTensorContainer) else value
++                   for value in (q, k, v))
+         q = a2a_gather_sequence(q, ctx)
+         k = a2a_gather_sequence(k, ctx)
+         v = a2a_gather_sequence(v, ctx)
