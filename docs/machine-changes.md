@@ -414,7 +414,9 @@ The two-GPU browser workflow opens in App Mode with prompt and seed controls
 and the generated image output. Its backend inputs match the retained API
 workflow. Loading the saved layout and generating/displaying a 1024-square
 image through the App Mode Run button passed verification. The layout is
-retained in the workflow template and restored by copying that file.
+retained as `qwen-image-2.1-2gpu.app.json`, which appears in the Apps sidebar;
+a fresh-browser check verified listing and opening it from that menu. Restore
+it by copying the workflow template.
 [Working setup and restore commands](../system/comfyui/README.md) and
 [pinned model provenance](../models/qwen-image-2.1.json) are retained; weights
 and generated images stay outside Git.

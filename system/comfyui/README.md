@@ -63,7 +63,7 @@ enhancer model is installed. Start with this size before trying larger images.
 
 ## Two-GPU extension and benchmark
 
-The separate `qwen-image-2.1-2gpu.json` browser workflow and
+The separate `qwen-image-2.1-2gpu.app.json` browser workflow and
 `qwen-image-2.1-2gpu-api.json` API workflow replace only the diffusion loader
 with `QwenImage21SPUNETLoader`, `world_size=2`, `devices=0,1`. It distributes
 attention and token computation using NCCL/Ulysses sequence parallelism. Each
@@ -92,7 +92,7 @@ tar -xzf "$comfy_sp_archive" --strip-components=1 -C "$HOME/.local/share/comfyui
 patch --directory="$HOME/.local/share/comfyui/extensions/qwen-image21-sp" -p1 < patches/attention-container.patch
 rm -- "$comfy_sp_archive"
 unset comfy_sp_archive
-cp workflows/qwen-image-2.1-2gpu.json "$HOME/.local/share/comfyui/user/default/workflows/"
+cp workflows/qwen-image-2.1-2gpu.app.json "$HOME/.local/share/comfyui/user/default/workflows/"
 ```
 
 After restoring the extension and workflows, create the container and install
@@ -141,7 +141,7 @@ The paired seed-424201 outputs were visually inspected and looked consistent.
 Across all four identical-seed pairs, mean absolute RGB channel differences
 were 0.485–0.796 on the 0–255 scale; these outputs are not pixel-identical.
 The two-GPU workflow is the preferred option for repeated image generation;
-load `qwen-image-2.1-2gpu.json` from ComfyUI's workflow browser. Keep
+load `qwen-image-2.1-2gpu.app.json` from ComfyUI's workflow browser. Keep
 `qwen-image-2.1.json` for single-GPU use. The alternative of placing the text
 encoder/VAE on one card and diffusion on the other is not installed or tested.
 
@@ -152,9 +152,10 @@ and restarting ComfyUI restored successful history and served the resulting PNG.
 
 ## App Mode interface
 
-The saved `qwen-image-2.1-2gpu.json` browser workflow opens directly in App Mode
-at <http://192.168.0.181:8000/comfyui/>. Open it from the workflow browser;
-reload/reopen an older tab to load the saved layout. The interface exposes the
+The saved `qwen-image-2.1-2gpu.app.json` browser workflow opens directly in App Mode
+at <http://192.168.0.181:8000/comfyui/>. Open Apps in the left sidebar and select
+`qwen-image-2.1-2gpu`. The `.app.json` suffix makes it appear in the Apps list.
+Refresh the page if the list was already open. The interface exposes the
 scene prompt (node 4), seed (node 7), standard Run controls and generated image
 output (node 9). The default seed is fixed at 42. Resolution remains 1024 square
 with 25 Euler/simple steps, CFG 1 and both GPUs. Select Graph when advanced
@@ -165,8 +166,9 @@ The layout is stored in the workflow's `extra.linearMode` and
 no image rebuild or service change is required. The API workflow used by
 Open WebUI remains the same.
 
-Verified on 2026-10-29: the saved workflow loaded through the LAN proxy in App
-Mode with exactly the prompt/seed selections and SaveImage output. Its nine
+Verified on 2026-10-29: a fresh browser listed the saved app in the Apps
+sidebar, and clicking its entry loaded it through the LAN proxy in App Mode
+with exactly the prompt/seed selections and SaveImage output. Its nine
 backend node types and inputs matched the retained two-GPU API workflow. A real
 Run-button submission at seed 20261029 completed successfully and displayed its
 1024-square result in the app. The saved default remains fixed seed 42.
