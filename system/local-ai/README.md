@@ -858,3 +858,11 @@ use localhost ports 5820 and 5821 and preserve the 0.2.4.2 boot default.
 Both entries passed live text and streaming checks; Qwen vision and DeepSeek
 tool calls also passed. See the linked instructions for restoration, validation
 and remaining full-context/performance checks.
+
+## ComfyUI GPU switching
+
+The retained selector includes `comfyui_auto` in the exclusive GPU group. Its
+native `/comfyui/` route starts the image container and the local stop helper
+drains accepted image jobs before releasing the GPU for chat. Install the
+helper and create the container before applying this selector; see
+[ComfyUI setup and verification status](../comfyui/README.md).

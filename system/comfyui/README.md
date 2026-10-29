@@ -11,12 +11,17 @@ input, output, user workflows, temporary images and caches. Docker retains
 the image and bounded container logs in its normal storage. Model weights,
 runtime data and generated images stay outside Git.
 
-The browser interface listens at <http://127.0.0.1:8188>. For a remote browser,
-forward it with `ssh -L 8188:127.0.0.1:8188 vesanieminen@192.168.0.181`.
+Open <http://192.168.0.181:8000/comfyui/> from the home LAN. This native
+llama-swap route starts the container and unloads the active chat backend.
+The interface also listens on `0.0.0.0:8188` while the container is running;
+use the port 8000 route for automatic startup and GPU switching. Direct port
+8188 does not start the container. Docker's published port is reachable on
+all host IPv4 interfaces; it is not restricted by the existing UFW port 8000 rule.
+
 The container uses GPU 0 as UID/GID 1000, automatic memory offloading and a
-1 GB VRAM reserve. Its root filesystem is read-only. It has no boot restart
-policy, and the existing llama-swap boot selection and vLLM profiles remain
-in place. Partner nodes and custom nodes are disabled.
+1 GB VRAM reserve. Its root filesystem is read-only. Partner nodes and custom
+nodes are disabled except for the retained local queue guard. The Pi can keep
+hosting LiteLLM/Open WebUI while GPU execution stays on this AI box.
 
 ## Restore
 
@@ -45,7 +50,11 @@ HF_HUB_DISABLE_TELEMETRY=1 HF_XET_HIGH_PERFORMANCE=1 HF_XET_CACHE="$HOME/.local/
 rm -rf -- "$comfy_download_tools"
 unset comfy_download_tools
 cp workflows/qwen-image-2.1.json "$HOME/.local/share/comfyui/user/default/workflows/"
-sudo docker compose up -d
+mkdir -p "$HOME/.local/share/comfyui/runtime"
+sudo install -Dm755 usr/local/libexec/comfyui-lifecycle.py /usr/local/libexec/comfyui-lifecycle.py
+sudo docker compose create
+sudo install -Dm644 ../local-ai/etc/llama-swap/config.yaml /etc/llama-swap/config.yaml
+sudo systemctl restart llama-swap.service
 ```
 
 Pinned model sizes and SHA-256 values are in
@@ -56,20 +65,31 @@ enhancer model is installed. Start with this size before trying larger images.
 
 ## GPU use and suspend
 
-Close chat interfaces and finish active chat requests before generating images.
-Unload chat models through llama-swap to free the GPUs:
+The reserved `comfyui_auto` model belongs to llama-swap's existing exclusive
+GPU group. An image request unloads chat; a chat request drains and stops the
+image container before loading chat. The boot service still preloads its
+selected Strata 0.2.4.2 model. Idle browser WebSockets do not keep the image
+backend active or restart it after a switch.
+
+The lifecycle helper sets a drain marker before shutdown. The local extension
+rejects new prompt submissions with HTTP 503 while draining, counts accepted
+submissions still being parsed, and waits for queued/running work and history
+writes to finish. It then requires five seconds of idle before stopping Docker.
+An unavailable queue check or failed history write prevents shutdown. The last
+20 completed jobs are saved in `runtime/history.json` so results remain
+available after a restart. Generated PNG files remain in `output/`.
+
+ComfyUI has no idle TTL because submissions return before generation finishes.
+It stops when another GPU backend is selected or all models are unloaded:
 
 ```bash
 curl --fail -X POST http://127.0.0.1:8000/api/models/unload
 ```
 
-Avoid chat requests and upstream health polling while generating; either can
-load the chat backend again. The installed llama-swap v263 does not have a pause
-endpoint. After generation, release ComfyUI's models before using chat again:
-
-```bash
-curl --fail -H 'Content-Type: application/json' -d '{"unload_models":true,"free_memory":true}' http://127.0.0.1:8188/free
-```
+The ComfyUI unload timeout is 24 hours to allow image queues to drain. Avoid
+queues that take longer than this. Direct `docker stop`, service shutdown,
+forced termination and power loss do not receive this queue protection.
+Do not start the container manually alongside a chat model; use the proxy.
 
 The suspend guard checks ComfyUI's queue and latest execution timestamps.
 Queued/running images prevent suspend, and completed jobs reset the existing
@@ -107,5 +127,14 @@ in use; this is a sampled observation, not a guaranteed peak bound.
 Live image activity was detected by the installed suspend guard; all 28 guard
 regression tests pass. Image models were released afterwards and the existing
 Strata chat backend restored. Higher resolutions, editing, multi-GPU operation
-and sustained performance remain unverified. The container is left running
-on demand, without automatic boot startup.
+and sustained performance remain unverified. The container has no independent boot restart policy.
+
+The installed llama-swap integration and LAN port publication were verified on
+2026-10-29. The browser loaded all nine workflow nodes through the LAN proxy;
+the host listener was `0.0.0.0:8188`. A real 1024-square image completed in
+29.754 seconds while a simultaneous chat request waited. The drain guard
+rejected new submissions with HTTP 503, stopped the container after completion,
+and chat inference succeeded with its GPU memory released. Restarting ComfyUI
+restored that job's successful history and served its PNG through the proxy.
+The installed helper and selector match these templates. Compose/selector
+validation and all 36 regression tests passed.

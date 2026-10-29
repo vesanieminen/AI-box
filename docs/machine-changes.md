@@ -374,14 +374,20 @@ sustained performance and new-version calibration remain unverified.
 ## Local image generation
 
 Qwen-Image-2.1 uses an on-demand ComfyUI 0.43.0 Docker container built from a
-digest-pinned PyTorch 2.13.0 / CUDA 13.0 base. It binds localhost port 8188 and
+digest-pinned PyTorch 2.13.0 / CUDA 13.0 base. The retained Compose configuration publishes `0.0.0.0:8188` and
 uses GPU 0, UID/GID 1000, a read-only container root and automatic VRAM
 offloading. All model files, workflows, caches and generated images live under
 `~/.local/share/comfyui`; no ComfyUI host package or system account is required.
 The three core BF16 files total 32,440,124,920 bytes. The selected llama-swap
-boot service and default vLLM profile are retained. Chat models are unloaded
-through llama-swap while images use the GPU; close chat interfaces and avoid
-upstream health polling until the image models have been released.
+boot service and default vLLM profile are retained. The retained selector adds `comfyui_auto` to the exclusive GPU group and serves
+its native interface at `http://192.168.0.181:8000/comfyui/`. The local lifecycle
+helper drains accepted image jobs before stopping Docker for a chat switch;
+the last 20 job results persist outside Git. The selected boot chat model is
+unchanged. LAN proxy/browser access and the `0.0.0.0:8188` listener passed verification.
+A simultaneous chat request waited for an active image to finish; new image
+submissions received HTTP 503 during draining. Docker stopped before chat
+loaded, and the successful image history and PNG survived a restart.
+All 36 suspend/lifecycle tests and Compose/selector validation passed.
 
 The installed suspend guard checks queued/running image jobs and recent
 completion timestamps. An idle ComfyUI browser does not prevent suspend.

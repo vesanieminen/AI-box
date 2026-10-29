@@ -355,6 +355,17 @@
           "text"
         ]
       }
+    },
+    "comfyui_auto": {
+      "name": "Qwen Image 2.1 BF16 (ComfyUI)",
+      "description": "RTX 3090 image generation; queue-safe Docker lifecycle and persistent recent results",
+      "cmd": "/usr/bin/python3 /usr/local/libexec/comfyui-lifecycle.py start",
+      "cmdStop": "/usr/bin/python3 /usr/local/libexec/comfyui-lifecycle.py stop",
+      "proxy": "http://127.0.0.1:8188",
+      "checkEndpoint": "/local-ai/queue-state",
+      "ttl": 0,
+      "unloadTimeout": 86400,
+      "unlisted": true
     }
   },
   "routing": {
@@ -385,7 +396,8 @@
               "qwen3.8-flash-next-iq3-s-0242",
               "deepseek-v4.1-flash-iq2-xs",
               "qwen3.8-flash-next-iq3-s-027",
-              "deepseek-v4.1-flash-iq2-xs-027"
+              "deepseek-v4.1-flash-iq2-xs-027",
+              "comfyui_auto"
             ]
           }
         }
