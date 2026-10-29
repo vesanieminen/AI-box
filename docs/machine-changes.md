@@ -416,7 +416,10 @@ workflow. Loading the saved layout and generating/displaying a 1024-square
 image through the App Mode Run button passed verification. The layout is
 retained as `qwen-image-2.1-2gpu.app.json`, which appears in the Apps sidebar;
 a fresh-browser check verified listing and opening it from that menu. Restore
-it by copying the workflow template.
+it by copying the workflow template. The canonical app also lives in the local
+extension's `example_workflows/` directory, with a relative symlink from
+`system/comfyui/workflows/`. A verified native template link loads the app
+automatically; its full URL is retained in the setup guide.
 [Working setup and restore commands](../system/comfyui/README.md) and
 [pinned model provenance](../models/qwen-image-2.1.json) are retained; weights
 and generated images stay outside Git.

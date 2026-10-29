@@ -11,8 +11,10 @@ input, output, user workflows, temporary images and caches. Docker retains
 the image and bounded container logs in its normal storage. Model weights,
 runtime data and generated images stay outside Git.
 
-Open <http://192.168.0.181:8000/comfyui/> from the home LAN. This native
-llama-swap route starts the container and unloads the active chat backend.
+Open the [Qwen Image app](http://192.168.0.181:8000/comfyui/?template=qwen-image-2.1-2gpu.app&source=local_ai_queue_guard)
+from the home LAN. This native template link explicitly loads the two-GPU app,
+including when a browser restores an empty tab. The llama-swap `/comfyui/`
+route starts the container and unloads the active chat backend.
 The interface also listens on `0.0.0.0:8188` while the container is running;
 use the port 8000 route for automatic startup and GPU switching. Direct port
 8188 does not start the container. Docker's published port is reachable on
@@ -162,7 +164,13 @@ with 25 Euler/simple steps, CFG 1 and both GPUs. Select Graph when advanced
 workflow editing is needed. ComfyUI may show its first-use App Mode tour.
 
 The layout is stored in the workflow's `extra.linearMode` and
-`extra.linearData` metadata. Restore it with the workflow copy command above;
+`extra.linearData` metadata. The canonical template is
+`queue_guard/example_workflows/qwen-image-2.1-2gpu.app.json`; the file under
+`workflows/` is a relative symlink to it. The existing queue-guard mount exposes
+this template through ComfyUI's native custom-node template route. This enables
+the direct link above without a frontend patch or extra service. ComfyUI removes
+the template query after loading; bookmarks must retain the full link above.
+Restore it with the workflow copy command above;
 no image rebuild or service change is required. The API workflow used by
 Open WebUI remains the same.
 
@@ -171,7 +179,10 @@ sidebar, and clicking its entry loaded it through the LAN proxy in App Mode
 with exactly the prompt/seed selections and SaveImage output. Its nine
 backend node types and inputs matched the retained two-GPU API workflow. A real
 Run-button submission at seed 20261029 completed successfully and displayed its
-1024-square result in the app. The saved default remains fixed seed 42.
+1024-square result in the app. The saved default remains fixed seed 42. The full
+template URL was separately verified in a fresh browser: it loaded the app with
+both exposed controls, output node 9 and the unchanged two-GPU API graph,
+without a menu click or injected workflow loading.
 
 ## Repeatable images
 
