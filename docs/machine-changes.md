@@ -38,9 +38,8 @@ outside this repository.
 
 Verified on 2026-10-29: the standard launcher and shell command report 1.19.5,
 mise selects that version, and `opencode models --pure` lists models.
-Interactive model inference has not been tested. Removal of the previous AUR
-`opencode-beta` package still requires `sudo pacman -R opencode-beta` in an
-authenticated terminal; it currently remains installed alongside the default.
+The AUR `opencode-beta` package is confirmed absent. Interactive model inference
+has not been tested.
 
 ## User configuration
 

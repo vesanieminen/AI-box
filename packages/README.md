@@ -43,6 +43,5 @@ GitHub CLI uses Arch `github-cli`: `sudo pacman -S --needed github-cli`.
 PAT provisioning and HTTPS Git authentication are documented in `docs/github.md`.
 
 OpenCode uses Omarchy's default mise launcher; restoration and validation are
-in [machine configuration](../docs/machine-changes.md#opencode). The previous
-`opencode-beta` AUR package is pending removal with `sudo pacman -R opencode-beta`;
-it remains in `foreign.txt` until removal is verified.
+in [machine configuration](../docs/machine-changes.md#opencode). It requires no
+custom package addition.
